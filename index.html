@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🚑 الإسعافات الأولية</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Tajawal&family=Amiri&display=swap" rel="stylesheet">
+
+<style>
+body{
+  margin:0;
+  font-family:'Tajawal', sans-serif;
+  background:#0f172a;
+  color:white;
+  transition:0.3s;
+}
+body.light{background:#f0f0f0;color:#111}
+
+/* شاشة البداية */
+#loginScreen{
+  position:fixed;
+  width:100%;height:100%;
+  display:flex;justify-content:center;align-items:center;
+  background:linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.9)), url("images/ambulance.jpg") center/cover;
+}
+.login-card{
+  background:rgba(0,0,0,0.75);
+  padding:40px 50px;
+  border-radius:25px;
+  text-align:center;
+  box-shadow:0 20px 50px rgba(0,0,0,0.6);
+}
+.title{font-size:42px;color:#FFD700;font-family:'Amiri';margin-bottom:15px}
+.start-btn{
+  padding:15px 40px;
+  background:linear-gradient(45deg,#ff4c4c,#dc2626);
+  border:none;color:white;border-radius:12px;
+  font-size:18px;cursor:pointer;
+}
+
+/* تطوير يظهر ويختفي */
+.dev-title{
+  margin-top:20px;
+  color:#00ffff;
+  animation:blink 2s infinite;
+}
+.dev-name{
+  font-weight:bold;
+  font-size:18px;
+}
+@keyframes blink{
+  0%,100%{opacity:0}
+  50%{opacity:1}
+}
+
+/* layout */
+.container{display:flex;height:100vh}
+.sidebar{
+  width:260px;
+  background:#1e293b;
+  overflow-y:auto;
+  padding:10px;
+}
+.content{
+  flex:1;
+  padding:15px;
+  overflow-y:auto;
+}
+
+/* الفهرس */
+#tocList div{
+  padding:10px;
+  margin:6px 0;
+  background:#334155;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:bold;
+}
+#tocList div:hover{background:#dc2626}
+
+/* المحتوى */
+img,video{
+  width:100%;
+  border-radius:10px;
+  margin:10px 0;
+}
+.step{
+  background:#1e293b;
+  padding:12px;
+  margin:10px 0;
+  border-radius:10px;
+}
+
+/* أزرار */
+.btn{
+  padding:10px 15px;
+  margin:5px;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:bold;
+}
+.print{background:#2563eb;color:white}
+.save{background:#16a34a;color:white}
+.exit{background:#dc2626;color:white}
+.theme{background:#9333ea;color:white}
+
+/* التقدم */
+#progressBar{
+  position:fixed;
+  top:0;left:0;
+  height:6px;
+  background:#ff4c4c;
+  width:0%;
+}
+
+/* تلميح */
+#tip{
+  position:fixed;
+  top:10px;
+  right:50%;
+  transform:translateX(50%);
+  background:yellow;
+  color:black;
+  padding:8px;
+  display:none;
+}
+
+/* ملاحظات */
+textarea{
+  width:100%;
+  border-radius:10px;
+  padding:10px;
+  border:none;
+  margin-top:10px;
+}
+
+/* موبايل */
+@media(max-width:768px){
+  .sidebar{width:120px;font-size:12px}
+}
+</style>
+</head>
+
+<body>
+
+<div id="progressBar"></div>
+<div id="tip"></div>
+
+<!-- شاشة البداية -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="title">🚑 الإسعافات الأولية</div>
+    <button class="start-btn" onclick="startApp()">ابدأ الآن</button>
+
+    <div class="dev-title">برمجة وتطوير</div>
+    <div class="dev-name">👨‍⚕️ Dr / Salah Al-ahdel</div>
+  </div>
+</div>
+
+<div class="container" id="app" style="display:none;">
+  <div class="sidebar">
+    <h3>📑 الفهرس</h3>
+    <div id="tocList"></div>
+
+    <button class="btn theme" onclick="toggleTheme()">🌙 الوضع</button>
+    <button class="btn print" onclick="window.print()">🖨 طباعة</button>
+    <button class="btn exit" onclick="exitApp()">🚪 خروج</button>
+  </div>
+
+  <div class="content" id="content"></div>
+</div>
+
+<script>
+
+/* الحالات */
+const cases=[
+{
+title:"🫀 الإنعاش القلبي (CPR)",
+img:"cpr", video:"cpr",
+def:"إجراء طارئ يُستخدم عند توقف القلب والتنفس للحفاظ على تدفق الدم إلى الدماغ.",
+causes:"توقف القلب المفاجئ، الاختناق، الغرق، الصدمات الكهربائية.",
+sym:"فقدان الوعي، توقف التنفس، غياب النبض.",
+steps:[
+"التأكد من أمان المكان",
+"فحص الاستجابة والتنفس",
+"الاتصال بالإسعاف فورًا",
+"بدء الضغطات الصدرية (100-120 ضغطة/دقيقة)",
+"عمق الضغط 5-6 سم للبالغ",
+"30 ضغطة ثم 2 نفس إنقاذي",
+"استخدام جهاز AED إن توفر"
+],
+tip:"كل ثانية تأخير تقلل فرصة النجاة"
+},
+
+{
+title:"🩸 النزيف",
+img:"bleeding", video:"bleeding",
+def:"فقدان الدم من الأوعية الدموية نتيجة إصابة.",
+causes:"جروح، حوادث، طعنات.",
+sym:"نزيف واضح، شحوب، دوخة، تسارع نبض.",
+steps:[
+"الضغط المباشر على الجرح",
+"استخدام ضماد نظيف",
+"رفع العضو المصاب إن أمكن",
+"عدم إزالة الأجسام المغروسة",
+"الاتصال بالإسعاف إذا كان النزيف شديد"
+],
+tip:"الضغط المباشر هو أهم خطوة"
+},
+
+{
+title:"🦴 الكسور",
+img:"fracture", video:"fracture",
+def:"انقطاع في استمرارية العظم.",
+causes:"سقوط، حوادث، ضربات قوية.",
+sym:"ألم شديد، تورم، تشوه، عدم القدرة على الحركة.",
+steps:[
+"تثبيت الطرف المصاب",
+"عدم تحريك المصاب",
+"استخدام جبيرة إن توفرت",
+"وضع كمادات باردة",
+"نقل المصاب للمستشفى"
+],
+tip:"أي حركة خاطئة قد تزيد الإصابة"
+},
+
+{
+title:"🔥 الحروق",
+img:"burn", video:"burn",
+def:"تلف الأنسجة بسبب الحرارة أو المواد الكيميائية.",
+causes:"النار، السوائل الساخنة، الكهرباء.",
+sym:"احمرار، فقاعات، ألم شديد.",
+steps:[
+"تبريد الحرق بالماء الجاري 10-20 دقيقة",
+"إزالة الملابس الضيقة",
+"تغطية بضماد نظيف",
+"عدم وضع معجون أو ثلج",
+"طلب المساعدة للحالات الشديدة"
+],
+tip:"التبريد السريع يقلل الضرر"
+},
+
+{
+title:"😮 الاختناق",
+img:"choking", video:"choking",
+def:"انسداد مجرى الهواء بجسم غريب.",
+causes:"طعام، أجسام صغيرة.",
+sym:"صعوبة التنفس، سعال، ازرقاق.",
+steps:[
+"تشجيع السعال",
+"الضرب بين الكتفين",
+"مناورة هيمليك",
+"الاتصال بالإسعاف إذا فقد الوعي"
+],
+tip:"التدخل السريع ينقذ الحياة"
+},
+
+{
+title:"😵 الإغماء",
+img:"fainting", video:"fainting",
+def:"فقدان مؤقت للوعي بسبب نقص تدفق الدم للدماغ.",
+causes:"هبوط ضغط، تعب، حرارة.",
+sym:"دوخة، تعرق، فقدان وعي.",
+steps:[
+"وضع المصاب على ظهره",
+"رفع القدمين",
+"فك الملابس الضيقة",
+"مراقبة التنفس"
+],
+tip:"رفع القدمين يساعد الدماغ"
+},
+
+{
+title:"🐍 لدغة الأفاعي",
+img:"snakebite", video:"snakebite",
+def:"إدخال سم الأفعى إلى الجسم عبر اللدغ.",
+causes:"التعرض للأفاعي.",
+sym:"ألم، تورم، تغير لون الجلد.",
+steps:[
+"تهدئة المصاب",
+"تثبيت الطرف",
+"عدم مص السم",
+"نقل فوري للمستشفى"
+],
+tip:"الحركة تنشر السم أسرع"
+},
+
+{
+title:"🦂 لدغة العقرب",
+img:"scorpion", video:"scorpion",
+def:"حقن السم عبر لدغة العقرب.",
+causes:"البيئات الصحراوية.",
+sym:"ألم شديد، تنميل.",
+steps:[
+"غسل المكان",
+"كمادات باردة",
+"مراقبة الحالة",
+"مراجعة الطبيب"
+],
+tip:"راقب التنفس خاصة للأطفال"
+},
+
+{
+title:"🐶 عضة الحيوانات",
+img:"bite", video:"bite",
+def:"إصابة نتيجة عض حيوان.",
+causes:"هجوم الحيوانات.",
+sym:"جرح، نزيف، احتمال عدوى.",
+steps:[
+"غسل الجرح جيدًا بالماء",
+"تعقيم",
+"إيقاف النزيف",
+"مراجعة الطبيب لأخذ لقاح"
+],
+tip:"خطر داء الكلب مهم"
+},
+
+{
+title:"☠️ التسمم",
+img:"poison", video:"poison",
+def:"دخول مادة سامة للجسم.",
+causes:"أدوية، مواد كيميائية.",
+sym:"قيء، دوخة، فقدان وعي.",
+steps:[
+"إبعاد المصاب عن المصدر",
+"عدم إعطاء أي شيء بالفم",
+"الاتصال بالإسعاف فورًا",
+"مراقبة التنفس"
+],
+tip:"لا تحاول إحداث قيء بدون توجيه طبي"
+}
+];
+
+/* بدء */
+function startApp(){
+  loginScreen.style.display="none";
+  app.style.display="flex";
+  buildTOC();
+  showIntro();
+}
+
+/* خروج */
+function exitApp(){
+  location.reload();
+}
+
+/* الفهرس */
+function buildTOC(){
+  tocList.innerHTML=`
+  <div onclick="showIntro()">📖 المقدمة</div>
+  `;
+  cases.forEach((c,i)=>{
+    tocList.innerHTML+=`<div onclick="openCase(${i})">${c.title}</div>`;
+  });
+  tocList.innerHTML+=`<div onclick="showConclusion()">📖 الخاتمة</div>`;
+}
+
+/* المقدمة */
+function showIntro(){
+  content.innerHTML=`
+  <h2 style="text-align:center;font-family:'Amiri';color:#FFD700;">
+  ﷽<br>
+  </h2>
+
+  <div class="step"><b>📖 نبذة:</b><br>
+  الإسعافات الأولية هي الرعاية الفورية التي تقدم للمصاب للحفاظ على حياته ومنع تدهور حالته حتى وصول الرعاية الطبية المتخصصة.
+  </div>
+
+  <div class="step"><b>👨‍⚕️ تعريف المسعف:</b><br>
+  هو الشخص المدرب القادر على تقييم الحالة وتقديم التدخل السريع بشكل آمن.
+  </div>
+
+  <div class="step"><b>🧠 صفات المسعف:</b><br>
+  الهدوء – سرعة التصرف – الدقة – تحمل المسؤولية – المعرفة الأساسية بالإسعافات.
+  </div>
+
+  <div class="step"><b>⚠️ الاحتياطات:</b><br>
+  تأمين المكان – حماية النفس – استخدام أدوات الحماية – طلب المساعدة فورًا.
+  </div>
+
+  <div class="step"><b>🎯 الأهداف:</b><br>
+  إنقاذ الحياة – منع التدهور – تعزيز الشفاء.
+  </div>
+  `;
+}
+
+/* فتح حالة */
+function openCase(i){
+  const c=cases[i];
+
+  content.innerHTML=`
+    <h2>${c.title}</h2>
+
+    <img src="images/${c.img}.jpg">
+    <video controls>
+      <source src="videos/${c.video}.mp4">
+    </video>
+
+    <div class="step"><b>📌 التعريف:</b><br>${c.def}</div>
+
+<div class="step"><b>⚠️ الأسباب:</b><br>${c.causes}</div>
+
+<div class="step"><b>🩺 الأعراض والعلامات:</b><br>${c.sym}</div>
+
+<div class="step">
+<b>🚑 الإجراءات المتخذة:</b><br>
+${c.steps.join("<br>")}
+</div>
+
+<div class="step" style="background:#ffeb3b;color:#111;">
+<b>💡 نصيحة مهمة:</b><br>${c.tip}
+</div>
+
+    <textarea id="note${i}" placeholder="ملاحظاتك...">${localStorage.getItem('n'+i)||''}</textarea>
+    <button class="btn save" onclick="saveNote(${i})">💾 حفظ</button>
+  `;
+
+  showTip(c.tip);
+  progress(i);
+}
+
+/* حفظ */
+function saveNote(i){
+  localStorage.setItem('n'+i, document.getElementById('note'+i).value);
+}
+
+/* تقدم */
+function progress(i){
+  progressBar.style.width=((i+1)/cases.length*100)+'%';
+}
+
+/* تلميح */
+function showTip(t){
+  tip.innerText=t;
+  tip.style.display="block";
+  setTimeout(()=>tip.style.display="none",3000);
+}
+
+/* خاتمة */
+function showConclusion(){
+  content.innerHTML=`
+
+    <img src="images/conclusion.jpg" style="width:100%;border-radius:15px;margin-bottom:15px;">
+
+    <h2 style="text-align:center;">📖 ختاماً</h2>
+
+    <div class="step">
+      الطريق الصحيح للوقاية من المخاطر الصحية يبدأ أولاً بالعودة إلى الله "سبحانه وتعالى"،
+      والدعاء، والتضرع، والالتجاء إليه. ثانياً، بالتوبة العملية والالتزام بالتعليمات،
+      وطاعة التوجيهات الصحية، مع مراعاة الوقاية والاحتياطات اليومية.
+    </div>
+
+    <div class="step" style="text-align:center;">
+      السيد عبدالملك بدر الدين الحوثي<br>
+      المحاضرة الرمضانية العاشرة – 1441 هـ
+    </div>
+
+  `;
+}
+
+/* الوضع */
+function toggleTheme(){
+  document.body.classList.toggle("light");
+}
+
+</script>
+
+</body>
+</html>
