@@ -1,159 +1,47 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>🚑 الإسعافات الأولية</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Tajawal&family=Amiri&display=swap" rel="stylesheet">
-
 <style>
-body{
-  margin:0;
-  font-family:'Tajawal', sans-serif;
-  background:#0f172a;
-  color:white;
-  transition:0.3s;
-}
+body{margin:0;font-family:'Tajawal', sans-serif;background:#0f172a;color:white;transition:0.3s;}
 body.light{background:#f0f0f0;color:#111}
-
-/* شاشة البداية */
-#loginScreen{
-  position:fixed;
-  width:100%;height:100%;
-  display:flex;justify-content:center;align-items:center;
-  background:linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.9)), url("images/ambulance.jpg") center/cover;
-}
-.login-card{
-  background:rgba(0,0,0,0.75);
-  padding:40px 50px;
-  border-radius:25px;
-  text-align:center;
-  box-shadow:0 20px 50px rgba(0,0,0,0.6);
-}
+#loginScreen{position:fixed;width:100%;height:100%;display:flex;justify-content:center;align-items:center;background:linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.9)), url("images/ambulance.jpg") center/cover;}
+.login-card{background:rgba(0,0,0,0.75);padding:40px 50px;border-radius:25px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,0.6);}
 .title{font-size:42px;color:#FFD700;font-family:'Amiri';margin-bottom:15px}
-.start-btn{
-  padding:15px 40px;
-  background:linear-gradient(45deg,#ff4c4c,#dc2626);
-  border:none;color:white;border-radius:12px;
-  font-size:18px;cursor:pointer;
-}
-
-/* تطوير يظهر ويختفي */
-.dev-title{
-  margin-top:20px;
-  color:#00ffff;
-  animation:blink 2s infinite;
-}
-.dev-name{
-  font-weight:bold;
-  font-size:18px;
-}
-@keyframes blink{
-  0%,100%{opacity:0}
-  50%{opacity:1}
-}
-
-/* layout */
+.start-btn{padding:15px 40px;background:linear-gradient(45deg,#ff4c4c,#dc2626);border:none;color:white;border-radius:12px;font-size:18px;cursor:pointer;}
+.dev-title{margin-top:20px;color:#00ffff;animation:blink 2s infinite;}
+.dev-name{font-weight:bold;font-size:18px;}
+@keyframes blink{0%,100%{opacity:0}50%{opacity:1}}
 .container{display:flex;height:100vh}
-.sidebar{
-  width:260px;
-  background:#1e293b;
-  overflow-y:auto;
-  padding:10px;
-}
-.content{
-  flex:1;
-  padding:15px;
-  overflow-y:auto;
-}
-
-/* الفهرس */
-#tocList div{
-  padding:10px;
-  margin:6px 0;
-  background:#334155;
-  border-radius:8px;
-  cursor:pointer;
-  font-weight:bold;
-}
+.sidebar{width:260px;background:#1e293b;overflow-y:auto;padding:10px}
+.content{flex:1;padding:15px;overflow-y:auto}
+#tocList div{padding:10px;margin:6px 0;background:#334155;border-radius:8px;cursor:pointer;font-weight:bold;}
 #tocList div:hover{background:#dc2626}
-
-/* المحتوى */
-img,video{
-  width:100%;
-  border-radius:10px;
-  margin:10px 0;
-}
-.step{
-  background:#1e293b;
-  padding:12px;
-  margin:10px 0;
-  border-radius:10px;
-}
-
-/* أزرار */
-.btn{
-  padding:10px 15px;
-  margin:5px;
-  border:none;
-  border-radius:10px;
-  cursor:pointer;
-  font-weight:bold;
-}
+img,video{width:100%;border-radius:10px;margin:10px 0;}
+.step{background:#1e293b;padding:12px;margin:10px 0;border-radius:10px;}
+.btn{padding:10px 15px;margin:5px;border:none;border-radius:10px;cursor:pointer;font-weight:bold;}
 .print{background:#2563eb;color:white}
 .save{background:#16a34a;color:white}
 .exit{background:#dc2626;color:white}
 .theme{background:#9333ea;color:white}
-
-/* التقدم */
-#progressBar{
-  position:fixed;
-  top:0;left:0;
-  height:6px;
-  background:#ff4c4c;
-  width:0%;
-}
-
-/* تلميح */
-#tip{
-  position:fixed;
-  top:10px;
-  right:50%;
-  transform:translateX(50%);
-  background:yellow;
-  color:black;
-  padding:8px;
-  display:none;
-}
-
-/* ملاحظات */
-textarea{
-  width:100%;
-  border-radius:10px;
-  padding:10px;
-  border:none;
-  margin-top:10px;
-}
-
-/* موبايل */
-@media(max-width:768px){
-  .sidebar{width:120px;font-size:12px}
-}
+#progressBar{position:fixed;top:0;left:0;height:6px;background:#ff4c4c;width:0%;}
+#tip{position:fixed;top:10px;right:50%;transform:translateX(50%);background:yellow;color:black;padding:8px;display:none;}
+textarea{width:100%;border-radius:10px;padding:10px;border:none;margin-top:10px;}
+@media(max-width:768px){.sidebar{width:120px;font-size:12px}}
 </style>
 </head>
-
 <body>
-
 <div id="progressBar"></div>
 <div id="tip"></div>
 
-<!-- شاشة البداية -->
 <div id="loginScreen">
   <div class="login-card">
     <div class="title">🚑 الإسعافات الأولية</div>
     <button class="start-btn" onclick="startApp()">ابدأ الآن</button>
-
     <div class="dev-title">برمجة وتطوير</div>
     <div class="dev-name">👨‍⚕️ Dr / Salah Al-ahdel</div>
   </div>
@@ -163,309 +51,290 @@ textarea{
   <div class="sidebar">
     <h3>📑 الفهرس</h3>
     <div id="tocList"></div>
-
     <button class="btn theme" onclick="toggleTheme()">🌙 الوضع</button>
     <button class="btn print" onclick="window.print()">🖨 طباعة</button>
     <button class="btn exit" onclick="exitApp()">🚪 خروج</button>
   </div>
-
   <div class="content" id="content"></div>
 </div>
 
 <script>
+const loginScreen = document.getElementById("loginScreen");
+const app = document.getElementById("app");
+const tocList = document.getElementById("tocList");
+const content = document.getElementById("content");
+const progressBar = document.getElementById("progressBar");
+const tip = document.getElementById("tip");
 
-/* الحالات */
-const cases=[
+const cases = [
 {
-title:"🫀 الإنعاش القلبي (CPR)",
-img:"cpr", video:"cpr",
-def:"إجراء طارئ يُستخدم عند توقف القلب والتنفس للحفاظ على تدفق الدم إلى الدماغ.",
-causes:"توقف القلب المفاجئ، الاختناق، الغرق، الصدمات الكهربائية.",
-sym:"فقدان الوعي، توقف التنفس، غياب النبض.",
-steps:[
-"التأكد من أمان المكان",
-"فحص الاستجابة والتنفس",
-"الاتصال بالإسعاف فورًا",
-"بدء الضغطات الصدرية (100-120 ضغطة/دقيقة)",
-"عمق الضغط 5-6 سم للبالغ",
-"30 ضغطة ثم 2 نفس إنقاذي",
-"استخدام جهاز AED إن توفر"
-],
-tip:"كل ثانية تأخير تقلل فرصة النجاة"
+  title:"🫀 الإنعاش القلبي (CPR)",
+  img:"cpr",
+  video:"cpr",
+  def:`الإنعاش القلبي الرئوي هو سلسلة من الخطوات الإسعافية المتتالية التي تهدف إلى الحفاظ على تدفق الدم والأكسجين إلى الدماغ والأعضاء الحيوية عند توقف القلب أو التنفس بشكل مفاجئ. الهدف ليس "إعادة القلب للعمل" دائماً بالضغط اليدوي، بل منع موت الدماغ حتى وصول التجهيزات المتقدمة (الصدمة الكهربائية).`,
+  causes:`فقدان الوعي المفاجئ: عدم الاستجابة للمؤثرات الصوتية أو الحركية.<br>
+توقف التنفس أو "التنفس الاحتضاري": عدم وجود حركة للصدر أو شهيق متقطع وغير فعال.<br>
+غياب النبض المركزي: عدم جس النبض في الشريان السباتي خلال 10 ثوانٍ.`,
+  sym:`فقدان الوعي، توقف التنفس، غياب النبض.`,
+  steps:[
+    `1️⃣ تأمين الموقع (Scene Safety): تأكد أن المكان آمن لك وللمريض.`,
+    `2️⃣ فحص الاستجابة وطلب المساعدة (Response & Activation): هز المريض والنداء بصوت عالٍ، إذا لم يستجب اطلب المساعدة فوراً.`,
+    `3️⃣ الضغطات الصدرية (Circulation - C): منتصف الصدر، عمق 5-6 سم، سرعة 100-120 ضغطة/دقيقة، السماح بالارتداد الكامل، عدم التوقف أكثر من 10 ثوانٍ.`,
+    `4️⃣ فتح مجرى الهواء (Airway - A): إمالة الرأس ورفع الذقن لفتح مجرى الهواء.`,
+    `5️⃣ التنفس الاصطناعي (Breathing - B): نفسان بعد كل 30 ضغطة، مدة ثانية واحدة للنفس الواحد، مراقبة ارتفاع الصدر.`,
+    `6️⃣ استخدام جهاز AED: بمجرد توفره، لإنهاء الرجفان البطيني وإعادة النظم الطبيعي للقلب.`,
+    `7️⃣ متى نتوقف عن الإنعاش؟: ROSC، وصول الفريق الطبي، إنهاك المسعف، أو وجود خطر يهدد حياته.`,
+    `💡 ملاحظة: Hands-only CPR للمسعف غير المدرب أو لمنع العدوى، فعالة جداً في الدقائق الأولى.`,
+    `🔹 البروتوكولات العالمية ACLS: قاعدة 5Hs & 5Ts للتشخيص السريع للأسباب القابلة للعكس.`,
+    `– 5Hs: Hypovolemia, Hypoxia, Acidosis, Hyper/Hypokalemia, Hypothermia.`,
+    `– 5Ts: Tension Pneumothorax, Tamponade, Toxins, Pulmonary Thrombosis, Coronary Thrombosis.`,
+    `– أسباب شائعة محلياً: Electric Shock, Trauma, إرهاق شديد.`,
+    `📝 جدول ملخص للتشخيص السريع: نزيف: شحوب، نبض ضعيف وسريع → تعويض السوائل والدم.<br>نقص أكسجين: ازرقاق → فتح مجرى الهواء وأكسجين 100%.<br>جلطة قلبية: ألم صدر → نقل عاجل لمركز القسطرة.<br>سموم: اتساع/ضيق الحدقة، بقايا أدوية → إعطاء الادرينالين إن وجد.`
+  ],
+  tip:`كل ثانية تأخير تقلل فرصة النجاة`
 },
-
 {
-title:"🩸 النزيف",
-img:"bleeding", video:"bleeding",
-def:"فقدان الدم من الأوعية الدموية نتيجة إصابة.",
-causes:"جروح، حوادث، طعنات.",
-sym:"نزيف واضح، شحوب، دوخة، تسارع نبض.",
-steps:[
-"الضغط المباشر على الجرح",
-"استخدام ضماد نظيف",
-"رفع العضو المصاب إن أمكن",
-"عدم إزالة الأجسام المغروسة",
-"الاتصال بالإسعاف إذا كان النزيف شديد"
-],
-tip:"الضغط المباشر هو أهم خطوة"
+  title:"🩸  النزيف (Hemorrhage Control Guide)",
+  img:"bleeding",
+  video:"bleeding",
+  def:`النزيف هو فقدان الدم من الدورة الدموية نتيجة تمزق الأوعية الدموية (شرايين، أوردة، شعيرات). فقدان كمية كبيرة من الدم يؤدي إلى صدمة نقص الحجم (Hypovolemic Shock).`,
+  causes:`جروح، حوادث، طعنات، كسور حادة، إصابات ناتجة عن آلات حادة أو حوادث مرورية.`,
+  sym:`العلامات الظاهرة: جرح مفتوح، تدفق دم، تجمع دموي تحت الجلد.  
+علامات الصدمة: شحوب وبرودة الجلد، عرق بارد، نبض سريع وضعيف، تشوش ذهني، انخفاض ضغط الدم.  
+النزيف الداخلي: ألم شديد في البطن أو الصدر، خروج دم من فتحات الجسم الطبيعية، تورم صلب.`,
+  steps:[
+    `1️⃣ أنواع النزيف: شرياني (قاتل في دقائق)، وريدي (متوسط إلى مرتفع)، شعيري (منخفض غالباً).`,
+    `2️⃣ بروتوكول السيطرة على النزيف P-E-D-T: الضغط المباشر، الرفع، الرباط الضاغط، العاصبة/المرقأة.`,
+    `3️⃣ النزيف الداخلي: وضع المريض في وضعية الصدمة، تدفئة المريض، نقل فوري إلى المستشفى.`,
+    `4️⃣ نصيحة: كل ثانية تأخير تزيد من خطورة الحالة، الضغط المباشر هو أول وأهم خطوة.`
+  ],
+  tip:"🚨 السيطرة السريعة على النزيف تنقذ حياة المصاب"
 },
-
 {
-title:"🦴 الكسور",
-img:"fracture", video:"fracture",
-def:"انقطاع في استمرارية العظم.",
-causes:"سقوط، حوادث، ضربات قوية.",
-sym:"ألم شديد، تورم، تشوه، عدم القدرة على الحركة.",
-steps:[
-"تثبيت الطرف المصاب",
-"عدم تحريك المصاب",
-"استخدام جبيرة إن توفرت",
-"وضع كمادات باردة",
-"نقل المصاب للمستشفى"
-],
-tip:"أي حركة خاطئة قد تزيد الإصابة"
+  title:"🦴 الكسور",
+  img:"fracture",
+  video:"fracture",
+  def:`الكسر هو انفصال أو تشقق في نسيج العظمة نتيجة قوة خارجية تفوق قدرة العظم على التحمل. تكمن خطورة الكسر ليس فقط في العظم نفسه، بل في احتمال تضرر الأعصاب والأوعية الدموية المحيطة به.`,
+  causes:`سقوط، حوادث، ضربات قوية.`,
+  sym:`الألم الشديد، التشوه، التورم، الزرقة، فقدان الوظيفة، صوت طرقعة عند تحريك العظم.`,
+  steps:[
+    `<b>1️⃣ أنواع الكسور (Classification):</b>
+    <table border="1" cellpadding="5" style="border-collapse:collapse;width:100%;color:white;">
+    <tr style="background:#334155;"><th>نوع الكسر</th><th>الوصف</th><th>المظهر الخارجي</th><th>مستوى الخطورة</th></tr>
+    <tr><td>كسر مغلق (Simple)</td><td>كسر العظم دون تمزق الجلد</td><td>تورم وتشوه دون وجود جرح</td><td>متوسطة (خطر نزيف داخلي)</td></tr>
+    <tr><td>كسر مفتوح (Compound)</td><td>بروز العظم المكسور عبر الجلد</td><td>وجود جرح مفتوح وعظم مرئي</td><td>عالية جداً (خطر تلوث ونزيف)</td></tr>
+    <tr><td>كسر مضاعف</td><td>كسر العظم مع إصابة عضو حيوي</td><td>نزيف حاد أو فقدان حركة حرجة</td><td>تهدد الحياة</td></tr>
+    <tr><td>كسر غصن نضير</td><td>كسر غير مكتمل (انحناء العظم)</td><td>شائع عند الأطفال (IMCI)</td><td>منخفضة إلى متوسطة</td></tr>
+    </table>`,
+    `<b>2️⃣ بروتوكول الإسعاف (خطوات العمل الميداني)</b>
+    <ul>
+    <li><b>التقييم الأولي (Check)</b>: تأكد من تنفس المريض ونبضه أولاً (بروتوكول ABC). لا تحاول إعادة العظم المكسور إلى مكانه أبداً.</li>
+    <li><b>السيطرة على النزيف (في الكسور المفتوحة)</b>: ضع شاشاً معقماً حول العظم البارز واضغط على أطراف الجرح وليس على العظم نفسه.</li>
+    <li><b>التثبيت والجبيرة (Splinting)</b>: استخدم جبيرة لتثبيت المفصلين المحيطين بالكسر، واربط الجبيرة بإحكام دون قطع الدورة الدموية.</li>
+    <li><b>فحص التروية (CSM Check)</b>: افحص الدورة الدموية، الإحساس، والحركة في أطراف العضو المصاب بعد التثبيت.</li>
+    <li><b>التبريد والتدفئة</b>: ضع كمادات باردة فوق منطقة الكسر لتقليل التورم والألم، واحرص على تدفئة المريض لمنع الصدمة.</li>
+    </ul>`,
+    `<b>3️⃣ تنبيهات هامة للكادر الطبي</b>
+    <ul>
+    <li>قاعدة ذهبية: إذا لم تكن متأكداً أنه كسر، تعامل معه كأنه كسر حتى يثبت العكس بالأشعة.</li>
+    <li>النقل: يمنع نقل المصاب بكسور العمود الفقري أو الحوض إلا بواسطة فريق متخصص وباستخدام النقالة الصلبة (Backboard).</li>
+    </ul>`
+  ],
+  tip:"التثبيت الصحيح قبل التحريك يحمي الأعصاب والأوعية الدموية من المضاعفات."
 },
-
+// الحالات المتبقية
 {
-title:"🔥 الحروق",
-img:"burn", video:"burn",
-def:"تلف الأنسجة بسبب الحرارة أو المواد الكيميائية.",
-causes:"النار، السوائل الساخنة، الكهرباء.",
-sym:"احمرار، فقاعات، ألم شديد.",
-steps:[
-"تبريد الحرق بالماء الجاري 10-20 دقيقة",
-"إزالة الملابس الضيقة",
-"تغطية بضماد نظيف",
-"عدم وضع معجون أو ثلج",
-"طلب المساعدة للحالات الشديدة"
-],
-tip:"التبريد السريع يقلل الضرر"
+  title:"🔥 الحروق",
+  img:"burn",
+  video:"burn",
+  def:`الحروق هي تلف في أنسجة الجسم ناتج عن التعرض لمؤثرات خارجية (حرارية، كيميائية، كهربائية، أو إشعاعية). تؤدي الحروق إلى تدمير طبقات الجلد، مما يفقد الجسم خط الدفاع الأول ضد الجراثيم ويسبب فقدان السوائل والحرارة.`,
+  causes:`النار، السوائل الساخنة، الكهرباء، المواد الكيميائية، التعرض للإشعاع.`,
+  sym:`تغير لون الجلد (أحمر، أبيض، أو أسود)، ظهور فقاعات مائية، صدمة عصبية أو نقص سوائل، صعوبة التنفس (إذا الحرق في الوجه أو استنشاق دخان).`,
+  steps:[
+    `<b>1️⃣ تصنيف درجات الحروق (Classification of Burn Degrees):</b>
+    <table border="1" cellpadding="5" style="border-collapse:collapse;width:100%;color:white;">
+      <tr style="background:#334155;"><th>الدرجة</th><th>الطبقة المتضررة</th><th>المظهر والأعراض</th><th>مستوى الألم</th></tr>
+      <tr><td>الدرجة الأولى</td><td>البشرة (السطحية)</td><td>احمرار، جفاف، وتورم بسيط</td><td>مؤلم جداً</td></tr>
+      <tr><td>الدرجة الثانية</td><td>البشرة + جزء من الأدمة</td><td>احمرار شديد، وجود فقاعات (Blisters)</td><td>مؤلم جداً</td></tr>
+      <tr><td>الدرجة الثالثة</td><td>كافة طبقات الجلد</td><td>الجلد يبدو أبيض أو متفحماً (خشن)</td><td>غير مؤلم (لتلف الأعصاب)</td></tr>
+      <tr><td>الدرجة الرابعة</td><td>الجلد + العضلات والعظام</td><td>تفحم عميق ووصول التلف للأنسجة الداخلية</td><td>خطيرة جداً</td></tr>
+    </table>`,
+
+    `<b>2️⃣ بروتوكول الإسعاف:</b>
+    <ul>
+      <li><b>إبعاد المصدر:</b> أوقف عملية الحرق فوراً (إخماد النار، قطع الكهرباء، أو غسل المادة الكيميائية).</li>
+      <li><b>التبريد بالماء:</b> سكب ماء جارٍ بدرجة حرارة الغرفة على الحرق لمدة 10-20 دقيقة. لا تستخدم الثلج مباشرة.</li>
+      <li><b>إزالة المعوقات:</b> انزع الخواتم، الساعات، أو الملابس الضيقة بلطف قبل تورم العضو، إلا إذا كانت ملتصقة بالحرق.</li>
+      <li><b>التغطية:</b> تغطية الحرق بضماد معقم أو شاش فازلين غير لاصق، دون الضغط على الحرق، مع الحفاظ على الفقاعات المائية سليمة.</li>
+    </ul>`,
+
+    `<b>3️⃣ تحذيرات هامة:</b>
+    <ul>
+      <li>ممنوع وضع معجون الأسنان، الزبدة، القهوة، أو الطحين على الحرق.</li>
+      <li>ممنوع وضع القطن مباشرة على الحرق.</li>
+      <li>ممنوع استخدام الثلج المباشر.</li>
+    </ul>`,
+
+    `<b>4️⃣ قاعدة التسعات (Rule of Nines):</b>
+    <ul>
+      <li>الرأس: 9%</li>
+      <li>كل ذراع: 9%</li>
+      <li>كل رجل: 18%</li>
+      <li>الصدر والبطن: 18%</li>
+      <li>الظهر: 18%</li>
+      <li>المنطقة التناسلية: 1%</li>
+    </ul>`
+  ],
+  tip:"التبريد السريع والتغطية المعقمة يقللان الضرر ويحميان الأنسجة من العدوى."
 },
-
 {
-title:"😮 الاختناق",
-img:"choking", video:"choking",
-def:"انسداد مجرى الهواء بجسم غريب.",
-causes:"طعام، أجسام صغيرة.",
-sym:"صعوبة التنفس، سعال، ازرقاق.",
-steps:[
-"تشجيع السعال",
-"الضرب بين الكتفين",
-"مناورة هيمليك",
-"الاتصال بالإسعاف إذا فقد الوعي"
-],
-tip:"التدخل السريع ينقذ الحياة"
+  title:"😮 الاختناق",
+  img:"choking",
+  video:"choking",
+  def:`انسداد مجرى الهواء بجسم غريب (طعام، ألعاب صغيرة، إلخ) يمنع وصول الأكسجين إلى الرئتين.`,
+  causes:`طعام، ألعاب صغيرة، أجسام غريبة.`,
+  sym:`سعال، صعوبة في الكلام أو التنفس، ازرقاق الوجه، إمساك الرقبة.`,
+  steps:[
+    `<b>1️⃣ أنواع انسداد مجرى الهواء:</b>
+    <table border="1" cellpadding="5" style="border-collapse:collapse;width:100%;color:white;">
+      <tr style="background:#334155;"><th>النوع</th><th>العلامات والأعراض</th><th>الإجراء المطلوب</th></tr>
+      <tr><td>انسداد جزئي</td><td>يسعل بقوة، يتكلم بصعوبة، يصدر أصواتاً</td><td>شجعه على السعال فقط (لا تتدخل يدوياً)</td></tr>
+      <tr><td>انسداد كلي</td><td>لا يستطيع التنفس أو الكلام، يمسك رقبته، يزرق وجهه</td><td>تدخل فوري (مناورة هيمليك)</td></tr>
+    </table>`,
+
+    `<b>2️⃣ بروتوكول إسعاف البالغين والأطفال:</b>
+    <ul>
+      <li>5 ضربات ظهر (Back Blows) خلف الشخص بين لوحي الكتف.</li>
+      <li>5 ضغطات بطن (Heimlich Maneuver) فوق السرة.</li>
+      <li>التكرار حتى خروج الجسم الغريب أو فقدان الوعي.</li>
+    </ul>`,
+
+    `<b>3️⃣ بروتوكول إسعاف الرضع:</b>
+    <ul>
+      <li>ضع الرضيع ووجهه للأسفل على ساعدك، رأسه أسفل من صدره.</li>
+      <li>5 ضربات ظهر برفق بين لوحي الكتف.</li>
+      <li>5 ضغطات صدر باستخدام إصبعين فقط.</li>
+    </ul>`,
+
+    `<b>4️⃣ إذا فقد المصاب وعيه:</b>
+    <ul>
+      <li>أنزل المصاب إلى الأرض وابدأ الإنعاش القلبي الرئوي (CPR) فوراً.</li>
+      <li>افحص الفم وأزل الجسم الغريب إذا كان مرئيًا.</li>
+      <li>لا تستخدم إصبعك بشكل عشوائي.</li>
+    </ul>`
+  ],
+  tip:"التدخل السريع والهدوء هما مفتاح نجاة المصاب بالاختناق."
 },
-
 {
-title:"😵 الإغماء",
-img:"fainting", video:"fainting",
-def:"فقدان مؤقت للوعي بسبب نقص تدفق الدم للدماغ.",
-causes:"هبوط ضغط، تعب، حرارة.",
-sym:"دوخة، تعرق، فقدان وعي.",
-steps:[
-"وضع المصاب على ظهره",
-"رفع القدمين",
-"فك الملابس الضيقة",
-"مراقبة التنفس"
-],
-tip:"رفع القدمين يساعد الدماغ"
+  title:"😵 الإغماء",
+  img:"fainting",
+  video:"fainting",
+  def:`فقدان مفاجئ ومؤقت للوعي ناتج عن نقص تدفق الدم والأكسجين إلى الدماغ.`,
+  causes:`هبوط ضغط، إرهاق، حرارة شديدة، جوع، مشاعر مفاجئة قوية.`,
+  sym:`دوار، شحوب، تعرق بارد، فقدان الوعي، غشاوة الرؤية، طنين في الأذن، نبض ضعيف.`,
+  steps:[
+    `<b>1️⃣ العلامات والأعراض:</b>
+    <table border="1" cellpadding="5" style="border-collapse:collapse;width:100%;color:white;">
+      <tr style="background:#334155;"><th>المرحلة</th><th>العلامات والأعراض</th></tr>
+      <tr><td>ما قبل الإغماء</td><td>دوار، شحوب، تعرق بارد، غشاوة في الرؤية، طنين في الأذن</td></tr>
+      <tr><td>أثناء الإغماء</td><td>سقوط مفاجئ، فقدان السيطرة على العضلات، جلد بارد، نبض ضعيف</td></tr>
+      <tr><td>ما بعد الإفاقة</td><td>تشوش ذهني بسيط، شعور بالتعب، عودة لون الجلد الطبيعي تدريجياً</td></tr>
+    </table>`,
+
+    `<b>2️⃣ بروتوكول الإسعاف:</b>
+    <ul>
+      <li>استلقاء المصاب على ظهره ورفع القدمين 30 سم لزيادة تدفق الدم للدماغ.</li>
+      <li>فك الملابس الضيقة حول الرقبة والخصر.</li>
+      <li>مراقبة التنفس والنبض باستمرار، إذا لم يتحسن خلال دقيقتين استخدم CPR.</li>
+      <li>بعد الإفاقة، اجعله يجلس لدقائق قبل النهوض وأعطه ماء أو عصير سكري.</li>
+    </ul>`,
+
+    `<b>3️⃣ وضعية الإفاقة:</b>
+    ضع المصاب على جانبه مع ثني الركبة العلوية ودعم الرأس لمنع انسداد المجرى الهوائي.`,
+
+    `<b>4️⃣ تحذيرات:</b>
+    <ul>
+      <li>ممنوع سكب الماء على الوجه.</li>
+      <li>ممنوع إعطاء أي شيء عن طريق الفم وهو فاقد للوعي.</li>
+      <li>ممنوع صفع أو هز المصاب.</li>
+    </ul>`
+  ],
+  tip:"ابقَ هادئاً وراقب التنفس والدورة الدموية لضمان إفاقة آمنة."
 },
-
 {
-title:"🐍 لدغة الأفاعي",
-img:"snakebite", video:"snakebite",
-def:"إدخال سم الأفعى إلى الجسم عبر اللدغ.",
-causes:"التعرض للأفاعي.",
-sym:"ألم، تورم، تغير لون الجلد.",
-steps:[
-"تهدئة المصاب",
-"تثبيت الطرف",
-"عدم مص السم",
-"نقل فوري للمستشفى"
-],
-tip:"الحركة تنشر السم أسرع"
+  title:"🐍 لدغة الأفاعي",
+  img:"snakebite",
+  video:"snakebite",
+  def:"إدخال سم الأفعى إلى الجسم عبر اللدغ.",
+  causes:"التعرض للأفاعي.",
+  sym:"ألم، تورم، تغير لون الجلد.",
+  steps:[
+    "تهدئة المصاب",
+    "تثبيت الطرف",
+    "عدم مص السم",
+    "نقل فوري للمستشفى"
+  ],
+  tip:"الحركة تنشر السم أسرع"
 },
-
 {
-title:"🦂 لدغة العقرب",
-img:"scorpion", video:"scorpion",
-def:"حقن السم عبر لدغة العقرب.",
-causes:"البيئات الصحراوية.",
-sym:"ألم شديد، تنميل.",
-steps:[
-"غسل المكان",
-"كمادات باردة",
-"مراقبة الحالة",
-"مراجعة الطبيب"
-],
-tip:"راقب التنفس خاصة للأطفال"
+  title:"🦂 لدغة العقرب",
+  img:"scorpion",
+  video:"scorpion",
+  def:"حقن السم عبر لدغة العقرب.",
+  causes:"البيئات الصحراوية.",
+  sym:"ألم شديد، تنميل.",
+  steps:[
+    "غسل المكان",
+    "كمادات باردة",
+    "مراقبة الحالة",
+    "مراجعة الطبيب"
+  ],
+  tip:"راقب التنفس خاصة للأطفال"
 },
-
 {
-title:"🐶 عضة الحيوانات",
-img:"bite", video:"bite",
-def:"إصابة نتيجة عض حيوان.",
-causes:"هجوم الحيوانات.",
-sym:"جرح، نزيف، احتمال عدوى.",
-steps:[
-"غسل الجرح جيدًا بالماء",
-"تعقيم",
-"إيقاف النزيف",
-"مراجعة الطبيب لأخذ لقاح"
-],
-tip:"خطر داء الكلب مهم"
+  title:"🐶 عضة الحيوانات",
+  img:"bite",
+  video:"bite",
+  def:"إصابة نتيجة عض حيوان.",
+  causes:"هجوم الحيوانات.",
+  sym:"جرح، نزيف، احتمال عدوى.",
+  steps:[
+    "غسل الجرح جيدًا بالماء",
+    "تعقيم",
+    "إيقاف النزيف",
+    "مراجعة الطبيب لأخذ لقاح"
+  ],
+  tip:"خطر داء الكلب مهم"
 },
-
 {
-title:"☠️ التسمم",
-img:"poison", video:"poison",
-def:"دخول مادة سامة للجسم.",
-causes:"أدوية، مواد كيميائية.",
-sym:"قيء، دوخة، فقدان وعي.",
-steps:[
-"إبعاد المصاب عن المصدر",
-"عدم إعطاء أي شيء بالفم",
-"الاتصال بالإسعاف فورًا",
-"مراقبة التنفس"
-],
-tip:"لا تحاول إحداث قيء بدون توجيه طبي"
+  title:"☠️ التسمم",
+  img:"poison",
+  video:"poison",
+  def:"دخول مادة سامة للجسم.",
+  causes:"أدوية، مواد كيميائية.",
+  sym:"قيء، دوخة، فقدان وعي.",
+  steps:[
+    "إبعاد المصاب عن المصدر",
+    "عدم إعطاء أي شيء بالفم",
+    "الاتصال بالإسعاف فورًا",
+    "مراقبة التنفس"
+  ],
+  tip:"لا تحاول إحداث قيء بدون توجيه طبي"
 }
+// باقي الحالات: الحروق، الاختناق، الإغماء، لدغة الأفاعي، لدغة العقرب، عضة الحيوانات، التسمم ...
 ];
+/* تابع بنفس التنسيق لجميع الحالات السابقة كما في كودك */
 
-/* بدء */
-function startApp(){
-  loginScreen.style.display="none";
-  app.style.display="flex";
-  buildTOC();
-  showIntro();
-}
-
-/* خروج */
-function exitApp(){
-  location.reload();
-}
-
-/* الفهرس */
-function buildTOC(){
-  tocList.innerHTML=`
-  <div onclick="showIntro()">📖 المقدمة</div>
-  `;
-  cases.forEach((c,i)=>{
-    tocList.innerHTML+=`<div onclick="openCase(${i})">${c.title}</div>`;
-  });
-  tocList.innerHTML+=`<div onclick="showConclusion()">📖 الخاتمة</div>`;
-}
-
-/* المقدمة */
-function showIntro(){
-  content.innerHTML=`
-  <h2 style="text-align:center;font-family:'Amiri';color:#FFD700;">
-  ﷽<br>
-  </h2>
-
-  <div class="step"><b>📖 نبذة:</b><br>
-  الإسعافات الأولية هي الرعاية الفورية التي تقدم للمصاب للحفاظ على حياته ومنع تدهور حالته حتى وصول الرعاية الطبية المتخصصة.
-  </div>
-
-  <div class="step"><b>👨‍⚕️ تعريف المسعف:</b><br>
-  هو الشخص المدرب القادر على تقييم الحالة وتقديم التدخل السريع بشكل آمن.
-  </div>
-
-  <div class="step"><b>🧠 صفات المسعف:</b><br>
-  الهدوء – سرعة التصرف – الدقة – تحمل المسؤولية – المعرفة الأساسية بالإسعافات.
-  </div>
-
-  <div class="step"><b>⚠️ الاحتياطات:</b><br>
-  تأمين المكان – حماية النفس – استخدام أدوات الحماية – طلب المساعدة فورًا.
-  </div>
-
-  <div class="step"><b>🎯 الأهداف:</b><br>
-  إنقاذ الحياة – منع التدهور – تعزيز الشفاء.
-  </div>
-  `;
-}
-
-/* فتح حالة */
-function openCase(i){
-  const c=cases[i];
-
-  content.innerHTML=`
-    <h2>${c.title}</h2>
-
-    <img src="images/${c.img}.jpg">
-    <video controls>
-      <source src="videos/${c.video}.mp4">
-    </video>
-
-    <div class="step"><b>📌 التعريف:</b><br>${c.def}</div>
-
-<div class="step"><b>⚠️ الأسباب:</b><br>${c.causes}</div>
-
-<div class="step"><b>🩺 الأعراض والعلامات:</b><br>${c.sym}</div>
-
-<div class="step">
-<b>🚑 الإجراءات المتخذة:</b><br>
-${c.steps.join("<br>")}
-</div>
-
-<div class="step" style="background:#ffeb3b;color:#111;">
-<b>💡 نصيحة مهمة:</b><br>${c.tip}
-</div>
-
-    <textarea id="note${i}" placeholder="ملاحظاتك...">${localStorage.getItem('n'+i)||''}</textarea>
-    <button class="btn save" onclick="saveNote(${i})">💾 حفظ</button>
-  `;
-
-  showTip(c.tip);
-  progress(i);
-}
-
-/* حفظ */
-function saveNote(i){
-  localStorage.setItem('n'+i, document.getElementById('note'+i).value);
-}
-
-/* تقدم */
-function progress(i){
-  progressBar.style.width=((i+1)/cases.length*100)+'%';
-}
-
-/* تلميح */
-function showTip(t){
-  tip.innerText=t;
-  tip.style.display="block";
-  setTimeout(()=>tip.style.display="none",3000);
-}
-
-/* خاتمة */
-function showConclusion(){
-  content.innerHTML=`
-
-    <img src="images/conclusion.jpg" style="width:100%;border-radius:15px;margin-bottom:15px;">
-
-    <h2 style="text-align:center;">📖 ختاماً</h2>
-
-    <div class="step">
-      الطريق الصحيح للوقاية من المخاطر الصحية يبدأ أولاً بالعودة إلى الله "سبحانه وتعالى"،
-      والدعاء، والتضرع، والالتجاء إليه. ثانياً، بالتوبة العملية والالتزام بالتعليمات،
-      وطاعة التوجيهات الصحية، مع مراعاة الوقاية والاحتياطات اليومية.
-    </div>
-
-    <div class="step" style="text-align:center;">
-      السيد عبدالملك بدر الدين الحوثي<br>
-      المحاضرة الرمضانية العاشرة – 1441 هـ
-    </div>
-
-  `;
-}
-
-/* الوضع */
-function toggleTheme(){
-  document.body.classList.toggle("light");
-}
-
+function startApp(){loginScreen.style.display="none";app.style.display="flex";buildTOC();showIntro();}
+function exitApp(){ location.reload(); }
+function buildTOC(){tocList.innerHTML=`<div onclick="showIntro()">📖 المقدمة</div>`;cases.forEach((c,i)=>tocList.innerHTML+=`<div onclick="openCase(${i})">${c.title}</div>`);tocList.innerHTML+=`<div onclick="showConclusion()">📖 الخاتمة</div>`;}
+function showIntro(){content.innerHTML=`<h2 style="text-align:center;font-family:'Amiri';color:#FFD700;">﷽<br></h2><div class="step"><b>📖 نبذة:</b><br>الإسعافات الأولية هي الرعاية الفورية للحفاظ على حياة المصاب ومنع تدهور حالته حتى وصول الرعاية الطبية.</div><div class="step"><b>👨‍⚕️ تعريف المسعف:</b><br>هو الشخص المدرب القادر على تقييم الحالة وتقديم التدخل السريع بشكل آمن.</div><div class="step"><b>🧠 صفات المسعف:</b><br>الهدوء – سرعة التصرف – الدقة – تحمل المسؤولية – المعرفة الأساسية بالإسعافات.</div><div class="step"><b>⚠️ الاحتياطات:</b><br>تأمين المكان – حماية النفس – استخدام أدوات الحماية – طلب المساعدة فورًا.</div><div class="step"><b>🎯 الأهداف:</b><br>إنقاذ الحياة – منع التدهور – تعزيز الشفاء.</div>`;}
+function openCase(i){const c=cases[i];content.innerHTML=`<h2>${c.title}</h2><img src="images/${c.img}.jpg"><video controls><source src="videos/${c.video}.mp4"></video><div class="step"><b>📌 التعريف:</b><br>${c.def}</div><div class="step"><b>⚠️ الأسباب:</b><br>${c.causes}</div><div class="step"><b>🩺 الأعراض والعلامات:</b><br>${c.sym}</div><div class="step"><b>🚑 الإجراءات المتخذة:</b><br>${c.steps.join("<br>")}</div><div class="step" style="background:#ffeb3b;color:#111;"><b>💡 نصيحة مهمة:</b><br>${c.tip}</div><textarea id="note${i}" placeholder="ملاحظاتك...">${localStorage.getItem('n'+i)||''}</textarea><button class="btn save" onclick="saveNote(${i})">💾 حفظ</button>`;showTip(c.tip);progress(i);}
+function saveNote(i){localStorage.setItem('n'+i, document.getElementById('note'+i).value);}
+function progress(i){progressBar.style.width=((i+1)/cases.length*100)+'%';}
+function showTip(t){tip.innerText=t;tip.style.display="block";setTimeout(()=>tip.style.display="none",3000);}
+function showConclusion(){content.innerHTML=`<img src="images/conclusion.jpg" style="width:100%;border-radius:15px;margin-bottom:15px;"><h2 style="text-align:center;">📖 ختاماً</h2><div class="step">الطريق الصحيح للوقاية من المخاطر الصحية يبدأ أولاً بالعودة إلى الله، ثانياً بالتوبة العملية والالتزام بالتعليمات وطاعة التوجيهات الصحية.</div><div class="step" style="text-align:center;">السيد عبدالملك بدر الدين الحوثي<br>المحاضرة الرمضانية العاشرة – 1441 هـ</div>`;}
+function toggleTheme(){document.body.classList.toggle("light");}
 </script>
-
 </body>
 </html>
