@@ -1,16 +1,14 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-RE67RHFDNM"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-RE67RHFDNM"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-RE67RHFDNM');
+    </script>
 
-  gtag('config', 'G-RE67RHFDNM');
-</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>🚑 الإسعافات الأولية</title>
@@ -18,13 +16,35 @@
 <style>
 body{margin:0;font-family:'Tajawal', sans-serif;background:#0f172a;color:white;transition:0.3s;}
 body.light{background:#f0f0f0;color:#111}
-#loginScreen{position:fixed;width:100%;height:100%;display:flex;justify-content:center;align-items:center;background:linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.9)), url("images/ambulance.jpg") center/cover;}
+#loginScreen{position:fixed;width:100%;height:100%;display:flex;justify-content:center;align-items:center;background:linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.9)), url("images/ambulance.jpg") center/cover; z-index: 2000;}
 .login-card{background:rgba(0,0,0,0.75);padding:40px 50px;border-radius:25px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,0.6);}
 .title{font-size:42px;color:#FFD700;font-family:'Amiri';margin-bottom:15px}
 .start-btn{padding:15px 40px;background:linear-gradient(45deg,#ff4c4c,#dc2626);border:none;color:white;border-radius:12px;font-size:18px;cursor:pointer;}
 .dev-title{margin-top:20px;color:#00ffff;animation:blink 2s infinite;}
 .dev-name{font-weight:bold;font-size:18px;}
 @keyframes blink{0%,100%{opacity:0}50%{opacity:1}}
+
+/* زر الطوارئ العائم */
+.emergency-fab {
+    position: fixed;
+    bottom: 25px;
+    left: 25px;
+    background: linear-gradient(45deg, #dc2626, #991b1b);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: bold;
+    box-shadow: 0 10px 25px rgba(220, 38, 38, 0.5);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    z-index: 1000;
+    transition: 0.3s;
+    border: 2px solid #fff;
+}
+.emergency-fab:hover { transform: scale(1.1); background: #ff0000; }
+
 .container{display:flex;height:100vh}
 .sidebar{width:260px;background:#1e293b;overflow-y:auto;padding:10px}
 .content{flex:1;padding:15px;overflow-y:auto}
@@ -37,15 +57,23 @@ img,video{width:100%;border-radius:10px;margin:10px 0;}
 .save{background:#16a34a;color:white}
 .exit{background:#dc2626;color:white}
 .theme{background:#9333ea;color:white}
-#progressBar{position:fixed;top:0;left:0;height:6px;background:#ff4c4c;width:0%;}
-#tip{position:fixed;top:10px;right:50%;transform:translateX(50%);background:yellow;color:black;padding:8px;display:none;}
+#progressBar{position:fixed;top:0;left:0;height:6px;background:#ff4c4c;width:0%; z-index: 3000;}
+#tip{position:fixed;top:10px;right:50%;transform:translateX(50%);background:yellow;color:black;padding:8px;display:none; z-index: 4000; border-radius: 8px; font-weight: bold;}
 textarea{width:100%;border-radius:10px;padding:10px;border:none;margin-top:10px;}
-@media(max-width:768px){.sidebar{width:120px;font-size:12px}}
+@media(max-width:768px){
+    .sidebar{width:120px;font-size:12px}
+    .emergency-fab span{display:none} /* إخفاء النص في الجوال وترك الأيقونة والرقم */
+}
 </style>
 </head>
 <body>
 <div id="progressBar"></div>
 <div id="tip"></div>
+
+<a href="tel:777774883" class="emergency-fab">
+    <span>📞 اتصل بمدير الطوارئ: بكيل الجحافي</span>
+    <strong>777774883</strong>
+</a>
 
 <div id="loginScreen">
   <div class="login-card">
@@ -151,7 +179,6 @@ const cases = [
   ],
   tip:"التثبيت الصحيح قبل التحريك يحمي الأعصاب والأوعية الدموية من المضاعفات."
 },
-// الحالات المتبقية
 {
   title:"🔥 الحروق",
   img:"burn",
@@ -168,7 +195,6 @@ const cases = [
       <tr><td>الدرجة الثالثة</td><td>كافة طبقات الجلد</td><td>الجلد يبدو أبيض أو متفحماً (خشن)</td><td>غير مؤلم (لتلف الأعصاب)</td></tr>
       <tr><td>الدرجة الرابعة</td><td>الجلد + العضلات والعظام</td><td>تفحم عميق ووصول التلف للأنسجة الداخلية</td><td>خطيرة جداً</td></tr>
     </table>`,
-
     `<b>2️⃣ بروتوكول الإسعاف:</b>
     <ul>
       <li><b>إبعاد المصدر:</b> أوقف عملية الحرق فوراً (إخماد النار، قطع الكهرباء، أو غسل المادة الكيميائية).</li>
@@ -176,14 +202,12 @@ const cases = [
       <li><b>إزالة المعوقات:</b> انزع الخواتم، الساعات، أو الملابس الضيقة بلطف قبل تورم العضو، إلا إذا كانت ملتصقة بالحرق.</li>
       <li><b>التغطية:</b> تغطية الحرق بضماد معقم أو شاش فازلين غير لاصق، دون الضغط على الحرق، مع الحفاظ على الفقاعات المائية سليمة.</li>
     </ul>`,
-
     `<b>3️⃣ تحذيرات هامة:</b>
     <ul>
       <li>ممنوع وضع معجون الأسنان، الزبدة، القهوة، أو الطحين على الحرق.</li>
       <li>ممنوع وضع القطن مباشرة على الحرق.</li>
       <li>ممنوع استخدام الثلج المباشر.</li>
     </ul>`,
-
     `<b>4️⃣ قاعدة التسعات (Rule of Nines):</b>
     <ul>
       <li>الرأس: 9%</li>
@@ -210,21 +234,18 @@ const cases = [
       <tr><td>انسداد جزئي</td><td>يسعل بقوة، يتكلم بصعوبة، يصدر أصواتاً</td><td>شجعه على السعال فقط (لا تتدخل يدوياً)</td></tr>
       <tr><td>انسداد كلي</td><td>لا يستطيع التنفس أو الكلام، يمسك رقبته، يزرق وجهه</td><td>تدخل فوري (مناورة هيمليك)</td></tr>
     </table>`,
-
     `<b>2️⃣ بروتوكول إسعاف البالغين والأطفال:</b>
     <ul>
       <li>5 ضربات ظهر (Back Blows) خلف الشخص بين لوحي الكتف.</li>
       <li>5 ضغطات بطن (Heimlich Maneuver) فوق السرة.</li>
       <li>التكرار حتى خروج الجسم الغريب أو فقدان الوعي.</li>
     </ul>`,
-
     `<b>3️⃣ بروتوكول إسعاف الرضع:</b>
     <ul>
       <li>ضع الرضيع ووجهه للأسفل على ساعدك، رأسه أسفل من صدره.</li>
       <li>5 ضربات ظهر برفق بين لوحي الكتف.</li>
       <li>5 ضغطات صدر باستخدام إصبعين فقط.</li>
     </ul>`,
-
     `<b>4️⃣ إذا فقد المصاب وعيه:</b>
     <ul>
       <li>أنزل المصاب إلى الأرض وابدأ الإنعاش القلبي الرئوي (CPR) فوراً.</li>
@@ -249,7 +270,6 @@ const cases = [
       <tr><td>أثناء الإغماء</td><td>سقوط مفاجئ، فقدان السيطرة على العضلات، جلد بارد، نبض ضعيف</td></tr>
       <tr><td>ما بعد الإفاقة</td><td>تشوش ذهني بسيط، شعور بالتعب، عودة لون الجلد الطبيعي تدريجياً</td></tr>
     </table>`,
-
     `<b>2️⃣ بروتوكول الإسعاف:</b>
     <ul>
       <li>استلقاء المصاب على ظهره ورفع القدمين 30 سم لزيادة تدفق الدم للدماغ.</li>
@@ -257,10 +277,8 @@ const cases = [
       <li>مراقبة التنفس والنبض باستمرار، إذا لم يتحسن خلال دقيقتين استخدم CPR.</li>
       <li>بعد الإفاقة، اجعله يجلس لدقائق قبل النهوض وأعطه ماء أو عصير سكري.</li>
     </ul>`,
-
     `<b>3️⃣ وضعية الإفاقة:</b>
     ضع المصاب على جانبه مع ثني الركبة العلوية ودعم الرأس لمنع انسداد المجرى الهوائي.`,
-
     `<b>4️⃣ تحذيرات:</b>
     <ul>
       <li>ممنوع سكب الماء على الوجه.</li>
@@ -330,15 +348,43 @@ const cases = [
   ],
   tip:"لا تحاول إحداث قيء بدون توجيه طبي"
 }
-// باقي الحالات: الحروق، الاختناق، الإغماء، لدغة الأفاعي، لدغة العقرب، عضة الحيوانات، التسمم ...
 ];
-/* تابع بنفس التنسيق لجميع الحالات السابقة كما في كودك */
 
 function startApp(){loginScreen.style.display="none";app.style.display="flex";buildTOC();showIntro();}
 function exitApp(){ location.reload(); }
 function buildTOC(){tocList.innerHTML=`<div onclick="showIntro()">📖 المقدمة</div>`;cases.forEach((c,i)=>tocList.innerHTML+=`<div onclick="openCase(${i})">${c.title}</div>`);tocList.innerHTML+=`<div onclick="showConclusion()">📖 الخاتمة</div>`;}
-function showIntro(){content.innerHTML=`<h2 style="text-align:center;font-family:'Amiri';color:#FFD700;">﷽<br></h2><div class="step"><b>📖 نبذة:</b><br>الإسعافات الأولية هي الرعاية الفورية للحفاظ على حياة المصاب ومنع تدهور حالته حتى وصول الرعاية الطبية.</div><div class="step"><b>👨‍⚕️ تعريف المسعف:</b><br>هو الشخص المدرب القادر على تقييم الحالة وتقديم التدخل السريع بشكل آمن.</div><div class="step"><b>🧠 صفات المسعف:</b><br>الهدوء – سرعة التصرف – الدقة – تحمل المسؤولية – المعرفة الأساسية بالإسعافات.</div><div class="step"><b>⚠️ الاحتياطات:</b><br>تأمين المكان – حماية النفس – استخدام أدوات الحماية – طلب المساعدة فورًا.</div><div class="step"><b>🎯 الأهداف:</b><br>إنقاذ الحياة – منع التدهور – تعزيز الشفاء.</div>`;}
-function openCase(i){const c=cases[i];content.innerHTML=`<h2>${c.title}</h2><img src="images/${c.img}.jpg"><video controls><source src="videos/${c.video}.mp4"></video><div class="step"><b>📌 التعريف:</b><br>${c.def}</div><div class="step"><b>⚠️ الأسباب:</b><br>${c.causes}</div><div class="step"><b>🩺 الأعراض والعلامات:</b><br>${c.sym}</div><div class="step"><b>🚑 الإجراءات المتخذة:</b><br>${c.steps.join("<br>")}</div><div class="step" style="background:#ffeb3b;color:#111;"><b>💡 نصيحة مهمة:</b><br>${c.tip}</div><textarea id="note${i}" placeholder="ملاحظاتك...">${localStorage.getItem('n'+i)||''}</textarea><button class="btn save" onclick="saveNote(${i})">💾 حفظ</button>`;showTip(c.tip);progress(i);}
+
+function showIntro(){
+  content.innerHTML=`<h2 style="text-align:center;font-family:'Amiri';color:#FFD700;">﷽<br></h2>
+  <div class="step" style="border-right-color:#ff4c4c; background:#2d1b1b; color:#fff;">
+      <h3 style="margin-top:0;">🚨 أرقام الطوارئ الهامة (العدين)</h3>
+      <b>مدير الطوارئ: بكيل الجحافي</b><br>
+      رقم الهاتف: <a href="tel:777774883" style="color:#00ffff; text-decoration:none;">777774883 📞</a><br>
+      <i>يرجى الاتصال فوراً في الحالات الحرجة التي تتطلب تنسيقاً ميدانياً.</i>
+  </div>
+  <div class="step"><b>📖 نبذة:</b><br>الإسعافات الأولية هي الرعاية الفورية للحفاظ على حياة المصاب ومنع تدهور حالته حتى وصول الرعاية الطبية.</div>
+  <div class="step"><b>👨‍⚕️ تعريف المسعف:</b><br>هو الشخص المدرب القادر على تقييم الحالة وتقديم التدخل السريع بشكل آمن.</div>
+  <div class="step"><b>🧠 صفات المسعف:</b><br>الهدوء – سرعة التصرف – الدقة – تحمل المسؤولية – المعرفة الأساسية بالإسعافات.</div>
+  <div class="step"><b>⚠️ الاحتياطات:</b><br>تأمين المكان – حماية النفس – استخدام أدوات الحماية – طلب المساعدة فورًا.</div>
+  <div class="step"><b>🎯 الأهداف:</b><br>إنقاذ الحياة – منع التدهور – تعزيز الشفاء.</div>`;
+}
+
+function openCase(i){
+  const c=cases[i];
+  content.innerHTML=`<h2>${c.title}</h2>
+  <img src="images/${c.img}.jpg" onerror="this.src='images/placeholder.jpg'">
+  <video controls><source src="videos/${c.video}.mp4"></video>
+  <div class="step"><b>📌 التعريف:</b><br>${c.def}</div>
+  <div class="step"><b>⚠️ الأسباب:</b><br>${c.causes}</div>
+  <div class="step"><b>🩺 الأعراض والعلامات:</b><br>${c.sym}</div>
+  <div class="step"><b>🚑 الإجراءات المتخذة:</b><br>${c.steps.join("<br>")}</div>
+  <div class="step" style="background:#ffeb3b;color:#111;"><b>💡 نصيحة مهمة:</b><br>${c.tip}</div>
+  <textarea id="note${i}" placeholder="ملاحظاتك...">${localStorage.getItem('n'+i)||''}</textarea>
+  <button class="btn save" onclick="saveNote(${i})">💾 حفظ</button>`;
+  showTip(c.tip);
+  progress(i);
+}
+
 function saveNote(i){localStorage.setItem('n'+i, document.getElementById('note'+i).value);}
 function progress(i){progressBar.style.width=((i+1)/cases.length*100)+'%';}
 function showTip(t){tip.innerText=t;tip.style.display="block";setTimeout(()=>tip.style.display="none",3000);}
