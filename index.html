@@ -9,496 +9,686 @@
       gtag('config', 'G-RE67RHFDNM');
     </script>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🚑 الإسعافات الأولية</title>
-<link href="https://fonts.googleapis.com/css2?family=Tajawal&family=Amiri&display=swap" rel="stylesheet">
-<style>
-/* التنسيقات الأساسية */
-body { margin: 0; font-family: 'Tajawal', sans-serif; background: #0f172a; color: white; transition: 0.3s; }
-body.light { background: #f0f0f0; color: #111; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚑 دليل الإسعافات الأولية - د. صلاح الأهدل</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&family=Amiri:wght@700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root { --primary: #ef4444; --bg-dark: #0f172a; --card-dark: #1e293b; }
+        
+        body { margin: 0; font-family: 'Tajawal', sans-serif; background: var(--bg-dark); color: white; transition: 0.3s; overflow-x: hidden; }
+        body.light { background: #f8fafc; color: #1e293b; }
 
-/* شاشة البداية */
-#loginScreen { position: fixed; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.9)), url("images/ambulance.jpg") center/cover; z-index: 2000; }
-.login-card { background: rgba(0,0,0,0.75); padding: 40px 50px; border-radius: 25px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.6); }
-.title { font-size: 42px; color: #FFD700; font-family: 'Amiri'; margin-bottom: 15px; }
-.start-btn { padding: 15px 40px; background: linear-gradient(45deg, #ff4c4c, #dc2626); border: none; color: white; border-radius: 12px; font-size: 18px; cursor: pointer; transition: 0.3s; }
-.start-btn:hover { transform: scale(1.05); }
-.dev-title { margin-top: 20px; color: #00ffff; animation: blink 2s infinite; }
-.dev-name { font-weight: bold; font-size: 18px; }
-@keyframes blink { 0%, 100% { opacity: 0; } 50% { opacity: 1; } }
+        /* شاشة البداية */
+        #loginScreen { position: fixed; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.9)), url("images/1001491511.png") center/cover; z-index: 2000; }
+        .login-card { background: rgba(0,0,0,0.85); padding: 40px; border-radius: 30px; text-align: center; border: 1px solid rgba(255,255,255,0.1); width: 85%; max-width: 450px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .title { font-size: 36px; color: #FFD700; font-family: 'Amiri'; margin-bottom: 20px; }
+        .start-btn { width: 100%; padding: 15px; background: linear-gradient(45deg, #ef4444, #b91c1c); border: none; color: white; border-radius: 15px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .start-btn:hover { transform: scale(1.05); }
+        .dev-info { margin-top: 25px; color: #38bdf8; font-size: 14px; }
+        .dev-name { display: block; font-size: 20px; color: #fff; font-weight: bold; margin-top: 5px; }
 
-/* زر الطوارئ الاحترافي */
-.emergency-fab {
-    position: fixed;
-    bottom: 30px;
-    left: 30px;
-    background: linear-gradient(135deg, #e11d48, #9f1239);
-    color: white;
-    padding: 12px 25px;
-    border-radius: 50px;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 18px;
-    box-shadow: 0 10px 20px rgba(225, 29, 72, 0.4);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    z-index: 1000;
-    transition: all 0.3s ease;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    animation: pulse-red 2s infinite;
-}
-.emergency-fab:hover { transform: scale(1.05); }
-.i-icon { font-size: 22px; }
+        /* الهيدر وشريط التقدم */
+        header { background: var(--card-dark); padding: 15px; text-align: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        body.light header { background: #fff; color: #1e293b; }
+        #progressBar { position: fixed; top: 0; left: 0; height: 5px; background: var(--primary); width: 0%; z-index: 3000; transition: 0.4s; }
 
-@keyframes pulse-red {
-    0% { box-shadow: 0 0 0 0 rgba(225, 29, 72, 0.7); }
-    70% { box-shadow: 0 0 0 15px rgba(225, 29, 72, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(225, 29, 72, 0); }
-}
+        /* شبكة الأيقونات الدائرية (الفهرس) */
+        #tocGrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; padding: 25px; max-width: 700px; margin: 0 auto; }
+        .grid-item { display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: 0.3s; }
+        .grid-item:hover { transform: translateY(-5px); }
+        
+        .icon-circle { 
+            width: 110px; height: 110px; background: #fff; border-radius: 50%; 
+            overflow: hidden; border: 3px solid var(--primary); 
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4); margin-bottom: 10px;
+            display: flex; justify-content: center; align-items: center;
+        }
+        .icon-circle img { width: 100%; height: 100%; object-fit: cover; }
+        .grid-item span { font-size: 14px; font-weight: bold; text-align: center; }
 
-/* تخطيط التطبيق */
-.container { display: flex; height: 100vh; }
-.sidebar { width: 260px; background: #1e293b; overflow-y: auto; padding: 10px; box-shadow: -2px 0 10px rgba(0,0,0,0.5); z-index: 100;}
-.content { flex: 1; padding: 15px; overflow-y: auto; padding-bottom: 80px; }
-#tocList div { padding: 10px; margin: 6px 0; background: #334155; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.2s;}
-#tocList div:hover { background: #dc2626; color: white; }
+        /* عرض الحالة */
+        #caseView { display: none; padding: 20px; max-width: 800px; margin: 0 auto; padding-bottom: 100px; }
+        .case-media { display: flex; flex-direction: column; gap: 15px; margin-bottom: 25px; }
+        .case-media img, .case-media video { width: 100%; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); display: block; }
+        
+        .info-box { background: var(--card-dark); padding: 20px; border-radius: 15px; margin-bottom: 15px; border-right: 5px solid var(--primary); line-height: 1.8; }
+        body.light .info-box { background: #fff; color: #1e293b; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .info-box h3 { margin-top: 0; color: var(--primary); font-size: 18px; margin-bottom: 10px;}
 
-/* محتوى الحالات */
-img, video { width: 100%; border-radius: 10px; margin: 10px 0; box-shadow: 0 4px 8px rgba(0,0,0,0.3); display: block; }
-.step { background: #1e293b; padding: 15px; margin: 10px 0; border-radius: 10px; border-right: 4px solid #3b82f6; line-height: 1.6; }
-body.light .step { background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        /* أزرار التحكم والطباعة والملاحظات */
+        .controls-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .back-btn { padding: 12px 25px; background: var(--primary); color: white; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; display: inline-flex; align-items: center; gap: 8px; transition: 0.3s; }
+        .back-btn:hover { background: #b91c1c; }
+        .print-btn { padding: 12px 20px; background: #10b981; color: white; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; display: inline-flex; align-items: center; gap: 8px; transition: 0.3s; }
+        .print-btn:hover { background: #059669; }
+        
+        /* تنسيق حقل الملاحظات */
+        .note-input { width: 100%; box-sizing: border-box; padding: 15px; border-radius: 10px; border: 1px solid #475569; background: #334155; color: white; font-family: inherit; font-size: 15px; resize: vertical; margin-bottom: 10px; min-height: 100px; }
+        body.light .note-input { background: #f1f5f9; border: 1px solid #cbd5e1; color: #1e293b; }
+        .note-input:focus { outline: 2px solid #3b82f6; }
+        .save-btn { padding: 10px 20px; background: #3b82f6; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; font-family: inherit; }
+        .save-btn:hover { background: #2563eb; }
+        .save-status { margin-right: 15px; color: #10b981; font-weight: bold; font-size: 14px; opacity: 0; transition: opacity 0.3s; }
 
-/* الأزرار */
-.btn { padding: 10px 15px; margin: 5px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.2s;}
-.btn:hover { opacity: 0.9; }
-.print { background: #2563eb; color: white; }
-.save { background: #16a34a; color: white; width: auto;}
-.exit { background: #dc2626; color: white; }
-.theme { background: #9333ea; color: white; }
+        .emergency-fab { position: fixed; bottom: 25px; left: 25px; background: #b91c1c; color: white; padding: 15px 25px; border-radius: 50px; text-decoration: none; font-weight: bold; box-shadow: 0 10px 20px rgba(185,28,28,0.4); z-index: 1000; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        
+        .bottom-controls { display: flex; gap: 10px; padding: 20px; max-width: 700px; margin: 0 auto; }
+        .btn-ctrl { flex: 1; padding: 12px; border-radius: 10px; border: none; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .btn-ctrl:hover { opacity: 0.9; }
 
-/* أشرطة التقدم والتنبيهات */
-#progressBar { position: fixed; top: 0; left: 0; height: 6px; background: #ff4c4c; width: 0%; z-index: 3000; transition: 0.4s ease; }
-#tip { position: fixed; top: 15px; right: 50%; transform: translateX(50%); background: #ffeb3b; color: #111; padding: 10px 20px; display: none; z-index: 4000; border-radius: 8px; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-textarea { width: 100%; border-radius: 10px; padding: 15px; border: none; margin-top: 10px; background: #334155; color: white; box-sizing: border-box; resize: vertical; }
-body.light textarea { background: #e2e8f0; color: #111; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; color: inherit; }
+        th, td { border: 1px solid #475569; padding: 10px; text-align: center; font-size: 13px; }
+        th { background: #334155; color: white; }
+        body.light th { background: #cbd5e1; color: #0f172a; }
+        .table-responsive { overflow-x: auto; }
 
-/* شاشات الجوال */
-@media(max-width: 768px) {
-    .sidebar { width: 120px; font-size: 13px; }
-    .emergency-fab span:not(.i-icon) { display: none; }
-    .emergency-fab { padding: 15px; border-radius: 50%; bottom: 20px; left: 20px; }
-    .content { padding: 10px; padding-bottom: 80px; }
-}
-</style>
+        @media(max-width: 480px) {
+            #tocGrid { grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 15px; }
+            .icon-circle { width: 90px; height: 90px; }
+            .emergency-fab { bottom: 15px; left: 15px; padding: 12px 20px; font-size: 14px; }
+        }
+
+        /* ====== تنسيقات الطباعة الاحترافية ====== */
+        @media print {
+            body { background: white !important; color: black !important; }
+            #loginScreen, .emergency-fab, .bottom-controls, #tocGrid, .back-btn, .print-btn, .save-btn { display: none !important; }
+            header { background: white !important; color: black !important; box-shadow: none !important; border-bottom: 2px solid #000; padding: 10px 0; }
+            #caseView { padding: 0 !important; margin: 0 !important; max-width: 100% !important; }
+            .case-media video { display: none !important; } /* إخفاء الفيديو عند الطباعة */
+            .case-media img { max-height: 250px; object-fit: contain; border-radius: 0; box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+            .info-box { background: white !important; color: black !important; border: 1px solid #ccc !important; box-shadow: none !important; border-right: 5px solid #000 !important; page-break-inside: avoid; }
+            .info-box h3 { color: black !important; }
+            th { background: #eee !important; color: black !important; }
+            td, th { border: 1px solid #000 !important; }
+            .note-input { border: 1px dashed #ccc !important; background: transparent !important; color: black !important; resize: none; overflow: visible; height: auto; }
+            @page { margin: 1cm; size: A4 portrait; }
+        }
+    </style>
 </head>
 <body>
 
-<div id="progressBar"></div>
-<div id="tip"></div>
+    <div id="progressBar"></div>
 
-<a href="tel:777774883" class="emergency-fab">
-    <span class="i-icon">📞</span>
-    <span>الطوارئ</span>
-</a>
+    <a href="tel:777774883" class="emergency-fab">📞 اتصال طارئ</a>
 
-<div id="loginScreen">
-  <div class="login-card">
-    <div class="title">🚑 الإسعافات الأولية</div>
-    <button class="start-btn" onclick="startApp()">ابدأ الآن</button>
-    <div class="dev-title">برمجة وتطوير</div>
-    <div class="dev-name">👨‍⚕️ Dr / Salah Al-ahdel</div>
-  </div>
-</div>
+    <div id="loginScreen">
+      <div class="login-card">
+        <div class="title">🚑 دليل الإسعافات الأولية</div>
+        <button class="start-btn" onclick="initApp()">دخول النظام</button>
+        <div class="dev-info">إشراف وتطوير:<span class="dev-name">د/ صلاح قاسم الأهدل</span></div>
+      </div>
+    </div>
 
-<div class="container" id="app" style="display:none;">
-  <div class="sidebar">
-    <h3 style="text-align: center;">📑 الفهرس</h3>
-    <div id="tocList"></div>
-    <hr style="border-color: #334155; margin: 15px 0;">
-    <button class="btn theme" onclick="toggleTheme()">🌙 الوضع</button>
-    <button class="btn print" onclick="window.print()">🖨 طباعة</button>
-    <button class="btn exit" onclick="exitApp()">🚪 خروج</button>
-  </div>
-  <div class="content" id="content"></div>
-</div>
+    <div id="mainApp" style="display:none;">
+        <header><h2 id="headerTitle" style="margin:0;">القائمة الرئيسية</h2></header>
 
-<script>
-const loginScreen = document.getElementById("loginScreen");
-const app = document.getElementById("app");
-const tocList = document.getElementById("tocList");
-const content = document.getElementById("content");
-const progressBar = document.getElementById("progressBar");
-const tip = document.getElementById("tip");
+        <div id="tocGrid"></div>
 
-const cases = [
-{
-  title:"🫀 الإنعاش القلبي (CPR)",
-  img:"cpr",
-  video:"cpr",
-  def:`الإنعاش القلبي الرئوي هو سلسلة من الخطوات الإسعافية المتتالية التي تهدف إلى الحفاظ على تدفق الدم والأكسجين إلى الدماغ والأعضاء الحيوية عند توقف القلب أو التنفس بشكل مفاجئ. الهدف ليس "إعادة القلب للعمل" دائماً بالضغط اليدوي، بل منع موت الدماغ حتى وصول التجهيزات المتقدمة (الصدمة الكهربائية).`,
-  causes:`فقدان الوعي المفاجئ: عدم الاستجابة للمؤثرات الصوتية أو الحركية.<br>توقف التنفس أو "التنفس الاحتضاري": عدم وجود حركة للصدر أو شهيق متقطع وغير فعال.<br>غياب النبض المركزي: عدم جس النبض في الشريان السباتي خلال 10 ثوانٍ.`,
-  sym:`فقدان الوعي، توقف التنفس، غياب النبض.`,
-  steps:[
-    `1️⃣ تأمين الموقع (Scene Safety): تأكد أن المكان آمن لك وللمريض.`,
-    `2️⃣ فحص الاستجابة وطلب المساعدة (Response & Activation): هز المريض والنداء بصوت عالٍ، إذا لم يستجب اطلب المساعدة فوراً.`,
-    `3️⃣ الضغطات الصدرية (Circulation - C): منتصف الصدر، عمق 5-6 سم، سرعة 100-120 ضغطة/دقيقة، السماح بالارتداد الكامل، عدم التوقف أكثر من 10 ثوانٍ.`,
-    `4️⃣ فتح مجرى الهواء (Airway - A): إمالة الرأس ورفع الذقن لفتح مجرى الهواء.`,
-    `5️⃣ التنفس الاصطناعي (Breathing - B): نفسان بعد كل 30 ضغطة، مدة ثانية واحدة للنفس الواحد، مراقبة ارتفاع الصدر.`,
-    `6️⃣ استخدام جهاز AED: بمجرد توفره، لإنهاء الرجفان البطيني وإعادة النظم الطبيعي للقلب.`,
-    `7️⃣ متى نتوقف عن الإنعاش؟: ROSC، وصول الفريق الطبي، إنهاك المسعف، أو وجود خطر يهدد حياته.`,
-    `💡 ملاحظة: Hands-only CPR للمسعف غير المدرب أو لمنع العدوى، فعالة جداً في الدقائق الأولى.`,
-    `🔹 البروتوكولات العالمية ACLS: قاعدة 5Hs & 5Ts للتشخيص السريع للأسباب القابلة للعكس.`,
-    `– 5Hs: Hypovolemia, Hypoxia, Acidosis, Hyper/Hypokalemia, Hypothermia.`,
-    `– 5Ts: Tension Pneumothorax, Tamponade, Toxins, Pulmonary Thrombosis, Coronary Thrombosis.`,
-    `– أسباب شائعة محلياً: Electric Shock, Trauma, إرهاق شديد.`,
-    `📝 جدول ملخص للتشخيص السريع: نزيف: شحوب، نبض ضعيف وسريع → تعويض السوائل والدم.<br>نقص أكسجين: ازرقاق → فتح مجرى الهواء وأكسجين 100%.<br>جلطة قلبية: ألم صدر → نقل عاجل لمركز القسطرة.<br>سموم: اتساع/ضيق الحدقة، بقايا أدوية → إعطاء الادرينالين إن وجد.`
-  ],
-  tip:`كل ثانية تأخير تقلل فرصة النجاة`
-},
-{
-  title:"🧠 السكتة الدماغية والجلطة القلبية",
-  img:"stroke_mi",
-  video:"stroke_mi",
-  def:`السكتة الدماغية (Stroke) تحدث عند انقطاع الدم عن جزء من الدماغ. أما الجلطة القلبية (MI) فهي انسداد مفاجئ في تروية عضلة القلب. كلاهما حالات مهددة للحياة تتطلب تدخلًا فوريًا.`,
-  causes:`ارتفاع ضغط الدم، السكري، التدخين، أمراض القلب، والجلطات العابرة.`,
-  sym:`<b>السكتة الدماغية (قاعدة FAST):</b><br>
-  - <b>F (Face):</b> تدلي أحد جانبي الوجه عند الابتسام.<br>
-  - <b>A (Arms):</b> ضعف في أحد الذراعين عند رفعهما.<br>
-  - <b>S (Speech):</b> صعوبة في الكلام أو كلام غير مفهوم.<br>
-  - <b>T (Time):</b> الوقت حرج جداً اتصل بالطوارئ فوراً.<br>
-  <b>الجلطة القلبية:</b> ألم ضاغط في الصدر، ضيق تنفس، عرق بارد، ألم يمتد للفك أو الذراع الأيسر.`,
-  steps:[
-    `1️⃣ الاتصال فوراً بمدير الطوارئ أو أقرب مركز قسطرة.`,
-    `2️⃣ إجلاس المصاب في وضعية مريحة (وضعية نصف الجلوس).`,
-    `3️⃣ فك الملابس الضيقة حول الرقبة والخصر.`,
-    `4️⃣ إذا كان واعياً ولا يوجد حساسية، يمكن إعطاؤه قرص أسبرين (مضغ) لتقليل التجلط.`,
-    `5️⃣ مراقبة التنفس والنبض باستمرار؛ في حال فقدان الوعي نبدأ CPR فوراً.`
-  ],
-  tip:"الوقت هو الدماغ والوقت هو العضلة؛ كل دقيقة تأخير تعني تلفاً لا يمكن إصلاحه."
-},
-{
-  title:"🐝 الصدمة التحسسية الحادة",
-  img:"anaphylaxis",
-  video:"anaphylaxis",
-  def:`رد فعل تحسسي شديد وفوري يصيب كامل الجسم، مما يؤدي لضيق الممرات الهوائية وهبوط حاد في ضغط الدم.`,
-  causes:`لدغات الحشرات (النحل، الدبابير)، بعض الأدوية (مثل البنسلين)، أو بعض الأطعمة.`,
-  sym:`تورم الوجه واللسان، صعوبة شديدة في التنفس، طفح جلدي واسع، غثيان، دوار شديد وفقدان وعي.`,
-  steps:[
-    `1️⃣ إبعاد المسبب (مثل نزع إبرة النحلة دون عصرها).`,
-    `2️⃣ استخدام حقنة الأدرينالين (EpiPen) إذا كانت متوفرة لدى المريض (تُحقن في عضلة الفخذ الخارجية).`,
-    `3️⃣ وضع المصاب مستلقياً على ظهره مع رفع قدميه (لتحسين الضغط).`,
-    `4️⃣ إذا كان هناك تورم في اللسان وصعوبة تنفس، يجب تأمين مجرى الهواء بأي وسيلة متاحة.`,
-    `5️⃣ نقل المريض فوراً للمستشفى لأن مفعول الأدرينالين قد ينتهي وتعود الصدمة.`
-  ],
-  tip:"الأدرينالين هو المنقذ الوحيد للحياة في هذه الحالة."
-},
-{
-  title:"💧 ضربة الشمس والجفاف",
-  img:"heatstroke",
-  video:"heatstroke",
-  def:`ارتفاع درجة حرارة الجسم لأكثر من 40 درجة مئوية بسبب التعرض الطويل للحرارة، مما يؤدي لفشل نظام تنظيم الحرارة في الدماغ.`,
-  causes:`العمل الشاق تحت الشمس، نقص شرب السوائل، خاصة عند الأطفال وكبار السن.`,
-  sym:`ارتفاع كبير في الحرارة، جلد جاف وساخن (بدون عرق)، صداع، تشوش ذهني، تشنجات، أو فقدان وعي.`,
-  steps:[
-    `1️⃣ نقل المصاب فوراً إلى مكان بارد أو مظلل.`,
-    `2️⃣ تبريد الجسم بسرعة: رش الماء البارد، استخدام الكمادات، أو وضع قطع ثلج تحت الإبطين وبين الفخذين.`,
-    `3️⃣ إذا كان واعياً، إعطاؤه سوائل باردة أو محلول إرواء تدريجياً.`,
-    `4️⃣ مراقبة علامات الجفاف الحاد (مرتبط ببروتوكول IMCI للأطفال).`,
-    `5️⃣ عدم إعطاء خافضات حرارة (مثل الباراسيتامول) لأنها لا تنفع في ضربة الشمس.`
-  ],
-  tip:"التبريد السريع للجسم هو الأولوية القصوى لمنع تلف الدماغ."
-},
-{
-  title:"🤮 الغرق",
-  img:"drowning",
-  video:"drowning",
-  def:`فشل التنفس نتيجة انغمار الأنف والفم بالسوائل، مما يؤدي لنقص الأكسجين في الدماغ.`,
-  causes:`السقوط في الآبار، السدود، أو تجمعات المياه.`,
-  sym:`انقطاع التنفس، زرقة الوجه والأطراف، خروج رغوة من الفم، فقدان الوعي.`,
-  steps:[
-    `1️⃣ إخراج المصاب من الماء مع حماية الرقبة (خطر وجود كسر في الفقرات).`,
-    `2️⃣ وضع المصاب على أرض صلبة وفحص التنفس والنبض.`,
-    `3️⃣ <b>هام:</b> ابدأ بـ 5 أنفاس إنقاذية أولاً (قبل الضغطات الصدرية) لأن المشكلة تنفسية وليست قلبية في الأصل.`,
-    `4️⃣ البدء بإنعاش قلبي رئوي (30 ضغطة : 2 نفس).`,
-    `5️⃣ لا تحاول إخراج الماء من الرئتين بالضغط على البطن؛ الإنعاش هو الذي سيطرد الماء.`
-  ],
-  tip:"حتى لو أفاق المصاب، يجب نقله للمستشفى لخطر 'الغرق الثانوي' وتجمع السوائل في الرئة."
-},
-{
-  title:"🤰 نزيف ما بعد الولادة",
-  img:"pph",
-  video:"pph",
-  def:`فقدان كمية كبيرة من الدم (أكثر من 500 مل) بعد الولادة، وهو المسبب الأول لوفيات الأمهات ميدانياً.`,
-  causes:`عدم انقباض الرحم (Atony)، تمزقات القناة المهبلية، أو بقاء أجزاء من المشيمة.`,
-  sym:`نزيف مهبلي غزير ومستمر، شحوب، نبض سريع وضعيف، هبوط الضغط، الشعور بالدوخة.`,
-  steps:[
-    `1️⃣ طلب المساعدة الطبية فوراً وتجهيز وسيلة نقل.`,
-    `2️⃣ عمل تدليك للرحم (Fundal Massage) بقوة من فوق البطن لتحفيزه على الانقباض.`,
-    `3️⃣ وضع الأم في وضعية الصدمة (مستلقية مع رفع القدمين).`,
-    `4️⃣ تشجيع الأم على التبول أو إفراغ المثانة (المثانة الممتلئة تمنع انقباض الرحم).`,
-    `5️⃣ إرضاع الطفل فوراً قد يساعد في إفراز هرمون الأوكسيتوسين الطبيعي لتقبض الرحم.`
-  ],
-  tip:"التدليك المستمر للرحم هو الإجراء المنقذ للحياة حتى وصول المساعدة."
-},
-{
-  title:"🩸 النزيف",
-  img:"bleeding",
-  video:"bleeding",
-  def:`النزيف هو فقدان الدم من الدورة الدموية نتيجة تمزق الأوعية الدموية (شرايين، أوردة، شعيرات). فقدان كمية كبيرة من الدم يؤدي إلى صدمة نقص الحجم (Hypovolemic Shock).`,
-  causes:`جروح، حوادث، طعنات، كسور حادة، إصابات ناتجة عن آلات حادة أو حوادث مرورية.`,
-  sym:`العلامات الظاهرة: جرح مفتوح، تدفق دم، تجمع دموي تحت الجلد.<br>علامات الصدمة: شحوب وبرودة الجلد، عرق بارد، نبض سريع وضعيف، تشوش ذهني، انخفاض ضغط الدم.<br>النزيف الداخلي: ألم شديد في البطن أو الصدر، خروج دم من فتحات الجسم الطبيعية، تورم صلب.`,
-  steps:[
-    `1️⃣ أنواع النزيف: شرياني (قاتل في دقائق)، وريدي (متوسط إلى مرتفع)، شعيري (منخفض غالباً).`,
-    `2️⃣ بروتوكول السيطرة على النزيف P-E-D-T: الضغط المباشر، الرفع، الرباط الضاغط، العاصبة/المرقأة.`,
-    `3️⃣ النزيف الداخلي: وضع المريض في وضعية الصدمة، تدفئة المريض، نقل فوري إلى المستشفى.`,
-    `4️⃣ نصيحة: كل ثانية تأخير تزيد من خطورة الحالة، الضغط المباشر هو أول وأهم خطوة.`
-  ],
-  tip:"🚨 السيطرة السريعة على النزيف تنقذ حياة المصاب"
-},
-{
-  title:"🦴 الكسور",
-  img:"fracture",
-  video:"fracture",
-  def:`الكسر هو انفصال أو تشقق في نسيج العظمة نتيجة قوة خارجية تفوق قدرة العظم على التحمل. تكمن خطورة الكسر ليس فقط في العظم نفسه، بل في احتمال تضرر الأعصاب والأوعية الدموية المحيطة به.`,
-  causes:`سقوط، حوادث، ضربات قوية.`,
-  sym:`الألم الشديد، التشوه، التورم، الزرقة، فقدان الوظيفة، صوت طرقعة عند تحريك العظم.`,
-  steps:[
-    `<b>1️⃣ أنواع الكسور (Classification):</b>
-    <div style="overflow-x:auto;">
-    <table border="1" cellpadding="8" style="border-collapse:collapse;width:100%;color:inherit;text-align:center;">
-    <tr style="background:#334155;color:white;"><th>نوع الكسر</th><th>الوصف</th><th>المظهر الخارجي</th><th>مستوى الخطورة</th></tr>
-    <tr><td>كسر مغلق</td><td>كسر العظم دون تمزق الجلد</td><td>تورم وتشوه دون جرح</td><td>متوسطة</td></tr>
-    <tr><td>كسر مفتوح</td><td>بروز العظم عبر الجلد</td><td>جرح مفتوح وعظم مرئي</td><td>عالية جداً</td></tr>
-    <tr><td>كسر مضاعف</td><td>كسر مع إصابة عضو حيوي</td><td>نزيف حاد أو فقدان حركة</td><td>تهدد الحياة</td></tr>
-    <tr><td>كسر غصن نضير</td><td>كسر غير مكتمل</td><td>شائع عند الأطفال</td><td>منخفضة</td></tr>
-    </table>
-    </div>`,
-    `<b>2️⃣ بروتوكول الإسعاف:</b>
-    <ul>
-    <li><b>التقييم الأولي (Check):</b> تأكد من تنفس المريض ونبضه أولاً. لا تحاول إعادة العظم لمكانه أبداً.</li>
-    <li><b>السيطرة على النزيف:</b> ضع شاشاً معقماً حول العظم البارز واضغط على أطراف الجرح.</li>
-    <li><b>التثبيت (Splinting):</b> استخدم جبيرة لتثبيت المفصلين المحيطين بالكسر.</li>
-    <li><b>فحص التروية (CSM):</b> افحص الدورة الدموية والإحساس بعد التثبيت.</li>
-    </ul>`,
-    `<b>3️⃣ تنبيهات هامة:</b>
-    <ul>
-    <li>إذا لم تكن متأكداً أنه كسر، تعامل معه كأنه كسر حتى يثبت العكس بالأشعة.</li>
-    <li>يمنع نقل المصاب بكسور العمود الفقري إلا بواسطة فريق متخصص ونقالة صلبة.</li>
-    </ul>`
-  ],
-  tip:"التثبيت الصحيح قبل التحريك يحمي الأعصاب والأوعية الدموية."
-},
-{
-  title:"🔥 الحروق",
-  img:"burn",
-  video:"burn",
-  def:`الحروق هي تلف في أنسجة الجسم ناتج عن التعرض لمؤثرات خارجية. تؤدي الحروق إلى تدمير طبقات الجلد، مما يفقد الجسم خط الدفاع الأول ويسبب فقدان السوائل.`,
-  causes:`النار، السوائل الساخنة، الكهرباء، المواد الكيميائية، التعرض للإشعاع.`,
-  sym:`تغير لون الجلد، ظهور فقاعات مائية، صدمة عصبية، صعوبة التنفس إذا الحرق في الوجه.`,
-  steps:[
-    `<b>1️⃣ تصنيف درجات الحروق:</b>
-    <div style="overflow-x:auto;">
-    <table border="1" cellpadding="8" style="border-collapse:collapse;width:100%;color:inherit;text-align:center;">
-      <tr style="background:#334155;color:white;"><th>الدرجة</th><th>الطبقة المتضررة</th><th>المظهر</th><th>الألم</th></tr>
-      <tr><td>الأولى</td><td>البشرة</td><td>احمرار وجفاف</td><td>مؤلم جداً</td></tr>
-      <tr><td>الثانية</td><td>البشرة + الأدمة</td><td>احمرار شديد وفقاعات</td><td>مؤلم جداً</td></tr>
-      <tr><td>الثالثة</td><td>كافة طبقات الجلد</td><td>الجلد أبيض أو متفحم</td><td>غير مؤلم (تلف أعصاب)</td></tr>
-    </table>
-    </div>`,
-    `<b>2️⃣ بروتوكول الإسعاف:</b>
-    <ul>
-      <li><b>إبعاد المصدر:</b> أوقف عملية الحرق فوراً.</li>
-      <li><b>التبريد بالماء:</b> سكب ماء جارٍ بدرجة حرارة الغرفة لمدة 10-20 دقيقة.</li>
-      <li><b>إزالة المعوقات:</b> انزع الخواتم أو الملابس الضيقة بلطف.</li>
-      <li><b>التغطية:</b> تغطية الحرق بضماد معقم أو شاش فازلين.</li>
-    </ul>`,
-    `<b>3️⃣ تحذيرات:</b>
-    <ul>
-      <li>ممنوع وضع معجون الأسنان أو الثلج المباشر على الحرق.</li>
-      <li>ممنوع فقع الفقاعات المائية.</li>
-    </ul>`,
-    `<b>4️⃣ قاعدة التسعات (Rule of Nines):</b>
-    الرأس: 9% | كل ذراع: 9% | كل رجل: 18% | الصدر والبطن: 18% | الظهر: 18% | التناسلية: 1%`
-  ],
-  tip:"التبريد السريع بالماء الجاري والتغطية المعقمة يقللان الضرر."
-},
-{
-  title:"😮 الاختناق",
-  img:"choking",
-  video:"choking",
-  def:`انسداد مجرى الهواء بجسم غريب يمنع وصول الأكسجين إلى الرئتين.`,
-  causes:`طعام، ألعاب صغيرة، أجسام غريبة.`,
-  sym:`سعال، صعوبة في الكلام، ازرقاق الوجه، إمساك الرقبة.`,
-  steps:[
-    `<b>1️⃣ أنواع انسداد مجرى الهواء:</b>
-    <div style="overflow-x:auto;">
-    <table border="1" cellpadding="8" style="border-collapse:collapse;width:100%;color:inherit;text-align:center;">
-      <tr style="background:#334155;color:white;"><th>النوع</th><th>العلامات</th><th>الإجراء</th></tr>
-      <tr><td>جزئي</td><td>يسعل بقوة ويتكلم بصعوبة</td><td>شجعه على السعال فقط</td></tr>
-      <tr><td>كلي</td><td>لا يستطيع التنفس، يمسك رقبته</td><td>تدخل فوري (مناورة هيمليك)</td></tr>
-    </table>
-    </div>`,
-    `<b>2️⃣ بروتوكول إسعاف البالغين والأطفال:</b>
-    <ul>
-      <li>5 ضربات ظهر خلف الشخص بين لوحي الكتف.</li>
-      <li>5 ضغطات بطن فوق السرة.</li>
-      <li>التكرار حتى خروج الجسم الغريب.</li>
-    </ul>`,
-    `<b>3️⃣ إسعاف الرضع:</b>
-    <ul>
-      <li>ضع الرضيع ووجهه للأسفل، رأسه أسفل من صدره.</li>
-      <li>5 ضربات ظهر برفق.</li>
-      <li>5 ضغطات صدر باستخدام إصبعين.</li>
-    </ul>`,
-    `<b>4️⃣ إذا فقد المصاب وعيه:</b>
-    ابدأ الإنعاش القلبي الرئوي (CPR) فوراً، ولا تستخدم إصبعك لاستخراج الجسم إلا إذا كان مرئياً بوضوح.`
-  ],
-  tip:"التدخل السريع والهدوء هما مفتاح النجاة."
-},
-{
-  title:"😵 الإغماء",
-  img:"fainting",
-  video:"fainting",
-  def:`فقدان مفاجئ ومؤقت للوعي ناتج عن نقص تدفق الدم والأكسجين إلى الدماغ.`,
-  causes:`هبوط ضغط، إرهاق، حرارة شديدة، جوع.`,
-  sym:`دوار، شحوب، تعرق بارد، فقدان الوعي.`,
-  steps:[
-    `<b>1️⃣ بروتوكول الإسعاف:</b>
-    <ul>
-      <li>استلقاء المصاب على ظهره ورفع القدمين 30 سم.</li>
-      <li>فك الملابس الضيقة حول الرقبة والخصر.</li>
-      <li>مراقبة التنفس والنبض باستمرار.</li>
-      <li>بعد الإفاقة، اجعله يجلس لدقائق قبل النهوض وأعطه عصيراً.</li>
-    </ul>`,
-    `<b>2️⃣ وضعية الإفاقة:</b>
-    ضع المصاب على جانبه مع ثني الركبة العلوية ودعم الرأس لمنع انسداد المجرى الهوائي في حال القيء.`,
-    `<b>3️⃣ تحذيرات:</b>
-    <ul>
-      <li>ممنوع سكب الماء على الوجه.</li>
-      <li>ممنوع إعطاء أي شيء عن طريق الفم وهو فاقد للوعي.</li>
-    </ul>`
-  ],
-  tip:"رفع القدمين يحسن تروية الدماغ بسرعة."
-},
-{
-  title:"🐍 لدغات الأفاعي والعقارب",
-  img:"snakebite",
-  video:"snakebite",
-  def:"إدخال سم الأفعى أو العقرب إلى الجسم عبر اللدغ.",
-  causes:"التعرض للأفاعي في الحقول أو البيئات الصحراوية.",
-  sym:"ألم شديد، تورم، تغير لون الجلد، تنميل.",
-  steps:[
-    "1️⃣ تهدئة المصاب تماماً لأن القلق يسرع نبضات القلب وبالتالي انتشار السم.",
-    "2️⃣ تثبيت الطرف المصاب وجعله في مستوى أقل من مستوى القلب.",
-    "3️⃣ عدم مص السم بالفم أو جرح المكان بالشفرة.",
-    "4️⃣ النقل الفوري لأقرب مستشفى أو مركز صحي لأخذ المصل المضاد.",
-    "💡 بالنسبة للعقرب: يمكن وضع كمادات باردة لتخفيف الألم وتضييق الأوعية الدموية مؤقتاً."
-  ],
-  tip:"منع الحركة ونقل المصاب فوراً هما الإجراء الأهم."
-},
-{
-  title:"☠️ التسمم",
-  img:"poison",
-  video:"poison",
-  def:"دخول مادة سامة للجسم.",
-  causes:"أدوية بجرعات زائدة، مواد كيميائية، منظفات.",
-  sym:"قيء، دوخة، فقدان وعي، حروق حول الفم.",
-  steps:[
-    "1️⃣ إبعاد المصاب عن المصدر.",
-    "2️⃣ عدم إعطاء أي شيء بالفم (لا ماء ولا حليب).",
-    "3️⃣ عدم محاولة إحداث قيء (خاصة مع المواد الحارقة لأنها ستحرق المريء مرة أخرى عند خروجها).",
-    "4️⃣ أخذ علبة المادة السامة أو الدواء والتوجه للمستشفى فوراً."
-  ],
-  tip:"الاحتفاظ بعلبة المادة السامة يساعد الطبيب في تحديد الترياق المناسب."
-}
-];
+        <div id="caseView">
+            <div class="controls-header">
+                <button class="back-btn" onclick="goBack()">🔙 العودة للفهرس</button>
+                <button class="print-btn" onclick="window.print()">🖨️ طباعة الحالة</button>
+            </div>
+            <div id="caseDetail"></div>
+        </div>
 
-function startApp() { 
-  loginScreen.style.display = "none"; 
-  app.style.display = "flex"; 
-  buildTOC(); 
-  showIntro(); 
-}
+        <div class="bottom-controls" id="bottomControls">
+            <button class="btn-ctrl" style="background:#6366f1; color:white;" onclick="toggleTheme()">🌓 تغيير الوضع</button>
+            <button class="btn-ctrl" style="background:#475569; color:white;" onclick="location.reload()">🚪 خروج</button>
+        </div>
+    </div>
 
-function exitApp() { 
-  location.reload(); 
-}
+    <script>
+        const cases = [
+        {
+          title:"🫀 الإنعاش القلبي (CPR)",
+          img:"cpr",
+          video:"cpr",
+          def:`الإنعاش القلبي الرئوي هو سلسلة من الخطوات الإسعافية المتتالية التي تهدف إلى الحفاظ على تدفق الدم والأكسجين إلى الدماغ والأعضاء الحيوية عند توقف القلب أو التنفس بشكل مفاجئ. الهدف ليس "إعادة القلب للعمل" دائماً بالضغط اليدوي، بل منع موت الدماغ حتى وصول التجهيزات المتقدمة (الصدمة الكهربائية).`,
+          causes:`فقدان الوعي المفاجئ: عدم الاستجابة للمؤثرات الصوتية أو الحركية.<br>توقف التنفس أو "التنفس الاحتضاري": عدم وجود حركة للصدر أو شهيق متقطع وغير فعال.<br>غياب النبض المركزي: عدم جس النبض في الشريان السباتي خلال 10 ثوانٍ.`,
+          sym:`فقدان الوعي، توقف التنفس، غياب النبض.`,
+          steps:[
+            `1️⃣ تأمين الموقع (Scene Safety): تأكد أن المكان آمن لك وللمريض.`,
+            `2️⃣ فحص الاستجابة وطلب المساعدة (Response & Activation): هز المريض والنداء بصوت عالٍ، إذا لم يستجب اطلب المساعدة فوراً.`,
+            `3️⃣ الضغطات الصدرية (Circulation - C): منتصف الصدر، عمق 5-6 سم، سرعة 100-120 ضغطة/دقيقة، السماح بالارتداد الكامل، عدم التوقف أكثر من 10 ثوانٍ.`,
+            `4️⃣ فتح مجرى الهواء (Airway - A): إمالة الرأس ورفع الذقن لفتح مجرى الهواء.`,
+            `5️⃣ التنفس الاصطناعي (Breathing - B): نفسان بعد كل 30 ضغطة، مدة ثانية واحدة للنفس الواحد، مراقبة ارتفاع الصدر.`,
+            `6️⃣ استخدام جهاز AED: بمجرد توفره، لإنهاء الرجفان البطيني وإعادة النظم الطبيعي للقلب.`,
+            `7️⃣ متى نتوقف عن الإنعاش؟: ROSC، وصول الفريق الطبي، إنهاك المسعف، أو وجود خطر يهدد حياته.`,
+            `💡 ملاحظة: Hands-only CPR للمسعف غير المدرب أو لمنع العدوى، فعالة جداً في الدقائق الأولى.`,
+            `🔹 البروتوكولات العالمية ACLS: قاعدة 5Hs & 5Ts للتشخيص السريع للأسباب القابلة للعكس.`,
+            `– 5Hs: Hypovolemia, Hypoxia, Acidosis, Hyper/Hypokalemia, Hypothermia.`,
+            `– 5Ts: Tension Pneumothorax, Tamponade, Toxins, Pulmonary Thrombosis, Coronary Thrombosis.`,
+            `– أسباب شائعة محلياً: Electric Shock, Trauma, إرهاق شديد.`,
+            `📝 <b>جدول ملخص للتشخيص السريع:</b><br>نزيف: شحوب، نبض ضعيف وسريع → تعويض السوائل والدم.<br>نقص أكسجين: ازرقاق → فتح مجرى الهواء وأكسجين 100%.<br>جلطة قلبية: ألم صدر → نقل عاجل لمركز القسطرة.<br>سموم: اتساع/ضيق الحدقة، بقايا أدوية → إعطاء الادرينالين إن وجد.`
+          ],
+          tip:`كل ثانية تأخير تقلل فرصة النجاة`
+        },
+        {
+          title:"🧠 السكتة الدماغية والجلطة القلبية",
+          img:"stroke_mi",
+          video:"stroke_mi",
+          def:`السكتة الدماغية (Stroke) تحدث عند انقطاع الدم عن جزء من الدماغ. أما الجلطة القلبية (MI) فهي انسداد مفاجئ في تروية عضلة القلب. كلاهما حالات مهددة للحياة تتطلب تدخلًا فوريًا.`,
+          causes:`ارتفاع ضغط الدم، السكري، التدخين، أمراض القلب، والجلطات العابرة.`,
+          sym:`<b>السكتة الدماغية (قاعدة FAST):</b><br>
+          - <b>F (Face):</b> تدلي أحد جانبي الوجه عند الابتسام.<br>
+          - <b>A (Arms):</b> ضعف في أحد الذراعين عند رفعهما.<br>
+          - <b>S (Speech):</b> صعوبة في الكلام أو كلام غير مفهوم.<br>
+          - <b>T (Time):</b> الوقت حرج جداً اتصل بالطوارئ فوراً.<br>
+          <b>الجلطة القلبية:</b> ألم ضاغط في الصدر، ضيق تنفس، عرق بارد، ألم يمتد للفك أو الذراع الأيسر.`,
+          steps:[
+            `1️⃣ الاتصال فوراً بمدير الطوارئ أو أقرب مركز قسطرة.`,
+            `2️⃣ إجلاس المصاب في وضعية مريحة (وضعية نصف الجلوس).`,
+            `3️⃣ فك الملابس الضيقة حول الرقبة والخصر.`,
+            `4️⃣ إذا كان واعياً ولا يوجد حساسية، يمكن إعطاؤه قرص أسبرين (مضغ) لتقليل التجلط.`,
+            `5️⃣ مراقبة التنفس والنبض باستمرار؛ في حال فقدان الوعي نبدأ CPR فوراً.`
+          ],
+          tip:"الوقت هو الدماغ والوقت هو العضلة؛ كل دقيقة تأخير تعني تلفاً لا يمكن إصلاحه."
+        },
+        {
+          title:"🐝 الصدمة التحسسية الحادة",
+          img:"anaphylaxis",
+          video:"anaphylaxis",
+          def:`رد فعل تحسسي شديد وفوري يصيب كامل الجسم، مما يؤدي لضيق الممرات الهوائية وهبوط حاد في ضغط الدم.`,
+          causes:`لدغات الحشرات (النحل، الدبابير)، بعض الأدوية (مثل البنسلين)، أو بعض الأطعمة.`,
+          sym:`تورم الوجه واللسان، صعوبة شديدة في التنفس، طفح جلدي واسع، غثيان، دوار شديد وفقدان وعي.`,
+          steps:[
+            `1️⃣ إبعاد المسبب (مثل نزع إبرة النحلة دون عصرها).`,
+            `2️⃣ استخدام حقنة الأدرينالين (EpiPen) إذا كانت متوفرة لدى المريض (تُحقن في عضلة الفخذ الخارجية).`,
+            `3️⃣ وضع المصاب مستلقياً على ظهره مع رفع قدميه (لتحسين الضغط).`,
+            `4️⃣ إذا كان هناك تورم في اللسان وصعوبة تنفس، يجب تأمين مجرى الهواء بأي وسيلة متاحة.`,
+            `5️⃣ نقل المريض فوراً للمستشفى لأن مفعول الأدرينالين قد ينتهي وتعود الصدمة.`
+          ],
+          tip:"الأدرينالين هو المنقذ الوحيد للحياة في هذه الحالة."
+        },
+        {
+          title:"💧 ضربة الشمس والجفاف",
+          img:"heatstroke",
+          video:"heatstroke",
+          def:`ارتفاع درجة حرارة الجسم لأكثر من 40 درجة مئوية بسبب التعرض الطويل للحرارة، مما يؤدي لفشل نظام تنظيم الحرارة في الدماغ.`,
+          causes:`العمل الشاق تحت الشمس، نقص شرب السوائل، خاصة عند الأطفال وكبار السن.`,
+          sym:`ارتفاع كبير في الحرارة، جلد جاف وساخن (بدون عرق)، صداع، تشوش ذهني، تشنجات، أو فقدان وعي.`,
+          steps:[
+            `1️⃣ نقل المصاب فوراً إلى مكان بارد أو مظلل.`,
+            `2️⃣ تبريد الجسم بسرعة: رش الماء البارد، استخدام الكمادات، أو وضع قطع ثلج تحت الإبطين وبين الفخذين.`,
+            `3️⃣ إذا كان واعياً، إعطاؤه سوائل باردة أو محلول إرواء تدريجياً.`,
+            `4️⃣ مراقبة علامات الجفاف الحاد (مرتبط ببروتوكول IMCI للأطفال).`,
+            `5️⃣ عدم إعطاء خافضات حرارة (مثل الباراسيتامول) لأنها لا تنفع في ضربة الشمس.`
+          ],
+          tip:"التبريد السريع للجسم هو الأولوية القصوى لمنع تلف الدماغ."
+        },
+        {
+          title:"🤮 الغرق",
+          img:"drowning",
+          video:"drowning",
+          def:`فشل التنفس نتيجة انغمار الأنف والفم بالسوائل، مما يؤدي لنقص الأكسجين في الدماغ.`,
+          causes:`السقوط في الآبار، السدود، أو تجمعات المياه.`,
+          sym:`انقطاع التنفس، زرقة الوجه والأطراف، خروج رغوة من الفم، فقدان الوعي.`,
+          steps:[
+            `1️⃣ إخراج المصاب من الماء مع حماية الرقبة (خطر وجود كسر في الفقرات).`,
+            `2️⃣ وضع المصاب على أرض صلبة وفحص التنفس والنبض.`,
+            `3️⃣ <b>هام:</b> ابدأ بـ 5 أنفاس إنقاذية أولاً (قبل الضغطات الصدرية) لأن المشكلة تنفسية وليست قلبية في الأصل.`,
+            `4️⃣ البدء بإنعاش قلبي رئوي (30 ضغطة : 2 نفس).`,
+            `5️⃣ لا تحاول إخراج الماء من الرئتين بالضغط على البطن؛ الإنعاش هو الذي سيطرد الماء.`
+          ],
+          tip:"حتى لو أفاق المصاب، يجب نقله للمستشفى لخطر 'الغرق الثانوي' وتجمع السوائل في الرئة."
+        },
+        {
+          title:"🤰 نزيف ما بعد الولادة",
+          img:"pph",
+          video:"pph",
+          def:`فقدان كمية كبيرة من الدم (أكثر من 500 مل) بعد الولادة، وهو المسبب الأول لوفيات الأمهات ميدانياً.`,
+          causes:`عدم انقباض الرحم (Atony)، تمزقات القناة المهبلية، أو بقاء أجزاء من المشيمة.`,
+          sym:`نزيف مهبلي غزير ومستمر، شحوب، نبض سريع وضعيف، هبوط الضغط، الشعور بالدوخة.`,
+          steps:[
+            `1️⃣ طلب المساعدة الطبية فوراً وتجهيز وسيلة نقل.`,
+            `2️⃣ عمل تدليك للرحم (Fundal Massage) بقوة من فوق البطن لتحفيزه على الانقباض.`,
+            `3️⃣ وضع الأم في وضعية الصدمة (مستلقية مع رفع القدمين).`,
+            `4️⃣ تشجيع الأم على التبول أو إفراغ المثانة (المثانة الممتلئة تمنع انقباض الرحم).`,
+            `5️⃣ إرضاع الطفل فوراً قد يساعد في إفراز هرمون الأوكسيتوسين الطبيعي لتقبض الرحم.`
+          ],
+          tip:"التدليك المستمر للرحم هو الإجراء المنقذ للحياة حتى وصول المساعدة."
+        },
+        {
+          title:"🩸 النزيف",
+          img:"bleeding",
+          video:"bleeding",
+          def:`النزيف هو فقدان الدم من الدورة الدموية نتيجة تمزق الأوعية الدموية (شرايين، أوردة، شعيرات). فقدان كمية كبيرة من الدم يؤدي إلى صدمة نقص الحجم (Hypovolemic Shock).`,
+          causes:`جروح، حوادث، طعنات، كسور حادة، إصابات ناتجة عن آلات حادة أو حوادث مرورية.`,
+          sym:`العلامات الظاهرة: جرح مفتوح، تدفق دم، تجمع دموي تحت الجلد.<br>علامات الصدمة: شحوب وبرودة الجلد، عرق بارد، نبض سريع وضعيف، تشوش ذهني، انخفاض ضغط الدم.<br>النزيف الداخلي: ألم شديد في البطن أو الصدر، خروج دم من فتحات الجسم الطبيعية، تورم صلب.`,
+          steps:[
+            `1️⃣ أنواع النزيف: شرياني (قاتل في دقائق)، وريدي (متوسط إلى مرتفع)، شعيري (منخفض غالباً).`,
+            `2️⃣ بروتوكول السيطرة على النزيف P-E-D-T: الضغط المباشر، الرفع، الرباط الضاغط، العاصبة/المرقأة.`,
+            `3️⃣ النزيف الداخلي: وضع المريض في وضعية الصدمة، تدفئة المريض، نقل فوري إلى المستشفى.`,
+            `4️⃣ نصيحة: كل ثانية تأخير تزيد من خطورة الحالة، الضغط المباشر هو أول وأهم خطوة.`
+          ],
+          tip:"🚨 السيطرة السريعة على النزيف تنقذ حياة المصاب"
+        },
+        {
+          title:"🦴 الكسور",
+          img:"fracture",
+          video:"fracture",
+          def:`الكسر هو انفصال أو تشقق في نسيج العظمة نتيجة قوة خارجية تفوق قدرة العظم على التحمل. تكمن خطورة الكسر ليس فقط في العظم نفسه، بل في احتمال تضرر الأعصاب والأوعية الدموية المحيطة به.`,
+          causes:`سقوط، حوادث، ضربات قوية.`,
+          sym:`الألم الشديد، التشوه، التورم، الزرقة، فقدان الوظيفة، صوت طرقعة عند تحريك العظم.`,
+          steps:[
+            `<b>1️⃣ أنواع الكسور (Classification):</b>
+            <div class="table-responsive">
+            <table>
+            <tr><th>نوع الكسر</th><th>الوصف</th><th>المظهر الخارجي</th><th>مستوى الخطورة</th></tr>
+            <tr><td>كسر مغلق</td><td>كسر العظم دون تمزق الجلد</td><td>تورم وتشوه دون جرح</td><td>متوسطة</td></tr>
+            <tr><td>كسر مفتوح</td><td>بروز العظم عبر الجلد</td><td>جرح مفتوح وعظم مرئي</td><td>عالية جداً</td></tr>
+            <tr><td>كسر مضاعف</td><td>كسر مع إصابة عضو حيوي</td><td>نزيف حاد أو فقدان حركة</td><td>تهدد الحياة</td></tr>
+            <tr><td>كسر غصن نضير</td><td>كسر غير مكتمل</td><td>شائع عند الأطفال</td><td>منخفضة</td></tr>
+            </table>
+            </div>`,
+            `<b>2️⃣ بروتوكول الإسعاف:</b>
+            <ul>
+            <li><b>التقييم الأولي (Check):</b> تأكد من تنفس المريض ونبضه أولاً. لا تحاول إعادة العظم لمكانه أبداً.</li>
+            <li><b>السيطرة على النزيف:</b> ضع شاشاً معقماً حول العظم البارز واضغط على أطراف الجرح.</li>
+            <li><b>التثبيت (Splinting):</b> استخدم جبيرة لتثبيت المفصلين المحيطين بالكسر.</li>
+            <li><b>فحص التروية (CSM):</b> افحص الدورة الدموية والإحساس بعد التثبيت.</li>
+            </ul>`,
+            `<b>3️⃣ تنبيهات هامة:</b>
+            <ul>
+            <li>إذا لم تكن متأكداً أنه كسر، تعامل معه كأنه كسر حتى يثبت العكس بالأشعة.</li>
+            <li>يمنع نقل المصاب بكسور العمود الفقري إلا بواسطة فريق متخصص ونقالة صلبة.</li>
+            </ul>`
+          ],
+          tip:"التثبيت الصحيح قبل التحريك يحمي الأعصاب والأوعية الدموية."
+        },
+        {
+          title:"🔥 الحروق",
+          img:"burn",
+          video:"burn",
+          def:`الحروق هي تلف في أنسجة الجسم ناتج عن التعرض لمؤثرات خارجية. تؤدي الحروق إلى تدمير طبقات الجلد، مما يفقد الجسم خط الدفاع الأول ويسبب فقدان السوائل.`,
+          causes:`النار، السوائل الساخنة، الكهرباء، المواد الكيميائية، التعرض للإشعاع.`,
+          sym:`تغير لون الجلد، ظهور فقاعات مائية، صدمة عصبية، صعوبة التنفس إذا الحرق في الوجه.`,
+          steps:[
+            `<b>1️⃣ تصنيف درجات الحروق:</b>
+            <div class="table-responsive">
+            <table>
+              <tr><th>الدرجة</th><th>الطبقة المتضررة</th><th>المظهر</th><th>الألم</th></tr>
+              <tr><td>الأولى</td><td>البشرة</td><td>احمرار وجفاف</td><td>مؤلم جداً</td></tr>
+              <tr><td>الثانية</td><td>البشرة + الأدمة</td><td>احمرار شديد وفقاعات</td><td>مؤلم جداً</td></tr>
+              <tr><td>الثالثة</td><td>كافة طبقات الجلد</td><td>الجلد أبيض أو متفحم</td><td>غير مؤلم (تلف أعصاب)</td></tr>
+            </table>
+            </div>`,
+            `<b>2️⃣ بروتوكول الإسعاف:</b>
+            <ul>
+              <li><b>إبعاد المصدر:</b> أوقف عملية الحرق فوراً.</li>
+              <li><b>التبريد بالماء:</b> سكب ماء جارٍ بدرجة حرارة الغرفة لمدة 10-20 دقيقة.</li>
+              <li><b>إزالة المعوقات:</b> انزع الخواتم أو الملابس الضيقة بلطف.</li>
+              <li><b>التغطية:</b> تغطية الحرق بضماد معقم أو شاش فازلين.</li>
+            </ul>`,
+            `<b>3️⃣ تحذيرات:</b>
+            <ul>
+              <li>ممنوع وضع معجون الأسنان أو الثلج المباشر على الحرق.</li>
+              <li>ممنوع فقع الفقاعات المائية.</li>
+            </ul>`,
+            `<b>4️⃣ قاعدة التسعات (Rule of Nines):</b>
+            الرأس: 9% | كل ذراع: 9% | كل رجل: 18% | الصدر والبطن: 18% | الظهر: 18% | التناسلية: 1%`
+          ],
+          tip:"التبريد السريع بالماء الجاري والتغطية المعقمة يقللان الضرر."
+        },
+        {
+          title:"😮 الاختناق",
+          img:"choking",
+          video:"choking",
+          def:`انسداد مجرى الهواء بجسم غريب يمنع وصول الأكسجين إلى الرئتين.`,
+          causes:`طعام، ألعاب صغيرة، أجسام غريبة.`,
+          sym:`سعال، صعوبة في الكلام، ازرقاق الوجه، إمساك الرقبة.`,
+          steps:[
+            `<b>1️⃣ أنواع انسداد مجرى الهواء:</b>
+            <div class="table-responsive">
+            <table>
+              <tr><th>النوع</th><th>العلامات</th><th>الإجراء</th></tr>
+              <tr><td>جزئي</td><td>يسعل بقوة ويتكلم بصعوبة</td><td>شجعه على السعال فقط</td></tr>
+              <tr><td>كلي</td><td>لا يستطيع التنفس، يمسك رقبته</td><td>تدخل فوري (مناورة هيمليك)</td></tr>
+            </table>
+            </div>`,
+            `<b>2️⃣ بروتوكول إسعاف البالغين والأطفال:</b>
+            <ul>
+              <li>5 ضربات ظهر خلف الشخص بين لوحي الكتف.</li>
+              <li>5 ضغطات بطن فوق السرة.</li>
+              <li>التكرار حتى خروج الجسم الغريب.</li>
+            </ul>`,
+            `<b>3️⃣ إسعاف الرضع:</b>
+            <ul>
+              <li>ضع الرضيع ووجهه للأسفل، رأسه أسفل من صدره.</li>
+              <li>5 ضربات ظهر برفق.</li>
+              <li>5 ضغطات صدر باستخدام إصبعين.</li>
+            </ul>`,
+            `<b>4️⃣ إذا فقد المصاب وعيه:</b>
+            ابدأ الإنعاش القلبي الرئوي (CPR) فوراً، ولا تستخدم إصبعك لاستخراج الجسم إلا إذا كان مرئياً بوضوح.`
+          ],
+          tip:"التدخل السريع والهدوء هما مفتاح النجاة."
+        },
+        {
+          title:"😵 الإغماء",
+          img:"fainting",
+          video:"fainting",
+          def:`فقدان مفاجئ ومؤقت للوعي ناتج عن نقص تدفق الدم والأكسجين إلى الدماغ.`,
+          causes:`هبوط ضغط، إرهاق، حرارة شديدة، جوع.`,
+          sym:`دوار، شحوب، تعرق بارد، فقدان الوعي.`,
+          steps:[
+            `<b>1️⃣ بروتوكول الإسعاف:</b>
+            <ul>
+              <li>استلقاء المصاب على ظهره ورفع القدمين 30 سم.</li>
+              <li>فك الملابس الضيقة حول الرقبة والخصر.</li>
+              <li>مراقبة التنفس والنبض باستمرار.</li>
+              <li>بعد الإفاقة، اجعله يجلس لدقائق قبل النهوض وأعطه عصيراً.</li>
+            </ul>`,
+            `<b>2️⃣ وضعية الإفاقة:</b>
+            ضع المصاب على جانبه مع ثني الركبة العلوية ودعم الرأس لمنع انسداد المجرى الهوائي في حال القيء.`,
+            `<b>3️⃣ تحذيرات:</b>
+            <ul>
+              <li>ممنوع سكب الماء على الوجه.</li>
+              <li>ممنوع إعطاء أي شيء عن طريق الفم وهو فاقد للوعي.</li>
+            </ul>`
+          ],
+          tip:"رفع القدمين يحسن تروية الدماغ بسرعة."
+        },
+        {
+          title:"🐍 لدغات الأفاعي والعقارب",
+          img:"snakebite",
+          video:"snakebite",
+          def:"إدخال سم الأفعى أو العقرب إلى الجسم عبر اللدغ.",
+          causes:"التعرض للأفاعي في الحقول أو البيئات الصحراوية.",
+          sym:"ألم شديد، تورم، تغير لون الجلد، تنميل.",
+          steps:[
+            "1️⃣ تهدئة المصاب تماماً لأن القلق يسرع نبضات القلب وبالتالي انتشار السم.",
+            "2️⃣ تثبيت الطرف المصاب وجعله في مستوى أقل من مستوى القلب.",
+            "3️⃣ عدم مص السم بالفم أو جرح المكان بالشفرة.",
+            "4️⃣ النقل الفوري لأقرب مستشفى أو مركز صحي لأخذ المصل المضاد.",
+            "💡 بالنسبة للعقرب: يمكن وضع كمادات باردة لتخفيف الألم وتضييق الأوعية الدموية مؤقتاً."
+          ],
+          tip:"منع الحركة ونقل المصاب فوراً هما الإجراء الأهم."
+        },
+        {
+          title:"☠️ التسمم",
+          img:"poison",
+          video:"poison",
+          def:"دخول مادة سامة للجسم.",
+          causes:"أدوية بجرعات زائدة، مواد كيميائية، منظفات.",
+          sym:"قيء، دوخة، فقدان وعي، حروق حول الفم.",
+          steps:[
+            "1️⃣ إبعاد المصاب عن المصدر.",
+            "2️⃣ عدم إعطاء أي شيء بالفم (لا ماء ولا حليب).",
+            "3️⃣ عدم محاولة إحداث قيء (خاصة مع المواد الحارقة لأنها ستحرق المريء مرة أخرى عند خروجها).",
+            "4️⃣ أخذ علبة المادة السامة أو الدواء والتوجه للمستشفى فوراً."
+          ],
+          tip:"الاحتفاظ بعلبة المادة السامة يساعد الطبيب في تحديد الترياق المناسب."
+        }
+        ];
 
-function buildTOC() {
-  tocList.innerHTML = `<div onclick="showIntro()">📖 المقدمة</div>`;
-  cases.forEach((c, i) => {
-    tocList.innerHTML += `<div onclick="openCase(${i})">${c.title}</div>`;
-  });
-  tocList.innerHTML += `<div onclick="showConclusion()">📖 الخاتمة</div>`;
-}
+        function initApp() {
+            document.getElementById("loginScreen").style.display = "none";
+            document.getElementById("mainApp").style.display = "block";
+            renderGrid();
+        }
 
-function showIntro() {
-  content.innerHTML = `<h2 style="text-align:center;font-family:'Amiri';color:#FFD700;">﷽<br></h2>
-  <div class="step" style="border-right-color:#ff4c4c; background:var(--bg-card, #2d1b1b); color:inherit;">
-      <h3 style="margin-top:0;">🚨 أرقام الطوارئ الهامة (مكتب الصحة)</h3>
-      <b>مدير الطوارئ: بكيل الجحافي</b><br>
-      <i>يرجى الضغط على زر "الطوارئ" العائم أسفل الشاشة للاتصال المباشر في الحالات الحرجة.</i>
-  </div>
-  <div class="step"><b>📖 نبذة:</b><br>الإسعافات الأولية هي الرعاية الفورية للحفاظ على حياة المصاب ومنع تدهور حالته حتى وصول الرعاية الطبية.</div>
-  <div class="step"><b>👨‍⚕️ تعريف المسعف:</b><br>هو الشخص المدرب القادر على تقييم الحالة وتقديم التدخل السريع بشكل آمن.</div>
-  <div class="step"><b>🧠 صفات المسعف:</b><br>الهدوء – سرعة التصرف – الدقة – تحمل المسؤولية – المعرفة الأساسية بالإسعافات.</div>
-  <div class="step"><b>⚠️ الاحتياطات:</b><br>تأمين المكان – حماية النفس – استخدام أدوات الحماية – طلب المساعدة فورًا.</div>
-  <div class="step"><b>🎯 الأهداف:</b><br>إنقاذ الحياة – منع تدهور – تعزيز الشفاء.</div>`;
-  progressBar.style.width = '0%';
-}
+        function renderGrid() {
+            const grid = document.getElementById("tocGrid");
+            let html = `
+                <div class="grid-item" onclick="openIntro()">
+                    <div class="icon-circle" style="background: #f8fafc;"><span style="font-size:45px;">📖</span></div>
+                    <span>المقدمة</span>
+                </div>
+            `;
+            html += cases.map((c, i) => `
+                <div class="grid-item" onclick="openCase(${i})">
+                    <div class="icon-circle">
+                        <img src="images/${c.img}.jpg" onerror="this.src='images/1001491511.png'">
+                    </div>
+                    <span>${c.title}</span>
+                </div>
+            `).join('');
+            html += `
+                <div class="grid-item" onclick="openDrugs()">
+                    <div class="icon-circle" style="background: #f8fafc; border-color: #3b82f6;"><span style="font-size:45px;">💊</span></div>
+                    <span>أدوية الطوارئ</span>
+                </div>
+            `;
+            html += `
+                <div class="grid-item" onclick="openConclusion()">
+                    <div class="icon-circle" style="background: #f8fafc;"><span style="font-size:45px;">📝</span></div>
+                    <span>الخاتمة</span>
+                </div>
+            `;
+            grid.innerHTML = html;
+        }
 
-function openCase(i) {
-  const c = cases[i];
-  content.innerHTML = `<h2>${c.title}</h2>
-  
-  <img src="images/${c.img}.jpg" onerror="this.src='https://via.placeholder.com/800x400?text=First+Aid'">
-  
-  <video controls poster="images/${c.img}.jpg">
-    <source src="videos/${c.video}.mp4" type="video/mp4">
-    متصفحك لا يدعم تشغيل الفيديو.
-  </video>
+        function openIntro() {
+            document.getElementById("tocGrid").style.display = "none";
+            document.getElementById("bottomControls").style.display = "none";
+            const view = document.getElementById("caseView");
+            view.style.display = "block";
+            document.querySelector(".print-btn").style.display = "none";
+            document.getElementById("headerTitle").innerText = "المقدمة";
+            document.getElementById("progressBar").style.width = "5%";
 
-  <div class="step"><b>📌 التعريف:</b><br>${c.def}</div>
-  <div class="step"><b>⚠️ الأسباب:</b><br>${c.causes}</div>
-  <div class="step"><b>🩺 الأعراض والعلامات:</b><br>${c.sym}</div>
-  <div class="step"><b>🚑 الإجراءات المتخذة:</b><br>${c.steps.join("<br>")}</div>
-  <div class="step" style="background:#ffeb3b;color:#111; border-right-color:#f59e0b;"><b>💡 نصيحة مهمة:</b><br>${c.tip}</div>
-  <textarea id="note${i}" placeholder="أضف ملاحظاتك الميدانية هنا...">${localStorage.getItem('n'+i) || ''}</textarea>
-  <button class="btn save" onclick="saveNote(${i})">💾 حفظ الملاحظات</button>`;
-  
-  showTip(c.tip);
-  progress(i);
-  content.scrollTo({ top: 0, behavior: 'smooth' });
-}
+            document.getElementById("caseDetail").innerHTML = `
+                <h2 style="text-align:center;font-family:'Amiri';color:#FFD700; font-size: 30px;">﷽<br></h2>
+                <div class="info-box" style="border-right-color:#ef4444; background:var(--card-dark); color:white;">
+                    <h3 style="margin-top:0;">🚨 أرقام الطوارئ الهامة (مكتب الصحة)</h3>
+                    <b>مدير الطوارئ: بكيل الجحافي</b><br>
+                    <i>يرجى الضغط على زر "اتصال طارئ" العائم أسفل الشاشة للاتصال المباشر في الحالات الحرجة.</i>
+                </div>
+                <div class="info-box"><h3>📖 نبذة:</h3><div>الإسعافات الأولية هي الرعاية الفورية للحفاظ على حياة المصاب ومنع تدهور حالته حتى وصول الرعاية الطبية.</div></div>
+                <div class="info-box"><h3>👨‍⚕️ تعريف المسعف:</h3><div>هو الشخص المدرب القادر على تقييم الحالة وتقديم التدخل السريع بشكل آمن.</div></div>
+                <div class="info-box"><h3>🧠 صفات المسعف:</h3><div>الهدوء – سرعة التصرف – الدقة – تحمل المسؤولية – المعرفة الأساسية بالإسعافات.</div></div>
+                <div class="info-box"><h3>⚠️ الاحتياطات:</h3><div>تأمين المكان – حماية النفس – استخدام أدوات الحماية – طلب المساعدة فورًا.</div></div>
+                <div class="info-box"><h3>🎯 الأهداف:</h3><div>إنقاذ الحياة – منع تدهور – تعزيز الشفاء.</div></div>
+            `;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
 
-function saveNote(i) {
-  localStorage.setItem('n' + i, document.getElementById('note' + i).value);
-  showTip("تم حفظ الملاحظة بنجاح ✅");
-}
+        function openConclusion() {
+            document.getElementById("tocGrid").style.display = "none";
+            document.getElementById("bottomControls").style.display = "none";
+            const view = document.getElementById("caseView");
+            view.style.display = "block";
+            document.querySelector(".print-btn").style.display = "none";
+            document.getElementById("headerTitle").innerText = "الخاتمة";
+            document.getElementById("progressBar").style.width = "100%";
 
-function progress(i) {
-  progressBar.style.width = ((i + 1) / cases.length * 100) + '%';
-}
+            document.getElementById("caseDetail").innerHTML = `
+                <div class="case-media">
+                    <img src="images/conclusion.jpg" onerror="this.style.display='none'" style="width:100%; border-radius:15px; margin-bottom:15px;">
+                </div>
+                <h2 style="text-align:center;">📖 ختاماً</h2>
+                <div class="info-box">الطريق الصحيح للوقاية من المخاطر الصحية يبدأ أولاً بالعودة إلى الله، ثانياً بالتوبة العملية والالتزام بالتعليمات وطاعة التوجيهات الصحية.</div>
+                <div class="info-box" style="text-align:center;">السيد عبدالملك بدر الدين الحوثي<br>المحاضرة الرمضانية العاشرة – 1441 هـ</div>
+            `;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
 
-function showTip(t) {
-  tip.innerText = t;
-  tip.style.display = "block";
-  setTimeout(() => tip.style.display = "none", 3000);
-}
+        function openCase(i) {
+            const c = cases[i];
+            let savedNote = localStorage.getItem('case_note_' + i) || '';
 
-function showConclusion() {
-  content.innerHTML = `<img src="images/conclusion.jpg" onerror="this.style.display='none'" style="width:100%;border-radius:15px;margin-bottom:15px;">
-  <h2 style="text-align:center;">📖 ختاماً</h2>
-  <div class="step">الطريق الصحيح للوقاية من المخاطر الصحية يبدأ أولاً بالعودة إلى الله، ثانياً بالتوبة العملية والالتزام بالتعليمات وطاعة التوجيهات الصحية.</div>
-  <div class="step" style="text-align:center;">السيد عبدالملك بدر الدين الحوثي<br>المحاضرة الرمضانية العاشرة – 1441 هـ</div>`;
-  progressBar.style.width = '100%';
-}
+            document.getElementById("tocGrid").style.display = "none";
+            document.getElementById("bottomControls").style.display = "none";
+            const view = document.getElementById("caseView");
+            view.style.display = "block";
+            document.querySelector(".print-btn").style.display = "inline-flex"; 
+            document.getElementById("headerTitle").innerText = c.title;
+            document.getElementById("progressBar").style.width = ((i+1)/cases.length*100) + "%";
 
-function toggleTheme() {
-  document.body.classList.toggle("light");
-}
-</script>
+            document.getElementById("caseDetail").innerHTML = `
+                <div class="case-media">
+                    <img src="images/${c.img}.jpg" onerror="this.style.display='none'">
+                    <video controls poster="images/${c.img}.jpg">
+                        <source src="videos/${c.video}.mp4" type="video/mp4">
+                    </video>
+                </div>
+                <div class="info-box"><h3>📌 التعريف:</h3><div>${c.def}</div></div>
+                <div class="info-box"><h3>⚠️ الأسباب:</h3><div>${c.causes}</div></div>
+                <div class="info-box"><h3>🩺 الأعراض والعلامات:</h3><div>${c.sym}</div></div>
+                <div class="info-box"><h3>🚑 الإجراءات المتخذة:</h3><div>${c.steps.join('<br><br>')}</div></div>
+                <div class="info-box" style="border-right-color:#22c55e;"><h3>💡 نصيحة د. صلاح الأهدل:</h3><div>${c.tip}</div></div>
+                
+                <div class="info-box" style="border-right-color:#3b82f6; margin-top:25px;">
+                    <h3>📝 ملاحظات وتحديثات حول الحالة:</h3>
+                    <textarea id="noteInput_${i}" class="note-input" placeholder="اكتب ملاحظاتك، تحديثات البروتوكول، أو أدوية بديلة هنا... سيتم حفظها تلقائياً عند الضغط على حفظ وستظهر عند الطباعة.">${savedNote}</textarea>
+                    <div style="display:flex; align-items:center;">
+                        <button class="save-btn" onclick="saveNote(${i})">💾 حفظ الملاحظة</button>
+                        <span id="saveStatus_${i}" class="save-status">تم الحفظ بنجاح ✓</span>
+                    </div>
+                </div>
+            `;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function openDrugs() {
+            let savedDrugsNote = localStorage.getItem('drugs_note') || '';
+
+            document.getElementById("tocGrid").style.display = "none";
+            document.getElementById("bottomControls").style.display = "none";
+            const view = document.getElementById("caseView");
+            view.style.display = "block";
+            document.querySelector(".print-btn").style.display = "inline-flex";
+            document.getElementById("headerTitle").innerText = "أدوية الطوارئ الأساسية";
+            document.getElementById("progressBar").style.width = "100%";
+
+            document.getElementById("caseDetail").innerHTML = `
+                <div class="info-box" style="border-right-color:#3b82f6;">
+                    <h3 style="color:#3b82f6;">💊 قائمة الأدوية الإسعافية</h3>
+                    <p>مبنية على بروتوكولات منظمة الصحة العالمية (WHO) والإنعاش القلبي المتقدم (ACLS)، مع تضمين الجرعات الخاصة بطب الأطفال وفقاً لمعايير الرعاية المتكاملة (IMCI) لتسهيل عمل الكوادر في المرافق الصحية.</p>
+                </div>
+                
+                <div class="table-responsive">
+                    <table>
+                        <tr>
+                            <th style="background:#3b82f6;">الدواء العلمي</th>
+                            <th style="background:#3b82f6;">دواعي الاستعمال</th>
+                            <th style="background:#3b82f6;">الجرعة للبالغين</th>
+                            <th style="background:#3b82f6;">الجرعة للأطفال (IMCI / الطوارئ)</th>
+                            <th style="background:#3b82f6;">الملاحظات وطريقة الإعطاء</th>
+                        </tr>
+                        <tr>
+                            <td><b>الأدرينالين</b><br>(Epinephrine 1:1,000)</td>
+                            <td>الصدمة التحسسية الحادة (Anaphylaxis)</td>
+                            <td>0.3 إلى 0.5 ملغ (IM)</td>
+                            <td>0.01 ملغ/كغ (بحد أقصى 0.3 ملغ) (IM)</td>
+                            <td>يُحقن في العضلة الأمامية الجانبية للفخذ. يُكرر كل 5-15 دقيقة إذا لزم الأمر.</td>
+                        </tr>
+                        <tr>
+                            <td><b>الأدرينالين</b><br>(Epinephrine 1:10,000)</td>
+                            <td>توقف القلب (Cardiac Arrest)</td>
+                            <td>1 ملغ (IV/IO) كل 3-5 دقائق</td>
+                            <td>0.01 ملغ/كغ (0.1 مل/كغ من تركيز 1:10,000) (IV/IO)</td>
+                            <td>يُعطى أثناء إجراء الإنعاش القلبي الرئوي المستمر.</td>
+                        </tr>
+                        <tr>
+                            <td><b>الأميودارون</b><br>(Amiodarone)</td>
+                            <td>الرجفان البطيني أو تسرع القلب البطيني</td>
+                            <td>الجرعة الأولى: 300 ملغ، الثانية: 150 ملغ (IV/IO)</td>
+                            <td>5 ملغ/كغ (IV/IO) ويمكن تكرارها</td>
+                            <td>يُعطى بعد الصدمة الكهربائية الثالثة في خوارزمية توقف القلب.</td>
+                        </tr>
+                        <tr>
+                            <td><b>الأتروبين</b><br>(Atropine)</td>
+                            <td>تباطؤ نبض القلب العرضي (Bradycardia)</td>
+                            <td>1 ملغ (IV) تكرر كل 3-5 دقائق (حد أقصى 3 ملغ)</td>
+                            <td>0.02 ملغ/كغ (IV/IO) (الحد الأدنى 0.1 ملغ)</td>
+                            <td>يجب الحذر: الجرعات المنخفضة جداً قد تسبب تباطؤ انعكاسي في النبض.</td>
+                        </tr>
+                        <tr>
+                            <td><b>الأسبرين</b><br>(Aspirin)</td>
+                            <td>الجلطة القلبية / متلازمة الشريان التاجي</td>
+                            <td>160 إلى 325 ملغ (مضغ)</td>
+                            <td>غير موصى به روتينياً للأطفال في الطوارئ</td>
+                            <td>يجب مضغ الأقراص لتسريع الامتصاص. يُمنع استخدامه في حال وجود نزيف نشط.</td>
+                        </tr>
+                        <tr>
+                            <td><b>سالبوتامول</b><br>(Salbutamol)</td>
+                            <td>نوبات الربو وتشنج القصبات الهوائية</td>
+                            <td>2.5 إلى 5 ملغ عبر جهاز الرذاذ (Nebulizer)</td>
+                            <td>2.5 ملغ (وزن < 20 كغ) أو 5 ملغ (وزن > 20 كغ)</td>
+                            <td>يمكن تكراره كل 20 دقيقة للجرعات الثلاث الأولى. أساسي في بروتوكول IMCI للتعامل مع صعوبة التنفس.</td>
+                        </tr>
+                        <tr>
+                            <td><b>ديازيبام</b><br>(Diazepam)</td>
+                            <td>النوبات التشنجية والاختلاج المستمر</td>
+                            <td>5 إلى 10 ملغ (IV) ببطء</td>
+                            <td>0.1 - 0.2 ملغ/كغ (IV) أو 0.5 ملغ/كغ (شرجياً)</td>
+                            <td>تتم المراقبة المستمرة للتنفس لاحتمالية حدوث تثبيط تنفسي.</td>
+                        </tr>
+                        <tr>
+                            <td><b>دكستروز</b><br>(Dextrose 10% / 50%)</td>
+                            <td>نقص سكر الدم الحاد (Hypoglycemia)</td>
+                            <td>25 - 50 غرام (D50W) (IV)</td>
+                            <td>2 - 5 مل/كغ من (D10W) (IV) للرضع والأطفال</td>
+                            <td>يجب التأكد من الأوردة الطرفية لتجنب تسرب المحلول والنخر النسيجي.</td>
+                        </tr>
+                        <tr>
+                            <td><b>نالوكسون</b><br>(Naloxone)</td>
+                            <td>التسمم بالمواد الأفيونية (تثبيط تنفسي)</td>
+                            <td>0.4 إلى 2 ملغ (IV/IM/IN)</td>
+                            <td>0.1 ملغ/كغ (بحد أقصى 2 ملغ)</td>
+                            <td>يُكرر كل 2-3 دقائق. الهدف استعادة التنفس الكافي وليس استعادة الوعي الكامل.</td>
+                        </tr>
+                        <tr>
+                            <td><b>هيدروكورتيزون</b><br>(Hydrocortisone)</td>
+                            <td>الربو الشديد / الصدمة التحسسية (علاج داعم)</td>
+                            <td>100 إلى 200 ملغ (IV)</td>
+                            <td>4 إلى 8 ملغ/كغ (IV) بحد أقصى 250 ملغ</td>
+                            <td>يحتاج لوقت ليبدأ مفعوله، ولا يعتبر بديلاً للأدرينالين في الدقائق الأولى من الصدمة التحسسية.</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="info-box" style="border-right-color:#3b82f6; margin-top:25px;">
+                    <h3>📝 ملاحظات عامة حول قسم الأدوية وتحديثات البروتوكول:</h3>
+                    <textarea id="noteInput_drugs" class="note-input" placeholder="اكتب ملاحظاتك الطبية هنا... سيتم حفظها تلقائياً عند الضغط على حفظ وتظهر في الطباعة.">${savedDrugsNote}</textarea>
+                    <div style="display:flex; align-items:center;">
+                        <button class="save-btn" onclick="saveDrugsNote()">💾 حفظ الملاحظة</button>
+                        <span id="saveStatus_drugs" class="save-status">تم الحفظ بنجاح ✓</span>
+                    </div>
+                </div>
+            `;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function saveNote(caseIndex) {
+            const noteContent = document.getElementById(`noteInput_${caseIndex}`).value;
+            localStorage.setItem('case_note_' + caseIndex, noteContent);
+            
+            const statusLabel = document.getElementById(`saveStatus_${caseIndex}`);
+            statusLabel.style.opacity = "1";
+            setTimeout(() => {
+                statusLabel.style.opacity = "0";
+            }, 2500);
+        }
+
+        function saveDrugsNote() {
+            const noteContent = document.getElementById(`noteInput_drugs`).value;
+            localStorage.setItem('drugs_note', noteContent);
+            
+            const statusLabel = document.getElementById(`saveStatus_drugs`);
+            statusLabel.style.opacity = "1";
+            setTimeout(() => {
+                statusLabel.style.opacity = "0";
+            }, 2500);
+        }
+
+        function goBack() {
+            document.getElementById("caseView").style.display = "none";
+            document.getElementById("tocGrid").style.display = "grid";
+            document.getElementById("bottomControls").style.display = "flex";
+            document.getElementById("headerTitle").innerText = "القائمة الرئيسية";
+            document.getElementById("progressBar").style.width = "0%";
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleTheme() { 
+            document.body.classList.toggle("light"); 
+        }
+    </script>
 </body>
 </html>
