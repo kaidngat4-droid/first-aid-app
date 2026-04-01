@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚑 دليل الإسعافات الأولية - د. صلاح الأهدل</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;900&family=Tajawal:wght@400;700&family=Amiri:wght@700&display=swap" rel="stylesheet">
+    
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-RE67RHFDNM"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -9,46 +14,80 @@
       gtag('config', 'G-RE67RHFDNM');
     </script>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🚑 دليل الإسعافات الأولية - د. صلاح الأهدل</title>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&family=Amiri:wght@700&display=swap" rel="stylesheet">
-    
     <style>
-        :root { --primary: #ef4444; --bg-dark: #0f172a; --card-dark: #1e293b; }
-        
+        /* 1. التنسيقات العامة */
+        :root { --primary: #ef4444; --bg-dark: #0f172a; --card-dark: #1e293b; --yemen-red: #CE1126; --yemen-gold: #B8860B; --glass-bg: rgba(15, 23, 42, 0.85); }
         body { margin: 0; font-family: 'Tajawal', sans-serif; background: var(--bg-dark); color: white; transition: 0.3s; overflow-x: hidden; }
-        body.light { background: #f8fafc; color: #1e293b; }
-
-        /* شاشة البداية */
-        #loginScreen { position: fixed; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.9)), url("images/1001491511.png") center/cover; z-index: 2000; }
-        .login-card { background: rgba(0,0,0,0.85); padding: 40px; border-radius: 30px; text-align: center; border: 1px solid rgba(255,255,255,0.1); width: 85%; max-width: 450px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
-        .title { font-size: 36px; color: #FFD700; font-family: 'Amiri'; margin-bottom: 20px; }
-        .start-btn { width: 100%; padding: 15px; background: linear-gradient(45deg, #ef4444, #b91c1c); border: none; color: white; border-radius: 15px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .start-btn:hover { transform: scale(1.05); }
-        .dev-info { margin-top: 25px; color: #38bdf8; font-size: 14px; }
-        .dev-name { display: block; font-size: 20px; color: #fff; font-weight: bold; margin-top: 5px; }
-
-        /* الهيدر وشريط التقدم */
-        header { background: var(--card-dark); padding: 15px; text-align: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        body.light { background: #f1f5f9; }
+        
+        /* 2. شريط التقدم والهيدر */
+        #progressBar { position: fixed; top: 0; right: 0; height: 5px; background: var(--primary); width: 0%; z-index: 10000; transition: 0.4s; }
+        header { background: var(--card-dark); padding: 15px; text-align: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.3); border-bottom: 2px solid var(--primary); }
         body.light header { background: #fff; color: #1e293b; }
-        #progressBar { position: fixed; top: 0; left: 0; height: 5px; background: var(--primary); width: 0%; z-index: 3000; transition: 0.4s; }
 
-        /* شبكة الأيقونات الدائرية (الفهرس) */
+        /* 🌌 خلفية نيونية احترافية */
+        #loginScreen {
+            position: fixed; inset: 0; display: flex; justify-content: center; align-items: center;
+            background: radial-gradient(circle at center, #020617 0%, #000000 100%); overflow: hidden; z-index: 9999; transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        /* 🌈 خطوط نيونية متحركة */
+        #loginScreen::before {
+            content: ""; position: absolute; width: 200%; height: 200%;
+            background: repeating-linear-gradient(90deg, rgba(255, 0, 128, 0.08) 0px, rgba(0, 255, 255, 0.08) 2px, transparent 2px, transparent 40px);
+            animation: moveGrid 8s linear infinite;
+        }
+
+        @keyframes moveGrid { from { transform: translateY(0); } to { transform: translateY(40px); } }
+
+        /* ✨ الكرت الزجاجي */
+        .login-card {
+            background: rgba(0, 0, 0, 0.6); padding: 45px 30px; border-radius: 30px; text-align: center;
+            width: 90%; max-width: 420px; backdrop-filter: blur(25px); border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 0 40px rgba(0, 255, 255, 0.2), 0 0 80px rgba(255, 0, 128, 0.2); animation: fadeIn 1.5s ease; position: relative; z-index: 2;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.9);} to { opacity: 1; transform: scale(1);} }
+
+        /* 👨‍⚕️ أيقونة الطبيب */
+        .pulse-heart { font-size: 60px; margin-bottom: 15px; animation: float 3s ease-in-out infinite; text-shadow: 0 0 20px #00ffff, 0 0 30px #ff0080; }
+        
+        @keyframes float { 0% { transform: translateY(0);} 50% { transform: translateY(-10px);} 100% { transform: translateY(0);} }
+
+        /* 🔥 العنوان */
+        .main-title { font-family: 'Cairo', sans-serif; font-size: 28px; font-weight: 900; background: linear-gradient(90deg, #00ffff, #ff0080); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 10px 0;}
+        .official-header { position: absolute; top: 20px; left: 0; right: 0; text-align: center; color: white; font-family: 'Amiri', serif; z-index: 2; }
+        .republic-text { font-size: 20px; font-weight: bold; letter-spacing: 1px; text-shadow: 0 0 5px rgba(0,0,0,0.5); }
+        .ministry-text { font-size: 14px; opacity: 0.9; margin-top: 4px; }
+        
+        /* 🏷️ النص الفرعي */
+        .district-tag { color: #ccc; font-size: 14px; margin-bottom: 30px; display: block; }
+
+        /* 🚀 زر الدخول النيوني */
+        .entry-btn {
+            width: 100%; padding: 16px; border-radius: 15px; border: none; font-size: 18px; font-weight: bold; cursor: pointer;
+            background: linear-gradient(90deg, #ff0080, #7c3aed, #00ffff); color: white; transition: 0.4s; box-shadow: 0 0 20px rgba(255,0,128,0.5);
+            display: flex; justify-content: center; align-items: center; gap: 10px;
+        }
+        .entry-btn:hover { transform: scale(1.05); box-shadow: 0 0 35px rgba(0,255,255,0.8); }
+
+        /* ✍️ التوقيع */
+        .signature { margin-top: 25px; color: #aaa; display: flex; flex-direction: column; }
+        .dr-name { font-weight: bold; color: white; }
+
+        /* 4. شبكة الأيقونات الدائرية (الفهرس) */
         #tocGrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; padding: 25px; max-width: 700px; margin: 0 auto; }
         .grid-item { display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: 0.3s; }
         .grid-item:hover { transform: translateY(-5px); }
-        
-        .icon-circle { 
-            width: 110px; height: 110px; background: #fff; border-radius: 50%; 
-            overflow: hidden; border: 3px solid var(--primary); 
-            box-shadow: 0 8px 20px rgba(0,0,0,0.4); margin-bottom: 10px;
-            display: flex; justify-content: center; align-items: center;
+        .icon-circle {
+            width: 110px; height: 110px; background: #fff; border-radius: 50%; overflow: hidden; border: 3px solid var(--primary);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4); margin-bottom: 10px; display: flex; justify-content: center; align-items: center; font-size: 50px;
         }
         .icon-circle img { width: 100%; height: 100%; object-fit: cover; }
-        .grid-item span { font-size: 14px; font-weight: bold; text-align: center; }
+        .grid-item span { font-size: 14px; font-weight: bold; text-align: center; color: inherit; }
+        body.light .grid-item span { color: #1e293b; }
 
-        /* عرض الحالة */
+        /* 5. عرض الحالة */
         #caseView { display: none; padding: 20px; max-width: 800px; margin: 0 auto; padding-bottom: 100px; }
         .case-media { display: flex; flex-direction: column; gap: 15px; margin-bottom: 25px; }
         .case-media img, .case-media video { width: 100%; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); display: block; }
@@ -56,53 +95,56 @@
         .info-box { background: var(--card-dark); padding: 20px; border-radius: 15px; margin-bottom: 15px; border-right: 5px solid var(--primary); line-height: 1.8; }
         body.light .info-box { background: #fff; color: #1e293b; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
         .info-box h3 { margin-top: 0; color: var(--primary); font-size: 18px; margin-bottom: 10px;}
+        .info-box ul { padding-inline-start: 20px; margin: 0; }
 
-        /* أزرار التحكم والطباعة والملاحظات */
-        .controls-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .back-btn { padding: 12px 25px; background: var(--primary); color: white; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; display: inline-flex; align-items: center; gap: 8px; transition: 0.3s; }
+        /* 6. أزرار التحكم والملاحظات */
+        .controls-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px; }
+        .back-btn { padding: 12px 25px; background: var(--primary); color: white; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; transition: 0.3s; font-family: inherit;}
         .back-btn:hover { background: #b91c1c; }
-        .print-btn { padding: 12px 20px; background: #10b981; color: white; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; display: inline-flex; align-items: center; gap: 8px; transition: 0.3s; }
+        .print-btn { padding: 12px 20px; background: #10b981; color: white; border: none; border-radius: 12px; cursor: pointer; font-weight: bold; transition: 0.3s; font-family: inherit;}
         .print-btn:hover { background: #059669; }
-        
-        /* تنسيق حقل الملاحظات */
         .note-input { width: 100%; box-sizing: border-box; padding: 15px; border-radius: 10px; border: 1px solid #475569; background: #334155; color: white; font-family: inherit; font-size: 15px; resize: vertical; margin-bottom: 10px; min-height: 100px; }
         body.light .note-input { background: #f1f5f9; border: 1px solid #cbd5e1; color: #1e293b; }
         .note-input:focus { outline: 2px solid #3b82f6; }
         .save-btn { padding: 10px 20px; background: #3b82f6; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.3s; font-family: inherit; }
         .save-btn:hover { background: #2563eb; }
-        .save-status { margin-right: 15px; color: #10b981; font-weight: bold; font-size: 14px; opacity: 0; transition: opacity 0.3s; }
-
-        .emergency-fab { position: fixed; bottom: 25px; left: 25px; background: #b91c1c; color: white; padding: 15px 25px; border-radius: 50px; text-decoration: none; font-weight: bold; box-shadow: 0 10px 20px rgba(185,28,28,0.4); z-index: 1000; animation: pulse 2s infinite; }
+        
+        .emergency-fab {
+            position: fixed; bottom: 25px; left: 25px; background: #b91c1c; color: white; padding: 15px 25px; border-radius: 50px;
+            text-decoration: none; font-weight: bold; box-shadow: 0 10px 20px rgba(185,28,28,0.4); z-index: 1000; animation: pulse 2s infinite; display: none;
+        }
         @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
         
         .bottom-controls { display: flex; gap: 10px; padding: 20px; max-width: 700px; margin: 0 auto; }
-        .btn-ctrl { flex: 1; padding: 12px; border-radius: 10px; border: none; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .btn-ctrl { flex: 1; padding: 12px; border-radius: 10px; border: none; cursor: pointer; font-weight: bold; transition: 0.3s; font-family: inherit;}
         .btn-ctrl:hover { opacity: 0.9; }
 
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; color: inherit; }
+        .save-status { margin-right: 12px; font-size: 14px; opacity: 0; transition: opacity 0.3s; color: #22c55e; }
+        body.light .save-status { color: #15803d; }
+        
+        .table-responsive { overflow-x: auto; margin-bottom: 15px; }
+        table { width: 100%; border-collapse: collapse; background: var(--card-dark); color: white; border-radius: 12px; overflow: hidden; }
+        body.light table { background: #fff; color: #1e293b; border: 1px solid #e2e8f0; }
         th, td { border: 1px solid #475569; padding: 10px; text-align: center; font-size: 13px; }
         th { background: #334155; color: white; }
         body.light th { background: #cbd5e1; color: #0f172a; }
-        .table-responsive { overflow-x: auto; }
 
         @media(max-width: 480px) {
             #tocGrid { grid-template-columns: repeat(2, 1fr); gap: 15px; padding: 15px; }
-            .icon-circle { width: 90px; height: 90px; }
+            .icon-circle { width: 90px; height: 90px; font-size: 40px; }
             .emergency-fab { bottom: 15px; left: 15px; padding: 12px 20px; font-size: 14px; }
         }
 
-        /* ====== تنسيقات الطباعة الاحترافية ====== */
+        /* 7. تنسيقات الطباعة الاحترافية */
         @media print {
             body { background: white !important; color: black !important; }
             #loginScreen, .emergency-fab, .bottom-controls, #tocGrid, .back-btn, .print-btn, .save-btn { display: none !important; }
             header { background: white !important; color: black !important; box-shadow: none !important; border-bottom: 2px solid #000; padding: 10px 0; }
-            #caseView { padding: 0 !important; margin: 0 !important; max-width: 100% !important; }
-            .case-media video { display: none !important; } /* إخفاء الفيديو عند الطباعة */
-            .case-media img { max-height: 250px; object-fit: contain; border-radius: 0; box-shadow: none; border: 1px solid #ddd; page-break-inside: avoid; }
+            #caseView { display: block !important; padding: 0 !important; margin: 0 !important; max-width: 100% !important; }
+            .case-media video { display: none !important; }
+            .case-media img { max-height: 250px; object-fit: contain; border-radius: 0; box-shadow: none; border: 1px solid #ddd; }
             .info-box { background: white !important; color: black !important; border: 1px solid #ccc !important; box-shadow: none !important; border-right: 5px solid #000 !important; page-break-inside: avoid; }
             .info-box h3 { color: black !important; }
-            th { background: #eee !important; color: black !important; }
-            td, th { border: 1px solid #000 !important; }
             .note-input { border: 1px dashed #ccc !important; background: transparent !important; color: black !important; resize: none; overflow: visible; height: auto; }
             @page { margin: 1cm; size: A4 portrait; }
         }
@@ -112,19 +154,37 @@
 
     <div id="progressBar"></div>
 
-    <a href="tel:777774883" class="emergency-fab">📞 اتصال طارئ</a>
+    <a href="tel:777774883" class="emergency-fab" id="emergencyFab">📞 اتصال طارئ</a>
 
     <div id="loginScreen">
-      <div class="login-card">
-        <div class="title">🚑 دليل الإسعافات الأولية</div>
-        <button class="start-btn" onclick="initApp()">دخول </button>
-        <div class="dev-info">إشراف وتطوير:<span class="dev-name">د/ صلاح قاسم الأهدل</span></div>
-      </div>
+        <div class="official-header">
+            <div class="republic-text">الجمهورية اليمنية</div>
+            <div class="ministry-text">وزارة الصحة العامة والسكان</div>
+        </div>
+        <div class="login-card">
+            <div class="pulse-heart">🚑</div>
+            <h1 class="main-title">دليل الإسعافات الأولية</h1>
+            <span class="district-tag">مكتب الصحة والبيئة - العدين</span>
+            
+            <button class="entry-btn" onclick="initApp()">
+                <span>دخول النظام الآمن</span>
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.707l-3-3a1 1 0 00-1.414 1.414L10.586 9H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z" clip-rule="evenodd"></path>
+                </svg>
+            </button>
+
+            <div class="signature">
+                <span class="dr-name">د. صلاح قاسم الأهدل</span>
+                <span class="dr-title">مدير مكتب الصحة والبيئة بالمديرية</span>
+            </div>
+        </div>
     </div>
 
     <div id="mainApp" style="display:none;">
-        <header><h2 id="headerTitle" style="margin:0;">القائمة الرئيسية</h2></header>
-
+        <header>
+            <h2 id="headerTitle" style="margin:0; font-family:'Cairo', sans-serif;">القائمة الرئيسية</h2>
+        </header>
+        
         <div id="tocGrid"></div>
 
         <div id="caseView">
@@ -276,27 +336,14 @@
           sym:`الألم الشديد، التشوه، التورم، الزرقة، فقدان الوظيفة، صوت طرقعة عند تحريك العظم.`,
           steps:[
             `<b>1️⃣ أنواع الكسور (Classification):</b>
-            <div class="table-responsive">
-            <table>
-            <tr><th>نوع الكسر</th><th>الوصف</th><th>المظهر الخارجي</th><th>مستوى الخطورة</th></tr>
+            <div class="table-responsive"><table><tr><th>نوع الكسر</th><th>الوصف</th><th>المظهر الخارجي</th><th>مستوى الخطورة</th></tr>
             <tr><td>كسر مغلق</td><td>كسر العظم دون تمزق الجلد</td><td>تورم وتشوه دون جرح</td><td>متوسطة</td></tr>
             <tr><td>كسر مفتوح</td><td>بروز العظم عبر الجلد</td><td>جرح مفتوح وعظم مرئي</td><td>عالية جداً</td></tr>
             <tr><td>كسر مضاعف</td><td>كسر مع إصابة عضو حيوي</td><td>نزيف حاد أو فقدان حركة</td><td>تهدد الحياة</td></tr>
             <tr><td>كسر غصن نضير</td><td>كسر غير مكتمل</td><td>شائع عند الأطفال</td><td>منخفضة</td></tr>
-            </table>
-            </div>`,
-            `<b>2️⃣ بروتوكول الإسعاف:</b>
-            <ul>
-            <li><b>التقييم الأولي (Check):</b> تأكد من تنفس المريض ونبضه أولاً. لا تحاول إعادة العظم لمكانه أبداً.</li>
-            <li><b>السيطرة على النزيف:</b> ضع شاشاً معقماً حول العظم البارز واضغط على أطراف الجرح.</li>
-            <li><b>التثبيت (Splinting):</b> استخدم جبيرة لتثبيت المفصلين المحيطين بالكسر.</li>
-            <li><b>فحص التروية (CSM):</b> افحص الدورة الدموية والإحساس بعد التثبيت.</li>
-            </ul>`,
-            `<b>3️⃣ تنبيهات هامة:</b>
-            <ul>
-            <li>إذا لم تكن متأكداً أنه كسر، تعامل معه كأنه كسر حتى يثبت العكس بالأشعة.</li>
-            <li>يمنع نقل المصاب بكسور العمود الفقري إلا بواسطة فريق متخصص ونقالة صلبة.</li>
-            </ul>`
+            </table></div>`,
+            `<b>2️⃣ بروتوكول الإسعاف:</b><ul><li><b>التقييم الأولي:</b> تأكد من تنفس المريض ونبضه أولاً. لا تحاول إعادة العظم لمكانه أبداً.</li><li><b>السيطرة على النزيف:</b> ضع شاشاً معقماً حول العظم البارز واضغط على أطراف الجرح.</li><li><b>التثبيت:</b> استخدم جبيرة لتثبيت المفصلين المحيطين بالكسر.</li><li><b>فحص التروية:</b> افحص الدورة الدموية والإحساس بعد التثبيت.</li></ul>`,
+            `<b>3️⃣ تنبيهات هامة:</b><ul><li>إذا لم تكن متأكداً أنه كسر، تعامل معه كأنه كسر حتى يثبت العكس بالأشعة.</li><li>يمنع نقل المصاب بكسور العمود الفقري إلا بواسطة فريق متخصص ونقالة صلبة.</li></ul>`
           ],
           tip:"التثبيت الصحيح قبل التحريك يحمي الأعصاب والأوعية الدموية."
         },
@@ -308,29 +355,13 @@
           causes:`النار، السوائل الساخنة، الكهرباء، المواد الكيميائية، التعرض للإشعاع.`,
           sym:`تغير لون الجلد، ظهور فقاعات مائية، صدمة عصبية، صعوبة التنفس إذا الحرق في الوجه.`,
           steps:[
-            `<b>1️⃣ تصنيف درجات الحروق:</b>
-            <div class="table-responsive">
-            <table>
-              <tr><th>الدرجة</th><th>الطبقة المتضررة</th><th>المظهر</th><th>الألم</th></tr>
-              <tr><td>الأولى</td><td>البشرة</td><td>احمرار وجفاف</td><td>مؤلم جداً</td></tr>
-              <tr><td>الثانية</td><td>البشرة + الأدمة</td><td>احمرار شديد وفقاعات</td><td>مؤلم جداً</td></tr>
-              <tr><td>الثالثة</td><td>كافة طبقات الجلد</td><td>الجلد أبيض أو متفحم</td><td>غير مؤلم (تلف أعصاب)</td></tr>
-            </table>
-            </div>`,
-            `<b>2️⃣ بروتوكول الإسعاف:</b>
-            <ul>
-              <li><b>إبعاد المصدر:</b> أوقف عملية الحرق فوراً.</li>
-              <li><b>التبريد بالماء:</b> سكب ماء جارٍ بدرجة حرارة الغرفة لمدة 10-20 دقيقة.</li>
-              <li><b>إزالة المعوقات:</b> انزع الخواتم أو الملابس الضيقة بلطف.</li>
-              <li><b>التغطية:</b> تغطية الحرق بضماد معقم أو شاش فازلين.</li>
-            </ul>`,
-            `<b>3️⃣ تحذيرات:</b>
-            <ul>
-              <li>ممنوع وضع معجون الأسنان أو الثلج المباشر على الحرق.</li>
-              <li>ممنوع فقع الفقاعات المائية.</li>
-            </ul>`,
-            `<b>4️⃣ قاعدة التسعات (Rule of Nines):</b>
-            الرأس: 9% | كل ذراع: 9% | كل رجل: 18% | الصدر والبطن: 18% | الظهر: 18% | التناسلية: 1%`
+            `<b>1️⃣ تصنيف درجات الحروق:</b><div class="table-responsive"><table><tr><th>الدرجة</th><th>الطبقة المتضررة</th><th>المظهر</th><th>الألم</th></tr>
+            <tr><td>الأولى</td><td>البشرة</td><td>احمرار وجفاف</td><td>مؤلم جداً</td></tr>
+            <tr><td>الثانية</td><td>البشرة + الأدمة</td><td>احمرار شديد وفقاعات</td><td>مؤلم جداً</td></tr>
+            <tr><td>الثالثة</td><td>كافة طبقات الجلد</td><td>الجلد أبيض أو متفحم</td><td>غير مؤلم (تلف أعصاب)</td></tr></table></div>`,
+            `<b>2️⃣ بروتوكول الإسعاف:</b><ul><li><b>إبعاد المصدر:</b> أوقف عملية الحرق فوراً.</li><li><b>التبريد بالماء:</b> سكب ماء جارٍ بدرجة حرارة الغرفة لمدة 10-20 دقيقة.</li><li><b>إزالة المعوقات:</b> انزع الخواتم أو الملابس الضيقة بلطف.</li><li><b>التغطية:</b> تغطية الحرق بضماد معقم أو شاش فازلين.</li></ul>`,
+            `<b>3️⃣ تحذيرات:</b><ul><li>ممنوع وضع معجون الأسنان أو الثلج المباشر على الحرق.</li><li>ممنوع فقع الفقاعات المائية.</li></ul>`,
+            `<b>4️⃣ قاعدة التسعات (Rule of Nines):</b> الرأس: 9% | كل ذراع: 9% | كل رجل: 18% | الصدر والبطن: 18% | الظهر: 18% | التناسلية: 1%`
           ],
           tip:"التبريد السريع بالماء الجاري والتغطية المعقمة يقللان الضرر."
         },
@@ -342,28 +373,12 @@
           causes:`طعام، ألعاب صغيرة، أجسام غريبة.`,
           sym:`سعال، صعوبة في الكلام، ازرقاق الوجه، إمساك الرقبة.`,
           steps:[
-            `<b>1️⃣ أنواع انسداد مجرى الهواء:</b>
-            <div class="table-responsive">
-            <table>
-              <tr><th>النوع</th><th>العلامات</th><th>الإجراء</th></tr>
-              <tr><td>جزئي</td><td>يسعل بقوة ويتكلم بصعوبة</td><td>شجعه على السعال فقط</td></tr>
-              <tr><td>كلي</td><td>لا يستطيع التنفس، يمسك رقبته</td><td>تدخل فوري (مناورة هيمليك)</td></tr>
-            </table>
-            </div>`,
-            `<b>2️⃣ بروتوكول إسعاف البالغين والأطفال:</b>
-            <ul>
-              <li>5 ضربات ظهر خلف الشخص بين لوحي الكتف.</li>
-              <li>5 ضغطات بطن فوق السرة.</li>
-              <li>التكرار حتى خروج الجسم الغريب.</li>
-            </ul>`,
-            `<b>3️⃣ إسعاف الرضع:</b>
-            <ul>
-              <li>ضع الرضيع ووجهه للأسفل، رأسه أسفل من صدره.</li>
-              <li>5 ضربات ظهر برفق.</li>
-              <li>5 ضغطات صدر باستخدام إصبعين.</li>
-            </ul>`,
-            `<b>4️⃣ إذا فقد المصاب وعيه:</b>
-            ابدأ الإنعاش القلبي الرئوي (CPR) فوراً، ولا تستخدم إصبعك لاستخراج الجسم إلا إذا كان مرئياً بوضوح.`
+            `<b>1️⃣ أنواع انسداد مجرى الهواء:</b><div class="table-responsive">表<th>النوع</th><th>العلامات</th><th>الإجراء</th></tr>
+            <tr><td>جزئي</td><td>يسعل بقوة ويتكلم بصعوبة</td><td>شجعه على السعال فقط</td></tr>
+            <tr><td>كلي</td><td>لا يستطيع التنفس، يمسك رقبته</td><td>تدخل فوري (مناورة هيمليك)</td></tr></table></div>`,
+            `<b>2️⃣ بروتوكول إسعاف البالغين والأطفال:</b><ul><li>5 ضربات ظهر خلف الشخص بين لوحي الكتف.</li><li>5 ضغطات بطن فوق السرة.</li><li>التكرار حتى خروج الجسم الغريب.</li></ul>`,
+            `<b>3️⃣ إسعاف الرضع:</b><ul><li>ضع الرضيع ووجهه للأسفل، رأسه أسفل من صدره.</li><li>5 ضربات ظهر برفق.</li><li>5 ضغطات صدر باستخدام إصبعين.</li></ul>`,
+            `<b>4️⃣ إذا فقد المصاب وعيه:</b> ابدأ الإنعاش القلبي الرئوي (CPR) فوراً، ولا تستخدم إصبعك لاستخراج الجسم إلا إذا كان مرئياً بوضوح.`
           ],
           tip:"التدخل السريع والهدوء هما مفتاح النجاة."
         },
@@ -375,20 +390,9 @@
           causes:`هبوط ضغط، إرهاق، حرارة شديدة، جوع.`,
           sym:`دوار، شحوب، تعرق بارد، فقدان الوعي.`,
           steps:[
-            `<b>1️⃣ بروتوكول الإسعاف:</b>
-            <ul>
-              <li>استلقاء المصاب على ظهره ورفع القدمين 30 سم.</li>
-              <li>فك الملابس الضيقة حول الرقبة والخصر.</li>
-              <li>مراقبة التنفس والنبض باستمرار.</li>
-              <li>بعد الإفاقة، اجعله يجلس لدقائق قبل النهوض وأعطه عصيراً.</li>
-            </ul>`,
-            `<b>2️⃣ وضعية الإفاقة:</b>
-            ضع المصاب على جانبه مع ثني الركبة العلوية ودعم الرأس لمنع انسداد المجرى الهوائي في حال القيء.`,
-            `<b>3️⃣ تحذيرات:</b>
-            <ul>
-              <li>ممنوع سكب الماء على الوجه.</li>
-              <li>ممنوع إعطاء أي شيء عن طريق الفم وهو فاقد للوعي.</li>
-            </ul>`
+            `<b>1️⃣ بروتوكول الإسعاف:</b><ul><li>استلقاء المصاب على ظهره ورفع القدمين 30 سم.</li><li>فك الملابس الضيقة حول الرقبة والخصر.</li><li>مراقبة التنفس والنبض باستمرار.</li><li>بعد الإفاقة، اجعله يجلس لدقائق قبل النهوض وأعطه عصيراً.</li></ul>`,
+            `<b>2️⃣ وضعية الإفاقة:</b> ضع المصاب على جانبه مع ثني الركبة العلوية ودعم الرأس لمنع انسداد المجرى الهوائي في حال القيء.`,
+            `<b>3️⃣ تحذيرات:</b><ul><li>ممنوع سكب الماء على الوجه.</li><li>ممنوع إعطاء أي شيء عن طريق الفم وهو فاقد للوعي.</li></ul>`
           ],
           tip:"رفع القدمين يحسن تروية الدماغ بسرعة."
         },
@@ -422,43 +426,99 @@
             "4️⃣ أخذ علبة المادة السامة أو الدواء والتوجه للمستشفى فوراً."
           ],
           tip:"الاحتفاظ بعلبة المادة السامة يساعد الطبيب في تحديد الترياق المناسب."
+        },
+        {
+          title:"🍬 غيبوبة السكر",
+          img:"diabetes",
+          video:"diabetes",
+          def:"اختلال خطير في مستوى السكر بالدم (ارتفاع أو انخفاض).",
+          causes:"زيادة الأنسولين، قلة الأكل، أو إهمال العلاج.",
+          sym:"تعرق، دوخة، فقدان وعي، عطش شديد، تنفس غير طبيعي.",
+          steps:[
+            "1️⃣ إذا كان واعي: إعطاء سكر سريع (عصير / عسل)",
+            "2️⃣ إعادة الفحص بعد 15 دقيقة",
+            "3️⃣ إذا فاقد الوعي: وضعية الإفاقة",
+            "4️⃣ منع إعطاء شيء بالفم",
+            "5️⃣ الاتصال بالإسعاف فوراً"
+          ],
+          tip:"إذا شككت، اعتبرها انخفاض سكر وتعامل فوراً"
+        },
+        {
+          title:"⚡ التشنجات (الصرع)",
+          img:"seizure",
+          video:"seizure",
+          def:"اضطراب كهربائي في الدماغ يؤدي لحركات لا إرادية.",
+          causes:"الصرع، الحمى، إصابات الرأس.",
+          sym:"اهتزاز الجسم، فقدان الوعي، رغوة بالفم.",
+          steps:[
+            "1️⃣ إبعاد الأشياء الخطرة",
+            "2️⃣ حماية الرأس",
+            "3️⃣ عدم تقييد الحركة",
+            "4️⃣ عدم وضع شيء بالفم",
+            "5️⃣ وضع المصاب بوضعية الإفاقة بعد التشنج"
+          ],
+          tip:"إذا استمر أكثر من 5 دقائق اطلب الإسعاف"
+        },
+        {
+          title:"🩸 نزيف الأنف (الرعاف)",
+          img:"nosebleed",
+          video:"nosebleed",
+          def:"نزيف من الأوعية الدموية داخل الأنف.",
+          causes:"جفاف، إصابة، ضغط دم.",
+          sym:"خروج دم من الأنف.",
+          steps:[
+            "1️⃣ إمالة الرأس للأمام",
+            "2️⃣ الضغط على الأنف 10 دقائق",
+            "3️⃣ التنفس من الفم",
+            "4️⃣ وضع كمادات باردة"
+          ],
+          tip:"لا ترجّع الرأس للخلف"
+        },
+        {
+          title:"🚑 النقل والإخلاء",
+          img:"evacuation",
+          video:"evacuation",
+          def:"مجموعة من الإجراءات لنقل المصابين والتعامل مع الكوارث بشكل آمن ومنظم.",
+          causes:"حوادث كبيرة، كوارث طبيعية، حرائق، انهيارات.",
+          sym:"وجود عدة مصابين أو خطر يهدد الحياة في الموقع.",
+          steps:[
+            "1️⃣ لا تحرك المصاب إلا عند وجود خطر (حريق / انفجار)",
+            "2️⃣ الحفاظ على استقامة العمود الفقري أثناء النقل",
+            "3️⃣ استخدم الساقين وليس الظهر عند الرفع",
+            "4️⃣ تعيين قائد لعملية النقل (1..2..3 ارفع)",
+            "5️⃣ سحب الإنقاذ عند الخطر المباشر",
+            "6️⃣ كرسي اليدين لنقل المصاب الواعي",
+            "7️⃣ الحمل على الظهر للمسافات القصيرة",
+            "8️⃣ الأحمر: إنقاذ فوري / الأصفر: انتظار / الأخضر: إصابة بسيطة / الأسود: لا أولوية",
+            "9️⃣ لا تستخدم المصاعد أثناء الحريق",
+            "🔟 ابق قريب من الأرض لتجنب الدخان",
+            "1️⃣1️⃣ افحص الأبواب قبل فتحها",
+            "1️⃣2️⃣ قدم دعم نفسي للمصابين"
+          ],
+          tip:"لا تكن الضحية التالية — سلامتك أولاً"
         }
         ];
 
         function initApp() {
-            document.getElementById("loginScreen").style.display = "none";
-            document.getElementById("mainApp").style.display = "block";
-            renderGrid();
+            const screen = document.getElementById("loginScreen");
+            screen.style.transition = "0.8s ease-out";
+            screen.style.opacity = "0";
+            screen.style.transform = "scale(1.05)";
+            setTimeout(() => {
+                screen.style.display = "none";
+                document.getElementById("mainApp").style.display = "block";
+                document.getElementById("progressBar").style.width = "100%";
+                renderGrid();
+                setTimeout(() => { document.getElementById("progressBar").style.width = "0%"; }, 1000);
+            }, 800);
         }
 
         function renderGrid() {
             const grid = document.getElementById("tocGrid");
-            let html = `
-                <div class="grid-item" onclick="openIntro()">
-                    <div class="icon-circle" style="background: #f8fafc;"><span style="font-size:45px;">📖</span></div>
-                    <span>المقدمة</span>
-                </div>
-            `;
-            html += cases.map((c, i) => `
-                <div class="grid-item" onclick="openCase(${i})">
-                    <div class="icon-circle">
-                        <img src="images/${c.img}.jpg" onerror="this.src='images/1001491511.png'">
-                    </div>
-                    <span>${c.title}</span>
-                </div>
-            `).join('');
-            html += `
-                <div class="grid-item" onclick="openDrugs()">
-                    <div class="icon-circle" style="background: #f8fafc; border-color: #3b82f6;"><span style="font-size:45px;">💊</span></div>
-                    <span>أدوية الطوارئ</span>
-                </div>
-            `;
-            html += `
-                <div class="grid-item" onclick="openConclusion()">
-                    <div class="icon-circle" style="background: #f8fafc;"><span style="font-size:45px;">📝</span></div>
-                    <span>الخاتمة</span>
-                </div>
-            `;
+            let html = `<div class="grid-item" onclick="openIntro()"><div class="icon-circle" style="background: #f8fafc;"><span style="font-size:45px;">📖</span></div><span>المقدمة</span></div>`;
+            html += cases.map((c, i) => `<div class="grid-item" onclick="openCase(${i})"><div class="icon-circle"><img src="images/${c.img}.jpg" onerror="this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20fill%3D%22%23ef4444%22%2F%3E%3Ctext%20x%3D%2250%22%20y%3D%2255%22%20font-size%3D%2240%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%3E🚑%3C%2Ftext%3E%3C%2Fsvg%3E'"></div><span>${c.title}</span></div>`).join('');
+            html += `<div class="grid-item" onclick="openDrugs()"><div class="icon-circle" style="background: #f8fafc; border-color: #3b82f6;"><span style="font-size:45px;">💊</span></div><span>أدوية الطوارئ</span></div>`;
+            html += `<div class="grid-item" onclick="openConclusion()"><div class="icon-circle" style="background: #f8fafc;"><span style="font-size:45px;">📝</span></div><span>الخاتمة</span></div>`;
             grid.innerHTML = html;
         }
 
@@ -470,19 +530,105 @@
             document.querySelector(".print-btn").style.display = "none";
             document.getElementById("headerTitle").innerText = "المقدمة";
             document.getElementById("progressBar").style.width = "5%";
-
             document.getElementById("caseDetail").innerHTML = `
                 <h2 style="text-align:center;font-family:'Amiri';color:#FFD700; font-size: 30px;">﷽<br></h2>
-                <div class="info-box" style="border-right-color:#ef4444; background:var(--card-dark); color:white;">
-                    <h3 style="margin-top:0;">🚨 أرقام الطوارئ الهامة (مكتب الصحة)</h3>
-                    <b>مدير الطوارئ: بكيل الجحافي</b><br>
-                    <i>يرجى الضغط على زر "اتصال طارئ" العائم أسفل الشاشة للاتصال المباشر في الحالات الحرجة.</i>
-                </div>
-                <div class="info-box"><h3>📖 نبذة:</h3><div>الإسعافات الأولية هي الرعاية الفورية للحفاظ على حياة المصاب ومنع تدهور حالته حتى وصول الرعاية الطبية.</div></div>
-                <div class="info-box"><h3>👨‍⚕️ تعريف المسعف:</h3><div>هو الشخص المدرب القادر على تقييم الحالة وتقديم التدخل السريع بشكل آمن.</div></div>
-                <div class="info-box"><h3>🧠 صفات المسعف:</h3><div>الهدوء – سرعة التصرف – الدقة – تحمل المسؤولية – المعرفة الأساسية بالإسعافات.</div></div>
-                <div class="info-box"><h3>⚠️ الاحتياطات:</h3><div>تأمين المكان – حماية النفس – استخدام أدوات الحماية – طلب المساعدة فورًا.</div></div>
-                <div class="info-box"><h3>🎯 الأهداف:</h3><div>إنقاذ الحياة – منع تدهور – تعزيز الشفاء.</div></div>
+                <img src="images/firstaidbag.jpg" onerror="this.style.display='none'" style="width:100%; border-radius:15px; margin-bottom:15px;">
+                <div class="info-box"><h3>🚨 أرقام الطوارئ الهامة</h3><b>مدير الطوارئ: بكيل الجحافي</b><br><i>استخدم زر "اتصال طارئ" أسفل الشاشة.</i></div>
+                <div class="info-box"><h3>📖 نبذة</h3>الإسعافات الأولية هي الرعاية الفورية للحفاظ على حياة المصاب ومنع تدهور حالته حتى وصول الرعاية الطبية.</div>
+                <div class="info-box"><h3>👨‍⚕️ تعريف المسعف</h3>هو الشخص المدرب القادر على تقييم الحالة وتقديم التدخل السريع بشكل آمن.</div>
+                <div class="info-box"><h3>🧠 صفات المسعف</h3>الهدوء – سرعة التصرف – الدقة – تحمل المسؤولية – المعرفة الأساسية.</div>
+                <div class="info-box"><h3>⚠️ الاحتياطات</h3>تأمين المكان – حماية النفس – استخدام أدوات الحماية – طلب المساعدة فورًا.</div>
+                <div
+<div class="info-box" style="border-right-color:#ef4444;">
+    <h3>🎒 مكونات حقيبة الإسعافات الأولية</h3>
+    <p>
+        حقيبة الإسعافات الأولية هي خط الدفاع الأول لإنقاذ الحياة وتقليل المضاعفات
+        قبل وصول الرعاية الطبية المتقدمة، ويجب أن تكون مجهزة دائماً وجاهزة للاستخدام.
+    </p>
+</div>
+
+<!-- 🧤 الوقاية -->
+<div class="info-box">
+    <h3>🧤 أدوات الوقاية الشخصية</h3>
+    <ul>
+        <li>قفازات طبية (Disposable Gloves)</li>
+        <li>كمامات طبية</li>
+        <li>نظارات واقية (اختياري)</li>
+        <li>معقم يدين (كحول 70%)</li>
+    </ul>
+</div>
+
+<!-- 🩹 الجروح -->
+<div class="info-box">
+    <h3>🩹 أدوات العناية بالجروح</h3>
+    <ul>
+        <li>شاش معقم (Gauze)</li>
+        <li>ضمادات لاصقة (Plasters)</li>
+        <li>رباط ضاغط (Bandage)</li>
+        <li>شريط لاصق طبي</li>
+        <li>قطن طبي</li>
+        <li>محلول ملحي (Normal Saline)</li>
+        <li>مطهر (بيتادين / كلورهيكسيدين)</li>
+    </ul>
+</div>
+
+<!-- 🦴 الكسور -->
+<div class="info-box">
+    <h3>🦴 أدوات الكسور والتثبيت</h3>
+    <ul>
+        <li>جبائر (Splints)</li>
+        <li>رباط مثلث (Triangular Bandage)</li>
+        <li>حزام تثبيت</li>
+    </ul>
+</div>
+
+<!-- 🌡️ الفحص -->
+<div class="info-box">
+    <h3>🌡️ أدوات الفحص والتقييم</h3>
+    <ul>
+        <li>ميزان حرارة (Thermometer)</li>
+        <li>جهاز ضغط (إن توفر)</li>
+        <li>سماعة طبية (اختياري)</li>
+        <li>مصباح يدوي</li>
+    </ul>
+</div>
+
+<!-- 💊 الأدوية -->
+<div class="info-box">
+    <h3>💊 الأدوية الأساسية</h3>
+    <ul>
+        <li>مسكنات ألم (باراسيتامول / إيبوبروفين)</li>
+        <li>مضاد حساسية (Loratadine / Chlorpheniramine)</li>
+        <li>محلول أملاح الإرواء (ORS)</li>
+        <li>مرهم حروق</li>
+        <li>مرهم مضاد حيوي</li>
+        <li>أقراص جلوكوز (لانخفاض السكر)</li>
+    </ul>
+</div>
+
+<!-- 🛠️ أدوات عامة -->
+<div class="info-box">
+    <h3>🛠️ أدوات مساعدة</h3>
+    <ul>
+        <li>مقص طبي</li>
+        <li>ملقط (Tweezers)</li>
+        <li>دبوس أمان</li>
+        <li>بطانية طوارئ</li>
+        <li>أكياس ثلج فورية (Cold Packs)</li>
+    </ul>
+</div>
+
+<!-- ⚠️ ملاحظات -->
+<div class="info-box" style="border-right-color:#22c55e;">
+    <h3>⚠️ ملاحظات هامة</h3>
+    <ul>
+        <li>يجب فحص الحقيبة بشكل دوري</li>
+        <li>استبدال الأدوات المنتهية الصلاحية</li>
+        <li>حفظها في مكان سهل الوصول</li>
+        <li>تخصيص حقيبة للمنزل وأخرى للسيارة</li>
+    </ul>
+</div>
+ ><h3>🎯 الأهداف</h3>إنقاذ الحياة – منع تدهور – تعزيز الشفاء.</div>
             `;
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -495,11 +641,8 @@
             document.querySelector(".print-btn").style.display = "none";
             document.getElementById("headerTitle").innerText = "الخاتمة";
             document.getElementById("progressBar").style.width = "100%";
-
             document.getElementById("caseDetail").innerHTML = `
-                <div class="case-media">
-                    <img src="images/conclusion.jpg" onerror="this.style.display='none'" style="width:100%; border-radius:15px; margin-bottom:15px;">
-                </div>
+                <div class="case-media"><img src="images/conclusion.jpg" onerror="this.style.display='none'" style="width:100%; border-radius:15px; margin-bottom:15px;"></div>
                 <h2 style="text-align:center;">📖 ختاماً</h2>
                 <div class="info-box">الطريق الصحيح للوقاية من المخاطر الصحية يبدأ أولاً بالعودة إلى الله، ثانياً بالتوبة العملية والالتزام بالتعليمات وطاعة التوجيهات الصحية.</div>
                 <div class="info-box" style="text-align:center;">السيد عبدالملك بدر الدين الحوثي<br>المحاضرة الرمضانية العاشرة – 1441 هـ</div>
@@ -510,7 +653,6 @@
         function openCase(i) {
             const c = cases[i];
             let savedNote = localStorage.getItem('case_note_' + i) || '';
-
             document.getElementById("tocGrid").style.display = "none";
             document.getElementById("bottomControls").style.display = "none";
             const view = document.getElementById("caseView");
@@ -518,201 +660,158 @@
             document.querySelector(".print-btn").style.display = "inline-flex"; 
             document.getElementById("headerTitle").innerText = c.title;
             document.getElementById("progressBar").style.width = ((i+1)/cases.length*100) + "%";
-
+            let stepsHtml = Array.isArray(c.steps) ? c.steps.join('<br><br>') : c.steps;
             document.getElementById("caseDetail").innerHTML = `
-                <div class="case-media">
-                    <img src="images/${c.img}.jpg" onerror="this.style.display='none'">
-                    <video controls poster="images/${c.img}.jpg">
-                        <source src="videos/${c.video}.mp4" type="video/mp4">
-                    </video>
-                </div>
+                <div class="case-media"><img src="images/${c.img}.jpg" onerror="this.style.display='none'"><video controls poster="images/${c.img}.jpg"><source src="videos/${c.video}.mp4" type="video/mp4"></video></div>
                 <div class="info-box"><h3>📌 التعريف:</h3><div>${c.def}</div></div>
                 <div class="info-box"><h3>⚠️ الأسباب:</h3><div>${c.causes}</div></div>
                 <div class="info-box"><h3>🩺 الأعراض والعلامات:</h3><div>${c.sym}</div></div>
-                <div class="info-box"><h3>🚑 الإجراءات المتخذة:</h3><div>${c.steps.join('<br><br>')}</div></div>
+                <div class="info-box"><h3>🚑 الإجراءات المتخذة:</h3><div>${stepsHtml}</div></div>
                 <div class="info-box" style="border-right-color:#22c55e;"><h3>💡 نصيحة د. صلاح الأهدل:</h3><div>${c.tip}</div></div>
-                
-                <div class="info-box" style="border-right-color:#3b82f6; margin-top:25px;">
-                    <h3>📝 ملاحظات وتحديثات حول الحالة:</h3>
-                    <textarea id="noteInput_${i}" class="note-input" placeholder="اكتب ملاحظاتك، تحديثات البروتوكول، أو أدوية بديلة هنا... سيتم حفظها تلقائياً عند الضغط على حفظ وستظهر عند الطباعة.">${savedNote}</textarea>
-                    <div style="display:flex; align-items:center;">
-                        <button class="save-btn" onclick="saveNote(${i})">💾 حفظ الملاحظة</button>
-                        <span id="saveStatus_${i}" class="save-status">تم الحفظ بنجاح ✓</span>
-                    </div>
-                </div>
+                <div class="info-box"><h3>📝 ملاحظات:</h3><textarea id="noteInput_${i}" class="note-input">${savedNote}</textarea><button class="save-btn" onclick="saveNote(${i})">💾 حفظ</button><span id="saveStatus_${i}" class="save-status">✓ تم الحفظ</span></div>
             `;
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-function openDrugs() {
-    let savedDrugsNote = localStorage.getItem('drugs_note') || '';
-
-    document.getElementById("tocGrid").style.display = "none";
-    document.getElementById("bottomControls").style.display = "none";
-    const view = document.getElementById("caseView");
-    view.style.display = "block";
-    document.querySelector(".print-btn").style.display = "inline-flex";
-    document.getElementById("headerTitle").innerText = "الدليل الدوائي الموحد للطوارئ (Yemen MOH / WHO / IMCI)";
-    document.getElementById("progressBar").style.width = "100%";
-
-    document.getElementById("caseDetail").innerHTML = `
-        <div class="info-box" style="border-right-color:#3b82f6; background: rgba(59, 130, 246, 0.05);">
-            <h3 style="color:#3b82f6;">💊 البروتوكول الدوائي الموحد - د. صلاح الأهدل</h3>
-            <p style="font-size:14px;">هذه القائمة مبنية على بروتوكولات <b>منظمة الصحة العالمية (WHO)</b> والإنعاش القلبي المتقدم <b>(ACLS)</b>، مع تضمين الجرعات الخاصة بطب الأطفال وفقاً لمعايير الرعاية المتكاملة <b>(IMCI)</b> وبروتوكولات <b>وزارة الصحة اليمنية</b> لتسهيل عمل الكوادر في المرافق الصحية.</p>
-        </div>
         
-        <div class="table-responsive">
-            <table>
-                <thead>
-                    <tr style="background:#1e293b; color:white;">
-                        <th>الفئة</th>
-                        <th>الدواء العلمي</th>
-                        <th>دواعي الاستعمال</th>
-                        <th>الجرعة (بالغين)</th>
-                        <th>الجرعة (أطفال/IMCI)</th>
-                        <th>ملاحظات هامة</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr style="border-right: 4px solid #ef4444;">
-                        <td rowspan="6" style="background:#fef2f2; color:#b91c1c; font-weight:bold;">القلب والإنعاش</td>
-                        <td><b>Adrenaline</b> (1:10,000)</td>
-                        <td>توقف القلب (CPR)</td>
-                        <td>1 ملغ IV كل 3-5 دقائق</td>
-                        <td>0.01 ملغ/كغ (0.1 مل/كغ)</td>
-                        <td>يُعطى وريدياً أثناء التدليك القلبي.</td>
-                    </tr>
-                    <tr style="border-right: 4px solid #ef4444;">
-                        <td><b>Atropine</b></td>
-                        <td>تباطؤ القلب / التسمم الفسفوري</td>
-                        <td>1 ملغ IV (حتى 3 ملغ)</td>
-                        <td>0.02 ملغ/كغ (الحد أدنى 0.1)</td>
-                        <td>في التسمم بالمبيدات: الجرعات أكبر بكثير.</td>
-                    </tr>
-                    <tr style="border-right: 4px solid #ef4444;">
-                        <td><b>Amiodarone</b></td>
-                        <td>الرجفان البطيني (VF/VT)</td>
-                        <td>300 ملغ ثم 150 ملغ</td>
-                        <td>5 ملغ/كغ (IV/IO)</td>
-                        <td>يُستخدم بعد الصدمة الكهربائية الثالثة.</td>
-                    </tr>
-                    <tr style="border-right: 4px solid #ef4444;">
-                        <td><b>Lidocaine 2%</b></td>
-                        <td>بديل للأميودارون في الإنعاش</td>
-                        <td>1-1.5 ملغ/كغ IV</td>
-                        <td>1 ملغ/كغ IV/IO</td>
-                        <td>يستخدم عند عدم توفر الأميودارون.</td>
-                    </tr>
-                    <tr style="border-right: 4px solid #ef4444;">
-                        <td><b>Dopamine</b></td>
-                        <td>الصدمة القلبية / هبوط الضغط</td>
-                        <td>2-20 mcg/kg/min</td>
-                        <td>حسب الوزن (Infusion)</td>
-                        <td>يُعطى عبر مضخة إنفوجن ببطء شديد.</td>
-                    </tr>
-                    <tr style="border-right: 4px solid #ef4444;">
-                        <td><b>Aspirin & GTN</b></td>
-                        <td>الجلطة القلبية / الذبحة</td>
-                        <td>Asp 300mg / GTN 0.5mg</td>
-                        <td>غير موصى به للأطفال</td>
-                        <td>GTN: قرص تحت اللسان كل 5 دقائق.</td>
-                    </tr>
+        function openDrugs() {
+            let savedDrugsNote = localStorage.getItem('drugs_note') || '';
+            document.getElementById("tocGrid").style.display = "none";
+            document.getElementById("bottomControls").style.display = "none";
+            const view = document.getElementById("caseView");
+            view.style.display = "block";
+            document.querySelector(".print-btn").style.display = "inline-flex";
+            document.getElementById("headerTitle").innerText = "الدليل الدوائي الموحد للطوارئ (Yemen MOH / WHO / IMCI)";
+            document.getElementById("progressBar").style.width = "100%";
+            document.getElementById("caseDetail").innerHTML = `
+                <div "><h3>💊 البروتوكول الدوائي الموحد</h3><p>قائمة مبنية على بروتوكولات WHO و ACLS و IMCI ووزارة الصحة اليمنية.</p></div>
+                <div
+<div class="table-responsive">    
+<table>    
+<thead>    
+<tr style="background:#1e293b; color:white;">    
+<th>الفئة</th>    
+<th>الدواء</th>    
+<th>الاستخدام</th>    
+<th>جرعة البالغين</th>    
+<th>جرعة الأطفال</th>    
+<th>ملاحظات</th>    
+</tr>    
+</thead>    
 
-                    <tr style="border-right: 4px solid #ec4899;">
-                        <td rowspan="3" style="background:#fdf2f8; color:#be185d; font-weight:bold;">النزيف والولادة</td>
-                        <td><b>Oxytocin</b></td>
-                        <td>نزيف ما بعد الولادة (PPH)</td>
-                        <td>10 وحدات IM أو 20 في محاليل</td>
-                        <td>--</td>
-                        <td>الدواء الأول للسيطرة على نزيف الرحم.</td>
-                    </tr>
-                    <tr style="border-right: 4px solid #ec4899;">
-                        <td><b>Misoprostol</b></td>
-                        <td>نزيف ما بعد الولادة</td>
-                        <td>600-800 mcg (شرجياً)</td>
-                        <td>--</td>
-                        <td>يُستخدم عند تعذر إعطاء الأوكسيتوسين.</td>
-                    </tr>
-                    <tr style="border-right: 4px solid #ec4899;">
-                        <td><b>Tranexamic Acid</b></td>
-                        <td>النزيف الحاد / الصدمات</td>
-                        <td>1 غرام IV ببطء</td>
-                        <td>15-25 ملغ/كغ</td>
-                        <td>يُعطى في أول 3 ساعات من الإصابة.</td>
-                    </tr>
+<tbody>    
 
-                    <tr style="border-right: 4px solid #f59e0b;">
-                        <td rowspan="3" style="background:#fffbeb; color:#b45309; font-weight:bold;">الأوبئة والسموم</td>
-                        <td><b>Artesunate</b> (IV)</td>
-                        <td>الملاريا الوخيمة</td>
-                        <td>2.4 ملغ/كغ (0, 12, 24h)</td>
-                        <td>2.4 ملغ/كغ (IV/IM)</td>
-                        <td><b>هام جداً:</b> بروتوكول الملاريا المعتمد في اليمن.</td>
-                    </tr>
-                    <tr style="border-right: 4px solid #f59e0b;">
-                        <td><b>ORS / Ringer Lactate</b></td>
-                        <td>الكوليرا / الجفاف الحاد</td>
-                        <td>حسب بروتوكول الإرواء</td>
-                        <td>خطة (A, B, C) حسب IMCI</td>
-                        <td>السوائل الوريدية السريعة في حالة الصدمة.</td>
-                    </tr>
-                    <tr style="border-right: 4px solid #f59e0b;">
-                        <td><b>Activated Charcoal</b></td>
-                        <td>التسمم الفموي</td>
-                        <td>50-100 غرام</td>
-                        <td>1 غرام/كغ</td>
-                        <td>يُعطى في الساعة الأولى من التسمم.</td>
-                    </tr>
+<!-- ❤️ القلب (أحمر - خطير جداً) -->
+<tr style="border-right:4px solid #ef4444;">    
+<td rowspan="7" style="background:#fef2f2; color:#b91c1c; font-weight:bold;">القلب والإنعاش</td>    
+<td>Adrenaline</td><td>توقف القلب</td><td>1mg IV</td><td>0.01mg/kg</td><td>كل 3-5 دقائق</td>    
+</tr>    
 
-                    <tr style="border-right: 4px solid #8b5cf6;">
-                        <td rowspan="2" style="background:#f5f3ff; color:#6d28d9; font-weight:bold;">الجهاز العصبي</td>
-                        <td><b>Phenytoin</b></td>
-                        <td>الحالة الصرعية المستمرة</td>
-                        <td>15-20 ملغ/كغ (IV ببطء)</td>
-                        <td>15-18 ملغ/كغ (IV)</td>
-                        <td>يُمدد في محلول ملحي فقط (Normal Saline).</td>
-                    </tr>
-                    <tr style="border-right: 4px solid #8b5cf6;">
-                        <td><b>Magnesium Sulfate</b></td>
-                        <td>تسمم الحمل / الربو الحاد</td>
-                        <td>4 غرام IV (تحميل)</td>
-                        <td>25-50 ملغ/كغ (للربو)</td>
-                        <td>مراقبة سريرية دقيقة للوظائف الحيوية.</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+<tr style="border-right:4px solid #ef4444;">    
+<td>Amiodarone</td><td>VF/VT</td><td>300mg</td><td>5mg/kg</td><td>بعد الصدمة</td>    
+</tr>    
 
-        <div class="info-box" style="margin-top:20px; border-right-color:#3b82f6;">
-            <h3>📝 تحديثات الطبيب والملاحظات الميدانية:</h3>
-            <textarea id="noteInput_drugs" class="note-input" placeholder="اكتب ملاحظاتك حول توفر الأدوية في العدين أو تحديثات الجرعات...">${savedDrugsNote}</textarea>
-            <button class="save-btn" onclick="saveDrugsNote()">💾 حفظ الملاحظة</button>
-            <span id="saveStatus_drugs" class="save-status">تم الحفظ ✓</span>
-        </div>
-    `;
-    window.scrollTo(0,0);
-}
+<tr style="border-right:4px solid #ef4444;">    
+<td>Atropine</td><td>بطء القلب</td><td>1mg</td><td>0.02mg/kg</td><td>حد أقصى 3mg</td>    
+</tr>    
 
+<tr style="border-right:4px solid #ef4444;">    
+<td>Lidocaine</td><td>اضطراب نظم</td><td>1mg/kg</td><td>1mg/kg</td><td>بديل أميودارون</td>    
+</tr>    
+
+<tr style="border-right:4px solid #ef4444;">    
+<td>Dopamine</td><td>هبوط الضغط</td><td>5-20 mcg/kg</td><td>حسب الوزن</td><td>Infusion</td>    
+</tr>    
+
+<tr style="border-right:4px solid #ef4444;">    
+<td>Nitroglycerin</td><td>ذبحة</td><td>0.5mg SL</td><td>--</td><td>تحت اللسان</td>    
+</tr>    
+
+<tr style="border-right:4px solid #ef4444;">    
+<td>Aspirin</td><td>جلطة قلبية</td><td>300mg</td><td>--</td><td>يمضغ</td>    
+</tr>    
+
+<!-- 🩸 النزيف (وردي) -->
+<tr style="border-right:4px solid #ec4899;">    
+<td rowspan="4" style="background:#fdf2f8; color:#be185d; font-weight:bold;">النزيف</td>    
+<td>Tranexamic Acid</td><td>نزيف حاد</td><td>1g</td><td>15mg/kg</td><td>خلال 3 ساعات</td>    
+</tr>    
+
+<tr style="border-right:4px solid #ec4899;">    
+<td>Oxytocin</td><td>نزيف ولادة</td><td>10 IU</td><td>--</td><td>IM</td>    
+</tr>    
+
+<tr style="border-right:4px solid #ec4899;">    
+<td>Misoprostol</td><td>نزيف</td><td>800mcg</td><td>--</td><td>شرجي</td>    
+</tr>    
+
+<tr style="border-right:4px solid #ec4899;">    
+<td>IV Fluids</td><td>صدمة</td><td>حسب الحالة</td><td>حسب الوزن</td><td>رينجر</td>    
+</tr>    
+
+<!-- 🧠 الجهاز العصبي (بنفسجي) -->
+<tr style="border-right:4px solid #8b5cf6;">    
+<td rowspan="3" style="background:#f5f3ff; color:#6d28d9; font-weight:bold;">الجهاز العصبي</td>    
+<td>Diazepam</td><td>تشنجات</td><td>10mg</td><td>0.2mg/kg</td><td>IV/Rectal</td>    
+</tr>    
+
+<tr style="border-right:4px solid #8b5cf6;">    
+<td>Phenytoin</td><td>صرع</td><td>20mg/kg</td><td>20mg/kg</td><td>ببطء</td>    
+</tr>    
+
+<tr style="border-right:4px solid #8b5cf6;">    
+<td>Magnesium Sulfate</td><td>تسمم حمل</td><td>4g</td><td>--</td><td>مراقبة</td>    
+</tr>    
+
+<!-- 🦠 الأوبئة (برتقالي) -->
+<tr style="border-right:4px solid #f59e0b;">    
+<td rowspan="3" style="background:#fffbeb; color:#b45309; font-weight:bold;">الأوبئة</td>    
+<td>Artesunate</td><td>ملاريا</td><td>2.4mg/kg</td><td>2.4mg/kg</td><td>IV</td>    
+</tr>    
+
+<tr style="border-right:4px solid #f59e0b;">    
+<td>ORS</td><td>جفاف</td><td>حسب الخطة</td><td>حسب IMCI</td><td>فموي</td>    
+</tr>    
+
+<tr style="border-right:4px solid #f59e0b;">    
+<td>Ringer Lactate</td><td>صدمة</td><td>Bolus</td><td>20ml/kg</td><td>وريدي</td>    
+</tr>    
+
+<!-- ☠️ التسمم (رمادي) -->
+<tr style="border-right:4px solid #6b7280;">    
+<td rowspan="3" style="background:#f1f5f9; color:#374151; font-weight:bold;">التسمم</td>    
+<td>Activated Charcoal</td><td>تسمم</td><td>50g</td><td>1g/kg</td><td>أول ساعة</td>    
+</tr>    
+
+<tr style="border-right:4px solid #6b7280;">    
+<td>Atropine</td><td>مبيدات</td><td>حسب الحالة</td><td>حسب الحالة</td><td>جرعات عالية</td>    
+</tr>    
+
+<tr style="border-right:4px solid #6b7280;">    
+<td>Naloxone</td><td>أفيونات</td><td>0.4mg</td><td>0.01mg/kg</td><td>يعكس التسمم</td>    
+</tr>    
+
+</tbody>    
+</table>    
+</div>
+ class="info-box"><h3>📝 ملاحظات:</h3><textarea id="noteInput_drugs" class="note-input">${savedDrugsNote}</textarea><button class="save-btn" onclick="saveDrugsNote()">💾 حفظ</button><span id="saveStatus_drugs" class="save-status">✓</span></div>
+            `;
+            window.scrollTo(0,0);
+        }
 
         function saveNote(caseIndex) {
             const noteContent = document.getElementById(`noteInput_${caseIndex}`).value;
             localStorage.setItem('case_note_' + caseIndex, noteContent);
-            
             const statusLabel = document.getElementById(`saveStatus_${caseIndex}`);
             statusLabel.style.opacity = "1";
-            setTimeout(() => {
-                statusLabel.style.opacity = "0";
-            }, 2500);
+            setTimeout(() => { statusLabel.style.opacity = "0"; }, 2000);
         }
 
         function saveDrugsNote() {
             const noteContent = document.getElementById(`noteInput_drugs`).value;
             localStorage.setItem('drugs_note', noteContent);
-            
             const statusLabel = document.getElementById(`saveStatus_drugs`);
-            statusLabel.style.opacity = "1";
-            setTimeout(() => {
-                statusLabel.style.opacity = "0";
-            }, 2500);
+            if(statusLabel) statusLabel.style.opacity = "1";
+            setTimeout(() => { if(statusLabel) statusLabel.style.opacity = "0"; }, 2000);
         }
 
         function goBack() {
