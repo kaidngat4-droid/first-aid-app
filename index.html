@@ -832,57 +832,106 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
         
-        function openDrugs() {
-            let savedDrugsNote = localStorage.getItem('drugs_note') || '';
-            document.getElementById("tocGrid").style.display = "none";
-            document.getElementById("bottomControls").style.display = "none";
-            const view = document.getElementById("caseView");
-            view.style.display = "block";
-            document.querySelector(".print-btn").style.display = "inline-flex";
-            document.getElementById("headerTitle").innerText = "الدليل الدوائي الموحد للطوارئ (Yemen MOH / WHO / IMCI)";
-            document.getElementById("progressBar").style.width = "100%";
-            document.getElementById("caseDetail").innerHTML = `
-                <div class="info-box"><h3>💊 البروتوكول الدوائي الموحد</h3><p>قائمة مبنية على بروتوكولات WHO و ACLS و IMCI ووزارة الصحة اليمنية.</p></div>
-                <div class="table-responsive">    
-表    
-<thead>    
-<tr style="background:#1e293b; color:white;">    
-<th>الفئة</th>    
-<th>الدواء</th>    
-<th>الاستخدام</th>    
-<th>جرعة البالغين</th>    
-<th>جرعة الأطفال</th>    
-<th>ملاحظات</th>    
-</tr>    
-</thead>    
-<tbody>    
-<tr style="border-right:4px solid #ef4444;"><td rowspan="7" style="background:#fef2f2; color:#b91c1c; font-weight:bold;">القلب والإنعاش</td><td>Adrenaline</td><td>توقف القلب</td><td>1mg IV</td><td>0.01mg/kg</td><td>كل 3-5 دقائق</td></tr>
-<tr style="border-right:4px solid #ef4444;"><td>Amiodarone</td><td>VF/VT</td><td>300mg</td><td>5mg/kg</td><td>بعد الصدمة</td></tr>
-<tr style="border-right:4px solid #ef4444;"><td>Atropine</td><td>بطء القلب</td><td>1mg</td><td>0.02mg/kg</td><td>حد أقصى 3mg</td></tr>
-<tr style="border-right:4px solid #ef4444;"><td>Lidocaine</td><td>اضطراب نظم</td><td>1mg/kg</td><td>1mg/kg</td><td>بديل أميودارون</td></tr>
-<tr style="border-right:4px solid #ef4444;"><td>Dopamine</td><td>هبوط الضغط</td><td>5-20 mcg/kg</td><td>حسب الوزن</td><td>Infusion</td></tr>
-<tr style="border-right:4px solid #ef4444;"><td>Nitroglycerin</td><td>ذبحة</td><td>0.5mg SL</td><td>--</td><td>تحت اللسان</td></tr>
-<tr style="border-right:4px solid #ef4444;"><td>Aspirin</td><td>جلطة قلبية</td><td>300mg</td><td>--</td><td>يمضغ</td></tr>
-<tr style="border-right:4px solid #ec4899;"><td rowspan="4" style="background:#fdf2f8; color:#be185d; font-weight:bold;">النزيف</td><td>Tranexamic Acid</td><td>نزيف حاد</td><td>1g</td><td>15mg/kg</td><td>خلال 3 ساعات</td></tr>
-<tr style="border-right:4px solid #ec4899;"><td>Oxytocin</td><td>نزيف ولادة</td><td>10 IU</td><td>--</td><td>IM</td></tr>
-<tr style="border-right:4px solid #ec4899;"><td>Misoprostol</td><td>نزيف</td><td>800mcg</td><td>--</td><td>شرجي</td></tr>
-<tr style="border-right:4px solid #ec4899;"><td>IV Fluids</td><td>صدمة</td><td>حسب الحالة</td><td>حسب الوزن</td><td>رينجر</td></tr>
-<tr style="border-right:4px solid #8b5cf6;"><td rowspan="3" style="background:#f5f3ff; color:#6d28d9; font-weight:bold;">الجهاز العصبي</td><td>Diazepam</td><td>تشنجات</td><td>10mg</td><td>0.2mg/kg</td><td>IV/Rectal</td></tr>
-<tr style="border-right:4px solid #8b5cf6;"><td>Phenytoin</td><td>صرع</td><td>20mg/kg</td><td>20mg/kg</td><td>ببطء</td></tr>
-<tr style="border-right:4px solid #8b5cf6;"><td>Magnesium Sulfate</td><td>تسمم حمل</td><td>4g</td><td>--</td><td>مراقبة</td></tr>
-<tr style="border-right:4px solid #f59e0b;"><td rowspan="3" style="background:#fffbeb; color:#b45309; font-weight:bold;">الأوبئة</td><td>Artesunate</td><td>ملاريا</td><td>2.4mg/kg</td><td>2.4mg/kg</td><td>IV</td></tr>
-<tr style="border-right:4px solid #f59e0b;"><td>ORS</td><td>جفاف</td><td>حسب الخطة</td><td>حسب IMCI</td><td>فموي</td></tr>
-<tr style="border-right:4px solid #f59e0b;"><td>Ringer Lactate</td><td>صدمة</td><td>Bolus</td><td>20ml/kg</td><td>وريدي</td></tr>
-<tr style="border-right:4px solid #6b7280;"><td rowspan="3" style="background:#f1f5f9; color:#374151; font-weight:bold;">التسمم</td><td>Activated Charcoal</td><td>تسمم</td><td>50g</td><td>1g/kg</td><td>أول ساعة</td></tr>
-<tr style="border-right:4px solid #6b7280;"><td>Atropine</td><td>مبيدات</td><td>حسب الحالة</td><td>حسب الحالة</td><td>جرعات عالية</td></tr>
-<tr style="border-right:4px solid #6b7280;"><td>Naloxone</td><td>أفيونات</td><td>0.4mg</td><td>0.01mg/kg</td><td>يعكس التسمم</td></tr>
-</tbody>    
-</table>    
-</div>
-<div class="info-box"><h3>📝 ملاحظات:</h3><textarea id="noteInput_drugs" class="note-input">${savedDrugsNote}</textarea><button class="save-btn" onclick="saveDrugsNote()">💾 حفظ</button><span id="saveStatus_drugs" class="save-status">✓</span></div>
-            `;
-            window.scrollTo(0,0);
-        }
+function openDrugs() {
+    let savedDrugsNote = localStorage.getItem('drugs_note') || '';
+    document.getElementById("tocGrid").style.display = "none";
+    document.getElementById("bottomControls").style.display = "none";
+    const view = document.getElementById("caseView");
+    view.style.display = "block";
+    document.querySelector(".print-btn").style.display = "inline-flex";
+    document.getElementById("headerTitle").innerText = "الدليل الدوائي الموحد للطوارئ (Yemen MOH / WHO / IMCI)";
+    document.getElementById("progressBar").style.width = "100%";
+    
+    document.getElementById("caseDetail").innerHTML = `
+        <div class="info-box"><h3>💊 البروتوكول الدوائي الموحد</h3><p>قائمة مبنية على بروتوكولات WHO و ACLS و IMCI ووزارة الصحة اليمنية.</p></div>
+        
+        <div class="table-responsive">
+            <table style="width:100%; border-collapse:collapse; font-size:13px;">
+                <thead>
+                    <tr style="background:#1e293b; color:white;">
+                        <th style="padding:12px;">الفئة</th>
+                        <th style="padding:12px;">الدواء</th>
+                        <th style="padding:12px;">الاستخدام</th>
+                        <th style="padding:12px;">جرعة البالغين</th>
+                        <th style="padding:12px;">جرعة الأطفال</th>
+                        <th style="padding:12px;">ملاحظات</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- ❤️ القلب والإنعاش (10 أدوية) -->
+                    <tr style="border-right:4px solid #ef4444; background:#fef2f2;">
+                        <td rowspan="10" style="background:#fef2f2; color:#b91c1c; font-weight:bold; text-align:center;">القلب والإنعاش</td>
+                        <td>💉 Adrenaline (Epinephrine)</td>
+                        <td>توقف القلب / صدمة تحسسية</td>
+                        <td>1mg IV كل 3-5 دقائق</td>
+                        <td>0.01mg/kg IV</td>
+                        <td>الدواء الأول في CPR والأنافيلاكسيس</td>
+                    </tr>
+                    <tr><td>💊 Amiodarone</td><td>رجفان بطيني / تسرع قلب بطيني</td><td>300mg ثم 150mg IV</td><td>5mg/kg IV</td><td>بعد الصدمة الكهربائية الثالثة</td></tr>
+                    <tr><td>💊 Atropine</td><td>بطء القلب / التسمم الفسفوري</td><td>1mg IV (حتى 3mg)</td><td>0.02mg/kg IV</td><td>في التسمم: جرعات أكبر</td></tr>
+                    <tr><td>💉 Lidocaine 2%</td><td>اضطراب نظم / تخدير موضعي</td><td>1-1.5mg/kg IV</td><td>1mg/kg IV</td><td>بديل للأميودارون</td></tr>
+                    <tr><td>💉 Dopamine</td><td>صدمة قلبية / هبوط ضغط</td><td>2-20 mcg/kg/min</td><td>2-20 mcg/kg/min</td><td>عن طريق مضخة infusion</td></tr>
+                    <tr><td>💊 Nitroglycerin</td><td>ذبحة صدرية / فشل قلبي</td><td>0.5mg تحت اللسان</td><td>--</td><td>كل 5 دقائق حتى 3 جرعات</td></tr>
+                    <tr><td>💊 Aspirin</td><td>جلطة قلبية / وقائي</td><td>300mg مضغ</td><td>--</td><td>لا يعطى للأطفال</td></tr>
+                    <tr><td>💉 Adenosine</td><td>تسارع فوق بطيني</td><td>6mg ثم 12mg IV</td><td>0.1mg/kg IV</td><td>دفعة سريعة جداً</td></tr>
+                    <tr><td>💉 Digoxin</td><td>فشل قلبي / رجفان أذيني</td><td>0.5mg ثم 0.25mg</td><td>حسب الوزن</td><td>مراقبة المستوى الدوائي</td></tr>
+                    <tr><td>💊 Verapamil</td><td>تسارع فوق بطيني / ذبحة</td><td>5-10mg IV</td><td>حسب الوزن</td><td>يمنع مع حاصرات البيتا</td></tr>
+
+                    <!-- 🩸 النزيف (6 أدوية) -->
+                    <tr style="border-right:4px solid #ec4899; background:#fdf2f8;">
+                        <td rowspan="6" style="background:#fdf2f8; color:#be185d; font-weight:bold; text-align:center;">النزيف</td>
+                        <td>💉 Tranexamic Acid</td><td>نزيف حاد / صدمات</td><td>1g IV ببطء</td><td>15mg/kg IV</td><td>خلال أول 3 ساعات</td>
+                    </tr>
+                    <tr><td>💉 Oxytocin</td><td>نزيف ما بعد الولادة</td><td>10 IU IM/IV</td><td>--</td><td>تدليك الرحم أولاً</td></tr>
+                    <tr><td>💊 Misoprostol</td><td>نزيف ما بعد الولادة</td><td>600-800mcg شرجي</td><td>--</td><td>عند عدم توفر الأوكسيتوسين</td></tr>
+                    <tr><td>💉 Vitamin K</td><td>نزيف بسبب مضادات التخثر</td><td>5-10mg IM/IV</td><td>1-2mg IM</td><td>للحديثي الولادة 1mg IM</td></tr>
+                    <tr><td>💉 Protamine Sulfate</td><td>عكس تأثير الهيبارين</td><td>1mg لكل 100 وحدة هيبارين</td><td>حسب الجرعة</td><td>يعطى ببطء شديد</td></tr>
+                    <tr><td>💊 Etamsylate</td><td>نزيف شعيري / رعاف</td><td>500mg IV/IM</td><td>حسب الوزن</td><td>مثبت للجدران الشعرية</td></tr>
+
+                    <!-- 🧠 الجهاز العصبي (5 أدوية) -->
+                    <tr style="border-right:4px solid #8b5cf6; background:#f5f3ff;">
+                        <td rowspan="5" style="background:#f5f3ff; color:#6d28d9; font-weight:bold; text-align:center;">الجهاز العصبي</td>
+                        <td>💊 Diazepam</td><td>تشنجات / حالة صرعية</td><td>10mg IV/PR</td><td>0.2-0.5mg/kg PR</td><td>مهدئ قوي، مراقبة التنفس</td>
+                    </tr>
+                    <tr><td>💉 Phenytoin</td><td>حالة صرعية / وقاية</td><td>15-20mg/kg IV ببطء</td><td>15-20mg/kg IV</td><td>يمدد في Normal Saline فقط</td></tr>
+                    <tr><td>💉 Magnesium Sulfate</td><td>تسمم الحمل / ربو حاد</td><td>4g IV تحميل</td><td>25-50mg/kg</td><td>مراقبة منعكسات الأوتار</td></tr>
+                    <tr><td>💊 Midazolam</td><td>تخدير / تشنجات</td><td>5-10mg IM/IV</td><td>0.1-0.2mg/kg</td><td>بديل للديازيبام</td></tr>
+                    <tr><td>💊 Levetiracetam</td><td>حالة صرعية</td><td>1000-3000mg IV</td><td>20-40mg/kg</td><td>آمن للاستخدام في الطوارئ</td></tr>
+
+                    <!-- 🦠 الأوبئة والمضادات الحيوية (6 أدوية) -->
+                    <tr style="border-right:4px solid #f59e0b; background:#fffbeb;">
+                        <td rowspan="6" style="background:#fffbeb; color:#b45309; font-weight:bold; text-align:center;">الأوبئة والمضادات</td>
+                        <td>💉 Artesunate</td><td>ملاريا وخيمة</td><td>2.4mg/kg IV (0,12,24h)</td><td>2.4mg/kg IV</td><td>بروتوكول اليمن المعتمد</td>
+                    </tr>
+                    <tr><td>💊 ORS</td><td>جفاف / كوليرا</td><td>حسب خطة الإرواء</td><td>حسب IMCI</td><td>خطة A,B,C</td></tr>
+                    <tr><td>💧 Ringer Lactate</td><td>صدمة / حروق / جفاف</td><td>Bolus 500-1000ml</td><td>20ml/kg</td><td>السائل المفضل في الطوارئ</td></tr>
+                    <tr><td>💉 Ceftriaxone</td><td>التهابات حادة / سحايا</td><td>1-2g IV/IM</td><td>50-100mg/kg</td><td>مضاد حيوي واسع المجال</td></tr>
+                    <tr><td>💉 Metronidazole</td><td>التهابات لاهوائية / جيارديا</td><td>500mg IV</td><td>15mg/kg</td><td>للعدوى البطنية والحوضية</td></tr>
+                    <tr><td>💊 Azithromycin</td><td>التهابات تنفسية / كوليرا</td><td>500mg</td><td>10mg/kg</td><td>علاج الكوليرا عند الأطفال</td></tr>
+
+                    <!-- ☠️ التسمم (6 أدوية) -->
+                    <tr style="border-right:4px solid #6b7280; background:#f1f5f9;">
+                        <td rowspan="6" style="background:#f1f5f9; color:#374151; font-weight:bold; text-align:center;">التسمم</td>
+                        <td>💊 Activated Charcoal</td><td>تسمم فموي</td><td>50-100g</td><td>1g/kg</td><td>خلال أول ساعة من التسمم</td>
+                    </tr>
+                    <tr><td>💉 Naloxone</td><td>تسمم أفيونات (مورفين، هيروين)</td><td>0.4-2mg IV</td><td>0.01mg/kg</td><td>يعكس التسمم فوراً</td></tr>
+                    <tr><td>💉 Flumazenil</td><td>تسمم بنزوديازيبينات</td><td>0.2mg IV</td><td>0.01mg/kg</td><td>يستخدم بحذر شديد</td></tr>
+                    <tr><td>💉 Sodium Bicarbonate</td><td>حماض استقلابي / جرعة زائدة TCA</td><td>1-2 mEq/kg IV</td><td>1mEq/kg</td><td>مراقبة غازات الدم</td></tr>
+                    <tr><td>💊 Acetylcysteine</td><td>تسمم باراسيتامول</td><td>150mg/kg ثم 50mg/kg</td><td>حسب الوزن</td><td>بروتوكول 20 ساعة</td></tr>
+                    <tr><td>💊 Deferoxamine</td><td>تسمم بالحديد</td><td>1g ثم 500mg كل 4 ساعات</td><td>15mg/kg/ساعة</td><td>مراقبة لون البول</td></tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="info-box">
+            <h3>📝 ملاحظات الطبيب والتحديثات الميدانية:</h3>
+            <textarea id="noteInput_drugs" class="note-input" placeholder="اكتب ملاحظاتك حول توفر الأدوية، تحديثات الجرعات، أو أي إضافات هامة...">${savedDrugsNote}</textarea>
+            <button class="save-btn" onclick="saveDrugsNote()">💾 حفظ الملاحظة</button>
+            <span id="saveStatus_drugs" class="save-status">✓ تم الحفظ</span>
+        </div>
+    `;
+    window.scrollTo(0, 0);
+}
 
         function saveNote(caseIndex) {
             const noteContent = document.getElementById(`noteInput_${caseIndex}`).value;
