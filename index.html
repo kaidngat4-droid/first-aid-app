@@ -10,6 +10,10 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
+    <!-- TensorFlow.js للتعرف على الصور -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.15.0/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@2.1.0/dist/mobilenet.min.js"></script>
+    
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-RE67RHFDNM"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
@@ -90,6 +94,252 @@
         .icon-circle img { width: 100%; height: 100%; object-fit: cover; }
         .grid-item span { font-size: 14px; font-weight: bold; text-align: center; color: inherit; }
         body.light .grid-item span { color: #1e293b; }
+
+        /* تنسيقات المساعد الصوتي والذكي */
+        .voice-indicator {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            background: #3b82f6;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(59,130,246,0.5);
+            transition: 0.3s;
+        }
+        .voice-indicator.listening {
+            background: #ef4444;
+            animation: pulse-voice 1s infinite;
+        }
+        @keyframes pulse-voice {
+            0% { box-shadow: 0 0 0 0 rgba(239,68,68,0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(239,68,68,0); }
+            100% { box-shadow: 0 0 0 0 rgba(239,68,68,0); }
+        }
+        .chatbot-container {
+            position: fixed;
+            bottom: 100px;
+            right: 80px;
+            width: 350px;
+            height: 500px;
+            background: var(--card-dark);
+            border-radius: 20px;
+            display: none;
+            flex-direction: column;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 1px solid var(--primary);
+        }
+        body.light .chatbot-container { background: #fff; }
+        .chatbot-header {
+            background: var(--primary);
+            padding: 12px;
+            border-radius: 20px 20px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .chatbot-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .message {
+            max-width: 85%;
+            padding: 10px 15px;
+            border-radius: 15px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        .user-message {
+            background: #3b82f6;
+            color: white;
+            align-self: flex-end;
+            border-radius: 15px 15px 0 15px;
+        }
+        .bot-message {
+            background: #334155;
+            color: white;
+            align-self: flex-start;
+            border-radius: 15px 15px 15px 0;
+        }
+        body.light .bot-message { background: #e2e8f0; color: #1e293b; }
+        .chatbot-input {
+            display: flex;
+            padding: 10px;
+            gap: 10px;
+            border-top: 1px solid #475569;
+        }
+        .chatbot-input input {
+            flex: 1;
+            padding: 10px;
+            border-radius: 10px;
+            border: none;
+            background: #334155;
+            color: white;
+        }
+        body.light .chatbot-input input { background: #f1f5f9; color: #1e293b; }
+        .chatbot-input button {
+            padding: 10px 15px;
+            background: var(--primary);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+        }
+        .symptom-checker-container, .image-recognition-container {
+            background: var(--card-dark);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        body.light .symptom-checker-container, body.light .image-recognition-container { background: #fff; }
+        .symptom-input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid #475569;
+            background: #334155;
+            color: white;
+            margin-bottom: 15px;
+        }
+        body.light .symptom-input { background: #f1f5f9; color: #1e293b; }
+        .priority-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .priority-emergency { background: #dc2626; color: white; }
+        .priority-urgent { background: #f59e0b; color: white; }
+        .priority-normal { background: #10b981; color: white; }
+        .camera-preview {
+            width: 100%;
+            height: 250px;
+            background: #334155;
+            border-radius: 15px;
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+        .camera-preview video, .camera-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .recognition-result {
+            background: #334155;
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 15px;
+        }
+        body.light .recognition-result { background: #f1f5f9; }
+        .diagnosis-result {
+            background: #1e293b;
+            border-radius: 15px;
+            padding: 15px;
+            margin-top: 15px;
+            border-right: 4px solid var(--primary);
+        }
+        body.light .diagnosis-result { background: #f8fafc; }
+
+        /* تنسيقات عداد CPR التفاعلي */
+        .cpr-counter {
+            background: #1e293b;
+            border-radius: 20px;
+            padding: 20px;
+            text-align: center;
+            margin: 20px 0;
+            border: 2px solid #ef4444;
+        }
+        body.light .cpr-counter { background: #fff; }
+        .cpr-display {
+            font-size: 48px;
+            font-weight: bold;
+            font-family: monospace;
+            background: #0f172a;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+            letter-spacing: 5px;
+        }
+        .cpr-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 15px 0;
+        }
+        .cpr-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .cpr-btn-press { background: #ef4444; color: white; }
+        .cpr-btn-press:hover { background: #dc2626; transform: scale(1.05); }
+        .cpr-btn-reset { background: #3b82f6; color: white; }
+        .cpr-btn-reset:hover { background: #2563eb; }
+        .cpr-metronome {
+            background: #334155;
+            border-radius: 12px;
+            padding: 10px;
+            margin-top: 15px;
+        }
+
+        /* تنسيقات المصطلحات الطبية */
+        .medical-terms-container {
+            max-height: 500px;
+            overflow-y: auto;
+            border-radius: 15px;
+            margin-top: 15px;
+        }
+        .term-card {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            transition: 0.3s;
+            border-right: 3px solid #3b82f6;
+        }
+        body.light .term-card { background: #f8fafc; border-right-color: #3b82f6; }
+        .term-card:hover { transform: translateX(-5px); background: #334155; }
+        body.light .term-card:hover { background: #e2e8f0; }
+        .term-english { font-weight: bold; color: #3b82f6; font-size: 16px; }
+        .term-arabic { color: #10b981; font-size: 15px; }
+        .term-search {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid #475569;
+            background: #334155;
+            color: white;
+            font-family: inherit;
+            margin-bottom: 15px;
+        }
+        body.light .term-search { background: #f1f5f9; border-color: #cbd5e1; color: #1e293b; }
+        .terms-count { font-size: 14px; color: #94a3b8; margin-bottom: 10px; text-align: center; }
 
         /* 5. عرض الحالة */
         #caseView { display: none; padding: 20px; max-width: 800px; margin: 0 auto; padding-bottom: 100px; }
@@ -179,12 +429,17 @@
             #hospitalMap { height: 350px; }
             .emergency-numbers-grid { grid-template-columns: repeat(2, 1fr); }
             .verse-text { font-size: 16px; }
+            .cpr-display { font-size: 32px; }
+            .cpr-btn { padding: 8px 16px; font-size: 14px; }
+            .term-card { flex-direction: column; text-align: center; }
+            .chatbot-container { width: 300px; right: 10px; bottom: 80px; }
+            .voice-indicator { right: 10px; bottom: 80px; }
         }
 
         /* 7. تنسيقات الطباعة الاحترافية */
         @media print {
             body { background: white !important; color: black !important; }
-            #loginScreen, .emergency-fab, .bottom-controls, #tocGrid, .back-btn, .print-btn, .save-btn, #hospitalMap { display: none !important; }
+            #loginScreen, .emergency-fab, .bottom-controls, #tocGrid, .back-btn, .print-btn, .save-btn, #hospitalMap, .voice-indicator, .chatbot-container { display: none !important; }
             header { background: white !important; color: black !important; box-shadow: none !important; border-bottom: 2px solid #000; padding: 10px 0; }
             #caseView { display: block !important; padding: 0 !important; margin: 0 !important; max-width: 100% !important; }
             .case-media video { display: none !important; }
@@ -202,6 +457,26 @@
 
     <!-- زر الطوارئ الأنيق (أيقونة صغيرة وجميلة) -->
     <a href="tel:777774883" class="emergency-fab" id="emergencyFab">📞</a>
+
+    <!-- أيقونة التحكم الصوتي -->
+    <div class="voice-indicator" id="voiceIndicator" onclick="toggleVoiceRecognition()">
+        🎤
+    </div>
+
+    <!-- نافذة المساعد الذكي (Chatbot) -->
+    <div class="chatbot-container" id="chatbotContainer">
+        <div class="chatbot-header">
+            <span>🤖 المساعد الطبي الذكي (AI Medical Assistant)</span>
+            <button onclick="closeChatbot()" style="background:none; border:none; color:white; font-size:20px; cursor:pointer;">✕</button>
+        </div>
+        <div class="chatbot-messages" id="chatbotMessages">
+            <div class="message bot-message">مرحباً! أنا المساعد الطبي الذكي. يمكنك أن تسألني عن: الجلطة القلبية، السكتة الدماغية، النزيف، الكسور، الحروق، الاختناق، الصدمة التحسسية، وغيرها من الحالات الطبية.</div>
+        </div>
+        <div class="chatbot-input">
+            <input type="text" id="chatbotInput" placeholder="اكتب سؤالك الطبي هنا..." onkeypress="if(event.key==='Enter') sendChatMessage()">
+            <button onclick="sendChatMessage()">إرسال 📤</button>
+        </div>
+    </div>
 
     <div id="loginScreen">
         <div class="official-header">
@@ -244,6 +519,7 @@
 
         <div class="bottom-controls" id="bottomControls">
             <button class="btn-ctrl" style="background:#6366f1; color:white;" onclick="toggleTheme()">🌓 تغيير الوضع</button>
+            <button class="btn-ctrl" style="background:#10b981; color:white;" onclick="openChatbot()">🤖 مساعد طبي ذكي</button>
             <button class="btn-ctrl" style="background:#475569; color:white;" onclick="location.reload()">🚪 خروج</button>
         </div>
     </div>
@@ -384,12 +660,7 @@
           sym:`الألم الشديد، التشوه، التورم، الزرقة، فقدان الوظيفة، صوت طرقعة عند تحريك العظم.`,
           steps:[
             `<b>1️⃣ أنواع الكسور (Classification):</b>
-            <div class="table-responsive"><table><tr><th>نوع الكسر</th><th>الوصف</th><th>المظهر الخارجي</th><th>مستوى الخطورة</th></tr>
-            <tr><td style="text-align:center;">كسر مغلق</td><td style="text-align:center;">كسر العظم دون تمزق الجلد</td><td style="text-align:center;">تورم وتشوه دون جرح</td><td style="text-align:center;">متوسطة</td></tr>
-            <tr><td style="text-align:center;">كسر مفتوح</td><td style="text-align:center;">بروز العظم عبر الجلد</td><td style="text-align:center;">جرح مفتوح وعظم مرئي</td><td style="text-align:center;">عالية جداً</td></tr>
-            <tr><td style="text-align:center;">كسر مضاعف</td><td style="text-align:center;">كسر مع إصابة عضو حيوي</td><td style="text-align:center;">نزيف حاد أو فقدان حركة</td><td style="text-align:center;">تهدد الحياة</td></tr>
-            <tr><td style="text-align:center;">كسر غصن نضير</td><td style="text-align:center;">كسر غير مكتمل</td><td style="text-align:center;">شائع عند الأطفال</td><td style="text-align:center;">منخفضة</td></tr>
-            </table></div>`,
+            <div class="table-responsive">\n<table>\n<thead>\n<th>نوع الكسر</th><th>الوصف</th><th>المظهر الخارجي</th><th>مستوى الخطورة</th>\n</thead>\n<tbody>\n<tr><td style="text-align:center;">كسر مغلق</td><td style="text-align:center;">كسر العظم دون تمزق الجلد</td><td style="text-align:center;">تورم وتشوه دون جرح</td><td style="text-align:center;">متوسطة</td></tr>\n<tr><td style="text-align:center;">كسر مفتوح</td><td style="text-align:center;">بروز العظم عبر الجلد</td><td style="text-align:center;">جرح مفتوح وعظم مرئي</td><td style="text-align:center;">عالية جداً</td></tr>\n<tr><td style="text-align:center;">كسر مضاعف</td><td style="text-align:center;">كسر مع إصابة عضو حيوي</td><td style="text-align:center;">نزيف حاد أو فقدان حركة</td><td style="text-align:center;">تهدد الحياة</td></tr>\n<tr><td style="text-align:center;">كسر غصن نضير</td><td style="text-align:center;">كسر غير مكتمل</td><td style="text-align:center;">شائع عند الأطفال</td><td style="text-align:center;">منخفضة</td></tr>\n</tbody>\n</table></div>`,
             `<b>2️⃣ بروتوكول الإسعاف:</b><ul><li><b>التقييم الأولي:</b> تأكد من تنفس المريض ونبضه أولاً. لا تحاول إعادة العظم لمكانه أبداً.</li><li><b>السيطرة على النزيف:</b> ضع شاشاً معقماً حول العظم البارز واضغط على أطراف الجرح.</li><li><b>التثبيت:</b> استخدم جبيرة لتثبيت المفصلين المحيطين بالكسر.</li><li><b>فحص التروية:</b> افحص الدورة الدموية والإحساس بعد التثبيت.</li></ul>`,
             `<b>3️⃣ تنبيهات هامة:</b><ul><li>إذا لم تكن متأكداً أنه كسر، تعامل معه كأنه كسر حتى يثبت العكس بالأشعة.</li><li>يمنع نقل المصاب بكسور العمود الفقري إلا بواسطة فريق متخصص ونقالة صلبة.</li></ul>`
           ],
@@ -403,7 +674,7 @@
           causes:`النار، السوائل الساخنة، الكهرباء، المواد الكيميائية، التعرض للإشعاع.`,
           sym:`تغير لون الجلد، ظهور فقاعات مائية، صدمة عصبية، صعوبة التنفس إذا الحرق في الوجه.`,
           steps:[
-            `<b>1️⃣ تصنيف درجات الحروق:</b><div class="table-responsive">\n<table>\n<tr><th>الدرجة</th><th>الطبقة المتضررة</th><th>المظهر</th><th>الألم</th></tr>\n<tr><td style="text-align:center;">الأولى</td><td style="text-align:center;">البشرة</td><td style="text-align:center;">احمرار وجفاف</td><td style="text-align:center;">مؤلم جداً</td></tr>\n<tr><td style="text-align:center;">الثانية</td><td style="text-align:center;">البشرة + الأدمة</td><td style="text-align:center;">احمرار شديد وفقاعات</td><td style="text-align:center;">مؤلم جداً</td></tr>\n<tr><td style="text-align:center;">الثالثة</td><td style="text-align:center;">كافة طبقات الجلد</td><td style="text-align:center;">الجلد أبيض أو متفحم</td><td style="text-align:center;">غير مؤلم (تلف أعصاب)</td></tr>\n</table>\n</div>`,
+            `<b>1️⃣ تصنيف درجات الحروق:</b><div class="table-responsive">\n<table>\n<thead>\n<th>الدرجة</th><th>الطبقة المتضررة</th><th>المظهر</th><th>الألم</th>\n</thead>\n<tbody>\n<tr><td style="text-align:center;">الأولى</td><td style="text-align:center;">البشرة</td><td style="text-align:center;">احمرار وجفاف</td><td style="text-align:center;">مؤلم جداً</td></tr>\n<tr><td style="text-align:center;">الثانية</td><td style="text-align:center;">البشرة + الأدمة</td><td style="text-align:center;">احمرار شديد وفقاعات</td><td style="text-align:center;">مؤلم جداً</td></tr>\n<tr><td style="text-align:center;">الثالثة</td><td style="text-align:center;">كافة طبقات الجلد</td><td style="text-align:center;">الجلد أبيض أو متفحم</td><td style="text-align:center;">غير مؤلم (تلف أعصاب)</td></tr>\n</tbody>\n</table></div>`,
             `<b>2️⃣ بروتوكول الإسعاف:</b><ul><li><b>إبعاد المصدر:</b> أوقف عملية الحرق فوراً.</li><li><b>التبريد بالماء:</b> سكب ماء جارٍ بدرجة حرارة الغرفة لمدة 10-20 دقيقة.</li><li><b>إزالة المعوقات:</b> انزع الخواتم أو الملابس الضيقة بلطف.</li><li><b>التغطية:</b> تغطية الحرق بضماد معقم أو شاش فازلين.</li></ul>`,
             `<b>3️⃣ تحذيرات:</b><ul><li>ممنوع وضع معجون الأسنان أو الثلج المباشر على الحرق.</li><li>ممنوع فقع الفقاعات المائية.</li></ul>`,
             `<b>4️⃣ قاعدة التسعات (Rule of Nines):</b> الرأس: 9% | كل ذراع: 9% | كل رجل: 18% | الصدر والبطن: 18% | الظهر: 18% | التناسلية: 1%`
@@ -418,7 +689,7 @@
           causes:`طعام، ألعاب صغيرة، أجسام غريبة.`,
           sym:`سعال، صعوبة في الكلام، ازرقاق الوجه، إمساك الرقبة.`,
           steps:[
-            `<b>1️⃣ أنواع انسداد مجرى الهواء:</b><div class="table-responsive">\n<table>\n<tr><th>النوع</th><th>العلامات</th><th>الإجراء</th></tr>\n<tr><td style="text-align:center;">جزئي</td><td style="text-align:center;">يسعل بقوة ويتكلم بصعوبة</td><td style="text-align:center;">شجعه على السعال فقط</td></tr>\n<tr><td style="text-align:center;">كلي</td><td style="text-align:center;">لا يستطيع التنفس، يمسك رقبته</td><td style="text-align:center;">تدخل فوري (مناورة هيمليك)</td></tr>\n</table>\n</div>`,
+            `<b>1️⃣ أنواع انسداد مجرى الهواء:</b><div class="table-responsive">\n<table>\n<thead>\n<th>النوع</th><th>العلامات</th><th>الإجراء</th>\n</thead>\n<tbody>\n<tr><td style="text-align:center;">جزئي</td><td style="text-align:center;">يسعل بقوة ويتكلم بصعوبة</td><td style="text-align:center;">شجعه على السعال فقط</td></tr>\n<tr><td style="text-align:center;">كلي</td><td style="text-align:center;">لا يستطيع التنفس، يمسك رقبته</td><td style="text-align:center;">تدخل فوري (مناورة هيمليك)</td></tr>\n</tbody>\n</table></div>`,
             `<b>2️⃣ بروتوكول إسعاف البالغين والأطفال:</b><ul><li>5 ضربات ظهر خلف الشخص بين لوحي الكتف.</li><li>5 ضغطات بطن فوق السرة.</li><li>التكرار حتى خروج الجسم الغريب.</li></ul>`,
             `<b>3️⃣ إسعاف الرضع:</b><ul><li>ضع الرضيع ووجهه للأسفل، رأسه أسفل من صدره.</li><li>5 ضربات ظهر برفق.</li><li>5 ضغطات صدر باستخدام إصبعين.</li></ul>`,
             `<b>4️⃣ إذا فقد المصاب وعيه:</b> ابدأ الإنعاش القلبي الرئوي (CPR) فوراً، ولا تستخدم إصبعك لاستخراج الجسم إلا إذا كان مرئياً بوضوح.`
@@ -546,7 +817,7 @@
         const hospitals = [
             { name: "🏥 مستشفى العدين العام", lat: 13.9667, lon: 43.9667, phone: "777774883", type: "مستشفى حكومي - العدين" },
             { name: "🏥 مستشفى الثورة العام - إب", lat: 13.9800, lon: 44.1300, phone: "777774883", type: "مستشفى حكومي - إب" },
-            { name: "🏥 مستشفى ناصر - إب", lat: 13.9750, lon: 44.1350, phone: "", type: "مستشفى حكومي - إب" },
+            { name: "🏥 مستشفى ناصر - إب", lat: 13.9750, lon: 44.1350, phone: "", type: "مستشفى حكومي - إб" },
             { name: "🏥 مستشفى الأمومة والطفولة - إب", lat: 13.9850, lon: 44.1250, phone: "", type: "مستشفى تخصصي - إب" },
             { name: "🏥 مستشفى الحمد التخصصي - إب", lat: 13.9900, lon: 44.1400, phone: "", type: "مستشفى خاص - إب" },
             { name: "🏥 مركز المغربي الطبي - إب", lat: 13.9820, lon: 44.1320, phone: "", type: "مركز طبي خاص - إب" },
@@ -555,6 +826,16 @@
         ];
 
         let map = null;
+        let cprInterval = null;
+        let cprCount = 0;
+        let cprActive = false;
+        let recognition = null;
+        let isListening = false;
+        let mobilenetModel = null;
+        let metronomeInterval = null;
+        let metronomeActive = false;
+        let currentStream = null;
+        let currentImageData = null;
 
         function initApp() {
             const screen = document.getElementById("loginScreen");
@@ -567,202 +848,388 @@
                 document.getElementById("progressBar").style.width = "100%";
                 renderGrid();
                 setTimeout(() => { document.getElementById("progressBar").style.width = "0%"; }, 1000);
+                initVoiceRecognition();
+                loadMobileNet();
             }, 800);
         }
 
-        // دالة عرض القائمة الرئيسية مع إضافة أيقونة الخرائط وأيقونة شاركنا التطوير
+        async function loadMobileNet() {
+            try {
+                mobilenetModel = await mobilenet.load();
+                console.log("MobileNet model loaded");
+            } catch(e) { console.log("MobileNet error", e); }
+        }
+
         function renderGrid() {
             const grid = document.getElementById("tocGrid");
             let html = `<div class="grid-item" onclick="openIntro()"><div class="icon-circle" style="background: #f8fafc;"><span style="font-size:45px;">📖</span></div><span>المقدمة</span></div>`;
-            
-            // أيقونة الخرائط والمستشفيات الاحترافية
             html += `<div class="grid-item" onclick="openHospitals()"><div class="icon-circle" style="background: #f8fafc; border-color: #10b981;"><span style="font-size:45px;">🗺️</span></div><span>الخرائط والمستشفيات</span></div>`;
-            
             html += cases.map((c, i) => `<div class="grid-item" onclick="openCase(${i})"><div class="icon-circle"><img src="images/${c.img}.jpg" onerror="this.src='data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Crect%20width%3D%22100%22%20height%3D%22100%22%20fill%3D%22%23ef4444%22%2F%3E%3Ctext%20x%3D%2250%22%20y%3D%2255%22%20font-size%3D%2240%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%3E🚑%3C%2Ftext%3E%3C%2Fsvg%3E'"></div><span>${c.title}</span></div>`).join('');
             html += `<div class="grid-item" onclick="openDrugs()"><div class="icon-circle" style="background: #f8fafc; border-color: #3b82f6;"><span style="font-size:45px;">💊</span></div><span>أدوية الطوارئ</span></div>`;
             html += `<div class="grid-item" onclick="openConclusion()"><div class="icon-circle" style="background: #f8fafc;"><span style="font-size:45px;">📝</span></div><span>الخاتمة</span></div>`;
-            
-            // أيقونة جديدة: شاركنا التطوير (بجانب الخاتمة)
             html += `<div class="grid-item" onclick="openDevelopment()"><div class="icon-circle" style="background: #f8fafc; border-color: #f59e0b;"><span style="font-size:45px;">💡</span></div><span>شاركنا التطوير</span></div>`;
-            
+            html += `<div class="grid-item" onclick="openExtremeEmergency()"><div class="icon-circle" style="background: #f8fafc; border-color: #dc2626;"><span style="font-size:45px;">⚠️</span></div><span>طواري قصوى</span></div>`;
+            html += `<div class="grid-item" onclick="openMedicalTerms()"><div class="icon-circle" style="background: #f8fafc; border-color: #8b5cf6;"><span style="font-size:45px;">📖</span></div><span>مصطلحات طبية</span></div>`;
+            html += `<div class="grid-item" onclick="openSymptomChecker()"><div class="icon-circle" style="background: #f8fafc; border-color: #06b6d4;"><span style="font-size:45px;">🩺</span></div><span>تشخيص الأعراض</span></div>`;
+            html += `<div class="grid-item" onclick="openImageRecognition()"><div class="icon-circle" style="background: #f8fafc; border-color: #ec4899;"><span style="font-size:45px;">📸</span></div><span>التعرف بالصورة</span></div>`;
             grid.innerHTML = html;
         }
 
-        // دالة عرض صفحة "شاركنا التطوير"
-        function openDevelopment() {
+        // ========== التحكم الصوتي (Voice Commands) ==========
+        function initVoiceRecognition() {
+            if ('webkitSpeechRecognition' in window) {
+                recognition = new webkitSpeechRecognition();
+                recognition.continuous = false;
+                recognition.interimResults = false;
+                recognition.lang = 'ar-SA';
+                recognition.onresult = function(event) {
+                    const command = event.results[0][0].transcript;
+                    document.getElementById('voiceIndicator').style.background = '#3b82f6';
+                    isListening = false;
+                    processVoiceCommand(command);
+                };
+                recognition.onerror = function() {
+                    document.getElementById('voiceIndicator').style.background = '#3b82f6';
+                    isListening = false;
+                };
+            }
+        }
+
+        function toggleVoiceRecognition() {
+            if (!recognition) { alert('المتصفح لا يدعم التعرف على الصوت'); return; }
+            if (isListening) {
+                recognition.stop();
+                document.getElementById('voiceIndicator').style.background = '#3b82f6';
+                isListening = false;
+            } else {
+                recognition.start();
+                document.getElementById('voiceIndicator').style.background = '#ef4444';
+                isListening = true;
+                setTimeout(() => {
+                    if (isListening) {
+                        recognition.stop();
+                        document.getElementById('voiceIndicator').style.background = '#3b82f6';
+                        isListening = false;
+                    }
+                }, 10000);
+            }
+        }
+
+        function processVoiceCommand(command) {
+            const cmd = command.toLowerCase();
+            let response = '';
+            if (cmd.includes('cpr') || cmd.includes('إنعاش')) { openExtremeEmergency(); response = 'تم فتح الطوارئ القصوى مع عداد CPR'; }
+            else if (cmd.includes('اتصل') || cmd.includes('طوارئ') || cmd.includes('إسعاف')) { window.location.href = 'tel:195'; response = 'جاري الاتصال بالإسعاف'; }
+            else if (cmd.includes('مستشفى') || cmd.includes('مشفى')) { openHospitals(); response = 'تم فتح الخريطة والمستشفيات'; }
+            else if (cmd.includes('نزيف')) { openCase(6); response = 'تم فتح معلومات النزيف'; }
+            else if (cmd.includes('كسر')) { openCase(7); response = 'تم فتح معلومات الكسور'; }
+            else if (cmd.includes('حروق')) { openCase(8); response = 'تم فتح معلومات الحروق'; }
+            else { response = `أمر غير معروف. الأوامر المتاحة: CPR، اتصل بالإسعاف، مستشفى، نزيف، كسر، حروق`; }
+            const toast = document.createElement('div');
+            toast.style.cssText = 'position:fixed; bottom:180px; right:20px; background:#10b981; color:white; padding:10px 15px; border-radius:10px; z-index:1001; font-size:14px;';
+            toast.innerText = response;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        // ========== المساعد الطبي الذكي (Chatbot) ==========
+        function openChatbot() {
+            const container = document.getElementById('chatbotContainer');
+            container.style.display = container.style.display === 'flex' ? 'none' : 'flex';
+        }
+        function closeChatbot() { document.getElementById('chatbotContainer').style.display = 'none'; }
+
+        function sendChatMessage() {
+            const input = document.getElementById('chatbotInput');
+            const question = input.value.trim();
+            if (!question) return;
+            const messagesContainer = document.getElementById('chatbotMessages');
+            const userMsgDiv = document.createElement('div');
+            userMsgDiv.className = 'message user-message';
+            userMsgDiv.innerText = question;
+            messagesContainer.appendChild(userMsgDiv);
+            const answer = medicalChatbot(question);
+            setTimeout(() => {
+                const botMsgDiv = document.createElement('div');
+                botMsgDiv.className = 'message bot-message';
+                botMsgDiv.innerHTML = answer;
+                messagesContainer.appendChild(botMsgDiv);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }, 500);
+            input.value = '';
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function medicalChatbot(question) {
+            const q = question.toLowerCase();
+            const responses = {
+                'نزيف': '🩸 في حالة النزيف: 1- اضغط مباشرة على مكان النزيف بشاش معقم. 2- ارفع الطرف المصاب إن أمكن. 3- استخدم رباط ضاغط. 4- إذا كان النزيف شديداً، اتصل بالإسعاف فوراً 195.',
+                'كسر': '🦴 في حالة الكسر: 1- لا تحرك المصاب. 2- ثبت الكسر باستخدام جبيرة. 3- ضع كمادات باردة. 4- انقل المصاب إلى المستشفى فوراً.',
+                'حروق': '🔥 في حالة الحروق: 1- برد الحرق بالماء الجاري 10-20 دقيقة. 2- لا تضع الثلج مباشرة. 3- غطِ الحرق بشاش معقم. 4- لا تفرقع الفقاعات.',
+                'جلطة قلبية': '💔 أعراض الجلطة القلبية: ألم ضاغط في الصدر، ضيق تنفس، عرق بارد. الإجراء: اجلس المصاب بوضعية نصف الجلوس، أعطه أسبرين 300mg مضغاً، اتصل بالإسعاف 195.',
+                'سكتة دماغية': '🧠 أعراض السكتة الدماغية (FAST): F: تدلي الوجه، A: ضعف الذراع، S: صعوبة الكلام، T: الوقت مهم جداً. اتصل بالإسعاف فوراً.',
+                'تشنجات': '⚡ في حالة التشنجات: 1- ابتعد عن الأشياء الخطرة. 2- ضع شيئاً ناعماً تحت الرأس. 3- لا تضع أي شيء في الفم. 4- بعد التوقف، ضع المصاب في وضعية الإفاقة.',
+                'اختناق': '😮 في حالة الاختناق: إذا كان واعياً ولا يستطيع التنفس، قم بمناورة هيمليك (ضغطات البطن). إذا فقد الوعي، ابدأ CPR فوراً.',
+                'صدمة تحسسية': '🐝 أعراض الصدمة التحسسية: تورم الوجه واللسان، صعوبة تنفس. الإجراء: حقن الأدرينالين (إن وجد)، اتصل بالإسعاف فوراً.'
+            };
+            for (const [key, value] of Object.entries(responses)) {
+                if (q.includes(key)) return value;
+            }
+            return '❓ لم أتعرف على سؤالك. يمكنك أن تسأل عن: النزيف، الكسور، الحروق، الجلطة القلبية، السكتة الدماغية، التشنجات، الاختناق، الصدمة التحسسية. للحالات الطارئة، اتصل على 195.';
+        }
+
+        // ========== تشخيص الأعراض (Symptom Checker) ==========
+        function openSymptomChecker() {
             document.getElementById("tocGrid").style.display = "none";
             document.getElementById("bottomControls").style.display = "none";
             const view = document.getElementById("caseView");
             view.style.display = "block";
-            document.querySelector(".print-btn").style.display = "none";
-            document.getElementById("headerTitle").innerText = "💡 شاركنا التطوير";
+            document.querySelector(".print-btn").style.display = "inline-flex";
+            document.getElementById("headerTitle").innerText = "🩺 تشخيص الأعراض - المساعد الذكي";
             document.getElementById("progressBar").style.width = "100%";
             
             document.getElementById("caseDetail").innerHTML = `
-                <div class="info-box development-box" style="border-right-color:#10b981;">
-                    <h3>🤝 شاركنا في تطوير الدليل</h3>
-                    <p>إن معرفة الإسعافات الأولية هي مسؤولية إنسانية وأخلاقية. كل معلومة في هذا الدليل يمكن أن تكون الفارق بين الحياة والموت.</p>
-                    <div class="verse-text">❝ وَمَنْ أَحْيَاهَا فَكَأَنَّمَا أَحْيَا النَّاسَ جَمِيعًا ❞</div>
-                    <p><strong>صدق الله العظيم</strong></p>
-                    <hr style="margin:20px 0; border-color:#475569;">
-                    <p>تم إعداد هذا الدليل بواسطة<br><strong>د. صلاح قاسم الأهدل</strong><br>مدير مكتب الصحة والبيئة بالعدين<br>محافظة إب - الجمهورية اليمنية</p>
-                    <p>نسأل الله السلامة للجميع، والدعاء لجرحانا بالشفاء ومرضانا وموتانا بالرحمة والمغفرة.</p>
-                    
-                    <hr style="margin:20px 0; border-color:#475569;">
-                    
-                    <h3>📝 مقترحاتك لتطوير الدليل</h3>
-                    <textarea id="suggestionText" class="suggestion-input" placeholder="اكتب مقترحاتك، ملاحظاتك، أو أي حالة إسعافية تريد إضافتها..."></textarea>
-                    <button class="share-whatsapp-btn" onclick="sendSuggestionToWhatsApp()">
-                        <span>📱</span> إرسال المقترح عبر واتساب
-                    </button>
-                    <p style="font-size:12px; margin-top:15px; opacity:0.7;">سيتم إرسال مقترحاتك إلى رقم التطوير: 776572227</p>
+                <div class="info-box" style="border-right-color:#06b6d4;">
+                    <h3>🩺 تشخيص الأعراض (Symptom Checker)</h3>
+                    <p>اختر الأعراض التي تعاني منها للحصول على تشخيص أولي وتوصيات.</p>
+                </div>
+                <div class="symptom-checker-container">
+                    <h3 style="color:var(--primary);">📍 حدد الأعراض</h3>
+                    <div style="display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin:15px 0;">
+                        <label><input type="checkbox" value="chest_pain" class="symptom-chk"> ألم في الصدر</label>
+                        <label><input type="checkbox" value="difficulty_breathing" class="symptom-chk"> صعوبة في التنفس</label>
+                        <label><input type="checkbox" value="bleeding" class="symptom-chk"> نزيف</label>
+                        <label><input type="checkbox" value="fracture" class="symptom-chk"> ألم شديد مع تورم</label>
+                        <label><input type="checkbox" value="burn" class="symptom-chk"> حرق</label>
+                        <label><input type="checkbox" value="fainting" class="symptom-chk"> إغماء / فقدان وعي</label>
+                        <label><input type="checkbox" value="seizure" class="symptom-chk"> تشنجات</label>
+                        <label><input type="checkbox" value="choking" class="symptom-chk"> اختناق</label>
+                        <label><input type="checkbox" value="allergy" class="symptom-chk"> تورم الوجه أو اللسان</label>
+                        <label><input type="checkbox" value="stroke" class="symptom-chk"> تدلي الوجه / ضعف الأطراف</label>
+                    </div>
+                    <button onclick="analyzeSymptoms()" style="width:100%; padding:12px; background:#06b6d4; border:none; border-radius:12px; color:white; font-weight:bold; cursor:pointer;">🔍 تحليل الأعراض</button>
+                    <div id="symptomResult" style="margin-top:20px; display:none;"></div>
                 </div>
             `;
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // دالة إرسال المقترح إلى واتساب
-        function sendSuggestionToWhatsApp() {
-            const suggestion = document.getElementById('suggestionText').value;
-            if (!suggestion.trim()) {
-                alert('الرجاء كتابة مقترحك قبل الإرسال');
+        function analyzeSymptoms() {
+            const checks = document.querySelectorAll('.symptom-chk:checked');
+            const symptoms = Array.from(checks).map(c => c.value);
+            const resultDiv = document.getElementById('symptomResult');
+            if (symptoms.length === 0) {
+                resultDiv.innerHTML = '<div class="diagnosis-result"><strong>⚠️ الرجاء اختيار عرض واحد على الأقل.</strong></div>';
+                resultDiv.style.display = 'block';
                 return;
             }
-            const phoneNumber = '776572227';
-            const message = `📝 *مقترح جديد لتطوير دليل الإسعافات الأولية*\n\n${suggestion}\n\n——\nتم الإرسال من تطبيق د. صلاح الأهدل`;
-            const encodedMessage = encodeURIComponent(message);
-            window.open(`https://wa.me/${phoneNumber}?text=${encodedMessage}`, '_blank');
+            let diagnosis = '', priority = '', recommendations = '';
+            if (symptoms.includes('chest_pain') && symptoms.includes('difficulty_breathing')) {
+                priority = 'priority-emergency';
+                diagnosis = '⚠️ حالة طارئة جداً - احتمال جلطة قلبية';
+                recommendations = 'اتصل بالإسعاف فوراً (195). أجلس المصاب بوضعية نصف الجلوس. أعطه أسبرين 300mg مضغاً إن أمكن.';
+            } else if (symptoms.includes('stroke')) {
+                priority = 'priority-emergency';
+                diagnosis = '🧠 حالة طارئة جداً - احتمال سكتة دماغية';
+                recommendations = 'اتصل بالإسعاف فوراً (195). لا تعطِ أسبرين. سجل وقت ظهور الأعراض.';
+            } else if (symptoms.includes('bleeding')) {
+                priority = 'priority-emergency';
+                diagnosis = '🩸 نزيف - يحتاج تدخل سريع';
+                recommendations = 'اضغط مباشرة على مكان النزيف. ارفع الطرف المصاب. استخدم عاصبة إن لزم. اتصل بالإسعاف.';
+            } else if (symptoms.includes('allergy')) {
+                priority = 'priority-emergency';
+                diagnosis = '🐝 صدمة تحسسية محتملة';
+                recommendations = 'احقن الأدرينالين (إن وجد). اتصل بالإسعاف فوراً. ضع المصاب مع رفع القدمين.';
+            } else if (symptoms.includes('seizure')) {
+                priority = 'priority-urgent';
+                diagnosis = '⚡ نوبة تشنجية';
+                recommendations = 'ابتعد عن الأشياء الخطرة. ضع شيئاً ناعماً تحت الرأس. لا تضع أي شيء في الفم.';
+            } else if (symptoms.includes('choking')) {
+                priority = 'priority-urgent';
+                diagnosis = '😮 اختناق';
+                recommendations = 'قم بمناورة هيمليك (ضغطات البطن). إذا فقد الوعي، ابدأ CPR.';
+            } else if (symptoms.includes('fracture')) {
+                priority = 'priority-urgent';
+                diagnosis = '🦴 كسر محتمل';
+                recommendations = 'لا تحرك المصاب. ثبت الكسر. ضع كمادات باردة. انقل للمستشفى.';
+            } else if (symptoms.includes('burn')) {
+                priority = 'priority-normal';
+                diagnosis = '🔥 حرق';
+                recommendations = 'برد الحرق بالماء الجاري 10-20 دقيقة. غطِه بشاش معقم. لا تضع الثلج مباشرة.';
+            } else {
+                priority = 'priority-normal';
+                diagnosis = '🏥 حالة غير طارئة';
+                recommendations = 'راجع أقرب عيادة أو مركز صحي.';
+            }
+            resultDiv.innerHTML = `<div class="diagnosis-result"><strong>التشخيص:</strong> ${diagnosis}<br><br><strong>التوصيات:</strong> ${recommendations}<br><br><span class="priority-badge ${priority}">${priority === 'priority-emergency' ? '🚨 طارئ قصوى - اتصل 195' : priority === 'priority-urgent' ? '⚠️ عاجل - راجع الطبيب' : '✅ غير طارئ'}</span></div>`;
+            resultDiv.style.display = 'block';
         }
 
-        // حساب المسافة بين نقطتين
-        function calculateDistance(lat1, lon1, lat2, lon2) {
-            const R = 6371;
-            const dLat = (lat2 - lat1) * Math.PI / 180;
-            const dLon = (lon2 - lon1) * Math.PI / 180;
-            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-                      Math.sin(dLon/2) * Math.sin(dLon/2);
-            return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)));
-        }
-
-        // دالة عرض الخريطة التفاعلية مع أرقام الطوارئ
-        function openHospitals() {
+        // ========== الطوارئ القصوى مع عداد CPR ==========
+        function openExtremeEmergency() {
+            if (cprInterval) clearInterval(cprInterval);
+            cprCount = 0;
             document.getElementById("tocGrid").style.display = "none";
             document.getElementById("bottomControls").style.display = "none";
             const view = document.getElementById("caseView");
             view.style.display = "block";
-            document.querySelector(".print-btn").style.display = "none";
-            document.getElementById("headerTitle").innerText = "🗺️ الخريطة التفاعلية وأرقام الطوارئ";
+            document.querySelector(".print-btn").style.display = "inline-flex";
+            document.getElementById("headerTitle").innerText = "⚠️ الطوارئ القصوى - تدريب CPR التفاعلي";
             document.getElementById("progressBar").style.width = "100%";
-            
-            // صندوق أرقام الطوارئ (أيقونة أرقام قد تهمك)
-            const emergencyNumbersHTML = `
-                <div class="info-box emergency-numbers-box" style="border-right-color:#f59e0b; margin-bottom:20px;">
-                    <h3>📞 أرقام قد تهمك (طوارئ)</h3>
-                    <div class="emergency-numbers-grid">
-                        <div class="emergency-number-item"><a href="tel:194">🚓 194</a><span>النجدة / الشرطة</span></div>
-                        <div class="emergency-number-item"><a href="tel:195">🚑 195</a><span>الإسعاف / الصحة</span></div>
-                        <div class="emergency-number-item"><a href="tel:191">🚔 191</a><span>شرطة الطرق</span></div>
-                        <div class="emergency-number-item"><a href="tel:197">🩸 197</a><span>الهلال الأحمر اليمني</span></div>
-                        <div class="emergency-number-item"><a href="tel:198">🔥 198</a><span>الدفاع المدني</span></div>
-                        <div class="emergency-number-item"><a href="tel:777774883">📞 777774883</a><span>مدير الطوارئ - بكيل الجحافي</span></div>
+            document.getElementById("caseDetail").innerHTML = `
+                <div class="info-box" style="border-right-color:#dc2626; background: #7f1a1a; color: white;">
+                    <h3>🚨 عداد الضغطات الصدرية التفاعلي (CPR Trainer)</h3>
+                    <p>اضغط على زر "ضغطة" بمعدل 100-120 ضغطة في الدقيقة.</p>
+                </div>
+                <div class="cpr-counter">
+                    <div class="cpr-display" id="cprDisplay">0</div>
+                    <div class="cpr-buttons">
+                        <button class="cpr-btn cpr-btn-press" onclick="cprPress()">🫀 ضغطة (Compression)</button>
+                        <button class="cpr-btn cpr-btn-reset" onclick="cprReset()">🔄 إعادة ضبط (Reset)</button>
+                    </div>
+                    <div class="cpr-metronome">
+                        <button class="cpr-btn" id="metronomeBtn" onclick="toggleMetronome()" style="background:#22c55e;">▶️ تشغيل الإيقاع (110/دقيقة)</button>
+                        <div id="metronomeStatus" style="margin-top:10px;"></div>
                     </div>
                 </div>
-            `;
-            
-            document.getElementById("caseDetail").innerHTML = emergencyNumbersHTML + `
-                <div id="hospitalMap" style="height: 450px; width: 100%; border-radius: 20px; margin-bottom: 20px;"></div>
-                <div id="hospitalsList" class="loading-map">📍 جاري تحديد موقعك وعرض أقرب المستشفيات على الخريطة...</div>
+                <div class="info-box"><h3>📚 خطوات الإنعاش القلبي الرئوي (CPR)</h3><div><strong>🔴 الخطوة 1:</strong> تأكد من سلامة المكان<br><strong>🟠 الخطوة 2:</strong> افحص الاستجابة<br><strong>🟡 الخطوة 3:</strong> اطلب المساعدة - اتصل 195<br><strong>🟢 الخطوة 4:</strong> افحص التنفس والنبض<br><strong>🔵 الخطوة 5:</strong> ابدأ الضغطات الصدرية 30:2<br><strong>🟣 الخطوة 6:</strong> افتح مجرى الهواء<br><strong>🟤 الخطوة 7:</strong> أعط نفسين إنقاذيين<br><strong>⚫ الخطوة 8:</strong> استمر حتى وصول المساعدة</div></div>
+                <div class="info-box"><h3>📞 أرقام الطوارئ القصوى</h3><div class="emergency-numbers-grid"><div class="emergency-number-item"><a href="tel:195">🚑 195</a><span>الإسعاف</span></div><div class="emergency-number-item"><a href="tel:777774883">📞 777774883</a><span>مدير الطوارئ</span></div></div></div>
             `;
             window.scrollTo({ top: 0, behavior: 'smooth' });
-            
-            // تهيئة الخريطة
-            map = L.map('hospitalMap').setView([13.9667, 44.1300], 9);
-            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-                subdomains: 'abcd',
-                maxZoom: 19
-            }).addTo(map);
-            
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    (position) => {
-                        const userLat = position.coords.latitude;
-                        const userLng = position.coords.longitude;
-                        
-                        // علامة موقع المستخدم (احترافية)
-                        const userIcon = L.divIcon({
-                            html: '<div style="background: #3b82f6; width: 24px; height: 24px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 15px #3b82f6; text-align: center; line-height: 22px; font-size: 14px;">📍</div>',
-                            iconSize: [30, 30]
-                        });
-                        L.marker([userLat, userLng], { icon: userIcon }).addTo(map)
-                            .bindPopup('<b>📍 موقعك الحالي</b><br>أنت هنا').openPopup();
-                        
-                        map.setView([userLat, userLng], 13);
-                        
-                        // حساب المسافات
-                        const hospitalsWithDistance = hospitals.map(h => {
-                            const d = calculateDistance(userLat, userLng, h.lat, h.lon);
-                            return { ...h, distance: d.toFixed(1) };
-                        });
-                        hospitalsWithDistance.sort((a, b) => a.distance - b.distance);
-                        
-                        // إضافة علامات المستشفيات
-                        hospitalsWithDistance.forEach(h => {
-                            const hospitalIcon = L.divIcon({
-                                html: '<div style="background: #ef4444; width: 28px; height: 28px; border-radius: 50%; border: 2px solid white; text-align: center; line-height: 26px; font-size: 16px; box-shadow: 0 0 10px #ef4444;">🏥</div>',
-                                iconSize: [32, 32]
-                            });
-                            const marker = L.marker([h.lat, h.lon], { icon: hospitalIcon }).addTo(map);
-                            marker.bindPopup(`
-                                <b>${h.name}</b><br>
-                                ${h.type}<br>
-                                📏 المسافة: ${h.distance} كم<br>
-                                <button onclick="window.open('https://www.openstreetmap.org/directions?engine=graphhopper_foot&route=${userLat}%2C${userLng}%2F${h.lat}%2C${h.lon}', '_blank')" style="background:#10b981; color:white; border:none; padding:5px 10px; border-radius:8px; margin-top:5px; cursor:pointer;">🗺️ اتجاهات</button>
-                                ${h.phone ? `<button onclick="window.location.href='tel:${h.phone}'" style="background:#ef4444; color:white; border:none; padding:5px 10px; border-radius:8px; margin-top:5px; margin-right:5px; cursor:pointer;">📞 اتصل</button>` : ''}
-                            `);
-                        });
-                        
-                        // عرض القائمة
-                        let listHtml = `<div class="info-box" style="border-right-color:#10b981;"><h3>🏥 أقرب المرافق الصحية إليك</h3><p>📍 موقعك: ${userLat.toFixed(4)}, ${userLng.toFixed(4)}</p>`;
-                        hospitalsWithDistance.forEach(h => {
-                            listHtml += `
-                                <div class="hospital-card">
-                                    <div class="hospital-info">
-                                        <h4>${h.name}</h4>
-                                        <p>${h.type} | 📏 المسافة: ${h.distance} كم</p>
-                                        ${h.phone ? `<p>📞 ${h.phone}</p>` : ''}
-                                    </div>
-                                    <div style="display: flex; gap: 8px;">
-                                        <a href="https://www.openstreetmap.org/directions?engine=graphhopper_foot&route=${userLat}%2C${userLng}%2F${h.lat}%2C${h.lon}" target="_blank" class="nav-btn">🗺️ اتجاهات</a>
-                                        ${h.phone ? `<a href="tel:${h.phone}" class="nav-btn call-btn">📞 اتصال</a>` : ''}
-                                    </div>
-                                </div>
-                            `;
-                        });
-                        listHtml += `<div style="margin-top:15px; padding:12px; background: #1e293b; border-radius:12px; text-align:center;"><small>⚠️ ملاحظة: في الحالات الحرجة، اتصل على الطوارئ فوراً.</small></div></div>`;
-                        document.getElementById("hospitalsList").innerHTML = listHtml;
-                    },
-                    (error) => {
-                        document.getElementById("hospitalsList").innerHTML = `<div class="location-error">⚠️ تعذر تحديد موقعك. يتم عرض جميع المستشفيات.</div><div class="info-box"><h3>🏥 جميع المستشفيات</h3>${hospitals.map(h => `<div class="hospital-card"><div><h4>${h.name}</h4><p>${h.type}</p></div><a href="tel:${h.phone || '777774883'}" class="nav-btn call-btn">📞 اتصال</a></div>`).join('')}</div>`;
-                        map.setView([13.9667, 44.1300], 10);
-                        hospitals.forEach(h => {
-                            const hospitalIcon = L.divIcon({ html: '<div style="background:#ef4444; width:28px; height:28px; border-radius:50%; border:2px solid white; text-align:center; line-height:26px;">🏥</div>', iconSize: [32, 32] });
-                            L.marker([h.lat, h.lon], { icon: hospitalIcon }).addTo(map).bindPopup(`<b>${h.name}</b><br>${h.type}`);
-                        });
-                    }
-                );
-            } else {
-                document.getElementById("hospitalsList").innerHTML = `<div class="location-error">⚠️ متصفحك لا يدعم تحديد الموقع.</div>`;
-                map.setView([13.9667, 44.1300], 10);
-                hospitals.forEach(h => {
-                    const hospitalIcon = L.divIcon({ html: '<div style="background:#ef4444; width:28px; height:28px; border-radius:50%; border:2px solid white; text-align:center; line-height:26px;">🏥</div>', iconSize: [32, 32] });
-                    L.marker([h.lat, h.lon], { icon: hospitalIcon }).addTo(map).bindPopup(`<b>${h.name}</b><br>${h.type}`);
-                });
+        }
+
+        function cprPress() { cprCount++; document.getElementById("cprDisplay").innerText = cprCount; if (navigator.vibrate) navigator.vibrate(50); }
+        
+        function cprReset() { cprCount = 0; document.getElementById("cprDisplay").innerText = "0"; if (metronomeInterval) { clearInterval(metronomeInterval); metronomeInterval = null; document.getElementById("metronomeBtn").innerHTML = "▶️ تشغيل الإيقاع (110/دقيقة)"; document.getElementById("metronomeStatus").innerHTML = ""; } }
+        
+        function toggleMetronome() {
+            if (metronomeActive) { clearInterval(metronomeInterval); metronomeActive = false; document.getElementById("metronomeBtn").innerHTML = "▶️ تشغيل الإيقاع (110/دقيقة)"; document.getElementById("metronomeStatus").innerHTML = ""; }
+            else { metronomeInterval = setInterval(() => { document.getElementById("metronomeStatus").innerHTML = "🔴 اضغط الآن!"; setTimeout(() => { if (document.getElementById("metronomeStatus")) document.getElementById("metronomeStatus").innerHTML = "⚪ انتظر..."; }, 200); if (navigator.vibrate) navigator.vibrate(100); }, 545); metronomeActive = true; document.getElementById("metronomeBtn").innerHTML = "⏹️ إيقاف الإيقاع"; document.getElementById("metronomeStatus").innerHTML = "⚡ الإيقاع يعمل (110 ضغطة/دقيقة)"; }
+        }
+
+        // ========== المصطلحات الطبية ==========
+        const medicalTerms = [
+            { en: "CPR", ar: "الإنعاش القلبي الرئوي" }, { en: "AED", ar: "جهاز مزيل الرجفان الآلي" }, { en: "Airway", ar: "مجرى الهواء" }, { en: "Breathing", ar: "التنفس" }, { en: "Circulation", ar: "الدورة الدموية" }, { en: "First Aid", ar: "الإسعافات الأولية" }, { en: "Trauma", ar: "الصدمة الجسدية" }, { en: "Shock", ar: "الصدمة العصبية" }, { en: "Hemorrhage", ar: "النزيف" }, { en: "Fracture", ar: "الكسر" }, { en: "Dislocation", ar: "الخلع" }, { en: "Sprain", ar: "الالتواء" }, { en: "Burn", ar: "الحرق" }, { en: "Poisoning", ar: "التسمم" }, { en: "Anaphylaxis", ar: "الصدمة التحسسية" }, { en: "Stroke", ar: "السكتة الدماغية" }, { en: "Heart Attack", ar: "الجلطة القلبية" }, { en: "Seizure", ar: "النوبة التشنجية" }, { en: "Choking", ar: "الاختناق" }, { en: "Drowning", ar: "الغرق" }, { en: "Heat Stroke", ar: "ضربة الشمس" }, { en: "Hypothermia", ar: "انخفاض الحرارة" }, { en: "Dehydration", ar: "الجفاف" }, { en: "Epilepsy", ar: "الصرع" }, { en: "Asthma", ar: "الربو" }, { en: "Allergy", ar: "الحساسية" }, { en: "Bleeding", ar: "النزيف" }, { en: "Wound", ar: "الجرح" }, { en: "Laceration", ar: "التمزق" }, { en: "Abrasion", ar: "السحجة" }, { en: "Contusion", ar: "الكدمة" }, { en: "Puncture", ar: "الجرح النافذ" }, { en: "Amputation", ar: "البتر" }, { en: "Bandage", ar: "الضماد" }, { en: "Splint", ar: "الجبيرة" }, { en: "Tourniquet", ar: "العاصبة" }, { en: "Gauze", ar: "الشاش" }, { en: "Antiseptic", ar: "المطهر" }, { en: "Stretcher", ar: "النقالة" }, { en: "Triage", ar: "الفرز الطبي" }, { en: "Resuscitation", ar: "الإنعاش" }, { en: "Ventilation", ar: "التهوية" }, { en: "Oxygen", ar: "الأكسجين" }, { en: "Pulse", ar: "النبض" }, { en: "Blood Pressure", ar: "ضغط الدم" }, { en: "Consciousness", ar: "الوعي" }, { en: "Unconscious", ar: "فاقد الوعي" }, { en: "Recovery Position", ar: "وضعية الإفاقة" }, { en: "Heimlich Maneuver", ar: "مناورة هيمليك" }, { en: "Spine", ar: "العمود الفقري" }, { en: "Neck", ar: "الرقبة" }, { en: "Head Injury", ar: "إصابة الرأس" }, { en: "Concussion", ar: "الارتجاج" }
+        ];
+
+        function openMedicalTerms() {
+            document.getElementById("tocGrid").style.display = "none";
+            document.getElementById("bottomControls").style.display = "none";
+            const view = document.getElementById("caseView");
+            view.style.display = "block";
+            document.querySelector(".print-btn").style.display = "inline-flex";
+            document.getElementById("headerTitle").innerText = "📖 المصطلحات الطبية";
+            document.getElementById("progressBar").style.width = "100%";
+            let html = `<div class="info-box"><h3>📚 قاموس المصطلحات الطبية</h3><p>${medicalTerms.length} مصطلح طبي</p></div><input type="text" id="termSearch" class="term-search" placeholder="🔍 ابحث..." onkeyup="filterTerms()"><div class="terms-count" id="termsCount">عرض ${medicalTerms.length} من ${medicalTerms.length}</div><div class="medical-terms-container" id="termsList">`;
+            medicalTerms.forEach(t => { html += `<div class="term-card" data-en="${t.en.toLowerCase()}" data-ar="${t.ar}"><div class="term-english">${t.en}</div><div class="term-arabic">${t.ar}</div></div>`; });
+            html += `</div>`;
+            document.getElementById("caseDetail").innerHTML = html;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function filterTerms() {
+            const search = document.getElementById("termSearch").value.toLowerCase();
+            const cards = document.querySelectorAll(".term-card");
+            let count = 0;
+            cards.forEach(c => { if (c.getAttribute("data-en").includes(search) || c.getAttribute("data-ar").includes(search)) { c.style.display = "flex"; count++; } else { c.style.display = "none"; } });
+            document.getElementById("termsCount").innerText = `عرض ${count} من ${medicalTerms.length}`;
+        }
+
+        // ========== التعرف على الصور بالذكاء الاصطناعي ==========
+        function openImageRecognition() {
+            document.getElementById("tocGrid").style.display = "none";
+            document.getElementById("bottomControls").style.display = "none";
+            const view = document.getElementById("caseView");
+            view.style.display = "block";
+            document.querySelector(".print-btn").style.display = "inline-flex";
+            document.getElementById("headerTitle").innerText = "📸 التعرف الذكي على الصور";
+            document.getElementById("progressBar").style.width = "100%";
+            document.getElementById("caseDetail").innerHTML = `
+                <div class="info-box" style="border-right-color:#ec4899;"><h3>📸 نظام التعرف الذكي على الصور</h3><p>استخدم الكاميرا لتصوير الجرح أو الدواء للحصول على توصيات.</p></div>
+                <div class="image-recognition-container">
+                    <div class="camera-preview" id="cameraPreview"><div style="text-align:center;"><button onclick="startCamera()" style="padding:10px 20px; background:#ec4899; border:none; border-radius:10px; color:white; cursor:pointer;">📷 فتح الكاميرا</button></div></div>
+                    <div style="display:flex; gap:10px; margin-top:10px;"><button onclick="capturePhoto()" style="flex:1; padding:10px; background:#10b981; border:none; border-radius:10px; color:white; cursor:pointer;">📸 التقاط وتحليل</button><button onclick="uploadPhoto()" style="flex:1; padding:10px; background:#3b82f6; border:none; border-radius:10px; color:white; cursor:pointer;">📁 رفع صورة</button></div>
+                    <input type="file" id="photoUpload" accept="image/*" style="display:none;" onchange="handleImageUpload(this)">
+                    <div id="aiRecognitionResult" class="recognition-result" style="display:none;"><h4 style="color:#10b981;">🤖 نتيجة التحليل:</h4><div id="aiRecognitionText"></div></div>
+                </div>
+            `;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function startCamera() {
+            const preview = document.getElementById('cameraPreview');
+            if (currentStream) currentStream.getTracks().forEach(t => t.stop());
+            navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } }).then(stream => {
+                currentStream = stream;
+                const video = document.createElement('video');
+                video.width = preview.clientWidth;
+                video.height = 250;
+                video.autoplay = true;
+                video.srcObject = stream;
+                preview.innerHTML = '';
+                preview.appendChild(video);
+            }).catch(err => { preview.innerHTML = '<div style="text-align:center; color:#ef4444;">❌ لا يمكن الوصول للكاميرا</div>'; });
+        }
+
+        function capturePhoto() {
+            const preview = document.getElementById('cameraPreview');
+            const video = preview.querySelector('video');
+            if (!video) { alert('الرجاء فتح الكاميرا أولاً'); return; }
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            canvas.getContext('2d').drawImage(video, 0, 0);
+            currentImageData = canvas.toDataURL('image/jpeg');
+            if (currentStream) { currentStream.getTracks().forEach(t => t.stop()); currentStream = null; }
+            preview.innerHTML = `<img src="${currentImageData}" style="width:100%; height:100%; object-fit:cover;">`;
+            analyzeImageWithAI(currentImageData);
+        }
+
+        function uploadPhoto() { document.getElementById('photoUpload').click(); }
+        
+        function handleImageUpload(input) {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) { currentImageData = e.target.result; document.getElementById('cameraPreview').innerHTML = `<img src="${currentImageData}" style="width:100%; height:100%; object-fit:cover;">`; analyzeImageWithAI(currentImageData); };
+                reader.readAsDataURL(file);
             }
         }
 
-        // ========== جميع الدوال الأصلية (بدون أي تغيير) ==========
+        async function analyzeImageWithAI(imageData) {
+            const resultDiv = document.getElementById('aiRecognitionResult');
+            const textDiv = document.getElementById('aiRecognitionText');
+            resultDiv.style.display = 'block';
+            textDiv.innerHTML = '🔄 جاري التحليل...';
+            try {
+                if (!mobilenetModel) { textDiv.innerHTML = '⚠️ النموذج قيد التحميل، حاول مرة أخرى'; return; }
+                const img = new Image();
+                img.src = imageData;
+                await new Promise(r => img.onload = r);
+                const predictions = await mobilenetModel.classify(img);
+                const top = predictions[0];
+                let advice = '';
+                const className = top.className.toLowerCase();
+                if (className.includes('wound') || className.includes('injury') || className.includes('cut') || className.includes('abrasion')) {
+                    advice = '🩸 تم التعرف على: جرح أو إصابة جلدية.<br><br>📋 التوصيات:<br>1. نظف الجرح بلطف بمحلول ملحي أو ماء وصابون معتدل.<br>2. استخدم مطهراً (بيتادين أو كلورهيكسيدين).<br>3. غطِ الجرح بشاش معقم وضمادة.<br>4. إذا كان الجرح عميقاً أو ينزف بغزارة، توجه لأقرب مستشفى.<br>5. تأكد من أن الجرح ليس ملوثاً (صدأ، تراب، زجاج) - قد تحتاج لمضاد كزاز.';
+                } else if (className.includes('burn') || className.includes('fire')) {
+                    advice = '🔥 تم التعرف على: حرق.<br><br>📋 التوصيات:<br>1. برد الحرق فوراً بالماء الجاري بدرجة حرارة الغرفة لمدة 20 دقيقة.<br>2. لا تضع الثلج مباشرة على الحرق.<br>3. لا تفرقع الفقاعات المائية.<br>4. غطِ الحرق بشاش معقم أو غلاف بلاستيكي معقم.<br>5. إذا كانت مساحة الحرق كبيرة (>10%) أو في الوجه/اليدين، اتصل بالإسعاف.';
+                } else if (className.includes('pill') || className.includes('capsule') || className.includes('tablet') || className.includes('medicine')) {
+                    advice = '💊 تم التعرف على: دواء أو كبسولة.<br><br>📋 التوصيات:<br>1. تأكد من اسم الدواء وتاريخ صلاحيته.<br>2. لا تتناول أي دواء بدون وصفة طبية أو استشارة صيدلي.<br>3. إذا كان هناك شك في التسمم الدوائي، اتصل بمركز السموم فوراً.';
+                } else if (className.includes('syringe') || className.includes('needle')) {
+                    advice = '💉 تم التعرف على: إبرة أو محقنة.<br><br>📋 التوصيات:<br>1. لا تستخدم إبرة ملوثة أبداً.<br>2. تخلص من الإبر المستعملة في حاوية مخصصة للأدوات الحادة.<br>3. إذا تعرضت لوخز بإبرة ملوثة، اغسل المكان فوراً وتوجه لأقرب مستشفى.';
+                } else if (className.includes('bandage') || className.includes('plaster')) {
+                    advice = '🩹 تم التعرف على: ضمادة أو شاش.<br><br>📋 التوصيات:<br>1. تأكد من نظافة الجرح قبل وضع الضمادة.<br>2. استخدم ضمادة معقمة للجروح المفتوحة.<br>3. غير الضمادة يومياً أو عندما تتبلل.<br>4. إذا لاحظت احمراراً أو تورماً أو إفرازات، قد يكون هناك التهاب.';
+                } else {
+                    advice = `🔍 تم التعرف على: ${top.className} (نسبة الثقة: ${(top.probability * 100).toFixed(1)}%)<br><br>📋 هذا الكائن ليس بالضرورة له علاقة طبية مباشرة. إذا كنت تبحث عن تشخيص حالة طبية، يرجى استخدام خدمة "تشخيص الأعراض" أو استشارة الطبيب.`;
+                }
+                textDiv.innerHTML = `<strong>🤖 نتيجة الذكاء الاصطناعي:</strong> ${top.className} (${(top.probability * 100).toFixed(1)}%)<br><br>${advice}<br><br><p style="margin-top:10px; font-size:12px; color:#94a3b8;">⚠️ هذا التحليل بواسطة الذكاء الاصطناعي (MobileNet). لا يحل محل التشخيص الطبي البشري. في الحالات الطارئة، اتصل على 195.</p>`;
+            } catch (error) {
+                textDiv.innerHTML = '❌ حدث خطأ أثناء تحليل الصورة. يرجى المحاولة مرة أخرى.';
+            }
+        }
+
+        // ========== باقي الدوال الأصلية ==========
         function openIntro() {
             document.getElementById("tocGrid").style.display = "none";
             document.getElementById("bottomControls").style.display = "none";
@@ -772,7 +1239,7 @@
             document.getElementById("headerTitle").innerText = "المقدمة";
             document.getElementById("progressBar").style.width = "5%";
             document.getElementById("caseDetail").innerHTML = `
-                <h2 style="text-align:center;font-family:'Amiri';color:#FFD700; font-size: 30px;">﷽<be></h2>
+                <h2 style="text-align:center;font-family:'Amiri';color:#FFD700; font-size: 30px;">﷽</h2>
                 <img src="images/firstaidbag.jpg" onerror="this.style.display='none'" style="width:100%; border-radius:15px; margin-bottom:15px;">
                 <div class="info-box"><h3>🚨 أرقام الطوارئ الهامة</h3><b>مدير الطوارئ: بكيل الجحافي</b><br><i>استخدم زر "اتصال طارئ" أسفل الشاشة.</i></div>
                 <div class="info-box"><h3>📖 نبذة</h3>الإسعافات الأولية هي الرعاية الفورية للحفاظ على حياة المصاب ومنع تدهور حالته حتى وصول الرعاية الطبية.</div>
@@ -832,106 +1299,154 @@
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
         
-function openDrugs() {
-    let savedDrugsNote = localStorage.getItem('drugs_note') || '';
-    document.getElementById("tocGrid").style.display = "none";
-    document.getElementById("bottomControls").style.display = "none";
-    const view = document.getElementById("caseView");
-    view.style.display = "block";
-    document.querySelector(".print-btn").style.display = "inline-flex";
-    document.getElementById("headerTitle").innerText = "الدليل الدوائي الموحد للطوارئ (Yemen MOH / WHO / IMCI)";
-    document.getElementById("progressBar").style.width = "100%";
-    
-    document.getElementById("caseDetail").innerHTML = `
-        <div class="info-box"><h3>💊 البروتوكول الدوائي الموحد</h3><p>قائمة مبنية على بروتوكولات WHO و ACLS و IMCI ووزارة الصحة اليمنية.</p></div>
-        
-        <div class="table-responsive">
-            <table style="width:100%; border-collapse:collapse; font-size:13px;">
-                <thead>
-                    <tr style="background:#1e293b; color:white;">
-                        <th style="padding:12px;">الفئة</th>
-                        <th style="padding:12px;">الدواء</th>
-                        <th style="padding:12px;">الاستخدام</th>
-                        <th style="padding:12px;">جرعة البالغين</th>
-                        <th style="padding:12px;">جرعة الأطفال</th>
-                        <th style="padding:12px;">ملاحظات</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- ❤️ القلب والإنعاش (10 أدوية) -->
-                    <tr style="border-right:4px solid #ef4444; background:#fef2f2;">
-                        <td rowspan="10" style="background:#fef2f2; color:#b91c1c; font-weight:bold; text-align:center;">القلب والإنعاش</td>
-                        <td>💉 Adrenaline (Epinephrine)</td>
-                        <td>توقف القلب / صدمة تحسسية</td>
-                        <td>1mg IV كل 3-5 دقائق</td>
-                        <td>0.01mg/kg IV</td>
-                        <td>الدواء الأول في CPR والأنافيلاكسيس</td>
-                    </tr>
-                    <tr><td>💊 Amiodarone</td><td>رجفان بطيني / تسرع قلب بطيني</td><td>300mg ثم 150mg IV</td><td>5mg/kg IV</td><td>بعد الصدمة الكهربائية الثالثة</td></tr>
-                    <tr><td>💊 Atropine</td><td>بطء القلب / التسمم الفسفوري</td><td>1mg IV (حتى 3mg)</td><td>0.02mg/kg IV</td><td>في التسمم: جرعات أكبر</td></tr>
-                    <tr><td>💉 Lidocaine 2%</td><td>اضطراب نظم / تخدير موضعي</td><td>1-1.5mg/kg IV</td><td>1mg/kg IV</td><td>بديل للأميودارون</td></tr>
-                    <tr><td>💉 Dopamine</td><td>صدمة قلبية / هبوط ضغط</td><td>2-20 mcg/kg/min</td><td>2-20 mcg/kg/min</td><td>عن طريق مضخة infusion</td></tr>
-                    <tr><td>💊 Nitroglycerin</td><td>ذبحة صدرية / فشل قلبي</td><td>0.5mg تحت اللسان</td><td>--</td><td>كل 5 دقائق حتى 3 جرعات</td></tr>
-                    <tr><td>💊 Aspirin</td><td>جلطة قلبية / وقائي</td><td>300mg مضغ</td><td>--</td><td>لا يعطى للأطفال</td></tr>
-                    <tr><td>💉 Adenosine</td><td>تسارع فوق بطيني</td><td>6mg ثم 12mg IV</td><td>0.1mg/kg IV</td><td>دفعة سريعة جداً</td></tr>
-                    <tr><td>💉 Digoxin</td><td>فشل قلبي / رجفان أذيني</td><td>0.5mg ثم 0.25mg</td><td>حسب الوزن</td><td>مراقبة المستوى الدوائي</td></tr>
-                    <tr><td>💊 Verapamil</td><td>تسارع فوق بطيني / ذبحة</td><td>5-10mg IV</td><td>حسب الوزن</td><td>يمنع مع حاصرات البيتا</td></tr>
+        function openDrugs() {
+            let savedDrugsNote = localStorage.getItem('drugs_note') || '';
+            document.getElementById("tocGrid").style.display = "none";
+            document.getElementById("bottomControls").style.display = "none";
+            const view = document.getElementById("caseView");
+            view.style.display = "block";
+            document.querySelector(".print-btn").style.display = "inline-flex";
+            document.getElementById("headerTitle").innerText = "الدليل الدوائي الموحد للطوارئ (Yemen MOH / WHO / IMCI)";
+            document.getElementById("progressBar").style.width = "100%";
+            document.getElementById("caseDetail").innerHTML = `
+                <div class="info-box"><h3>💊 البروتوكول الدوائي الموحد</h3><p>قائمة مبنية على بروتوكولات WHO و ACLS و IMCI ووزارة الصحة اليمنية.</p></div>
+                <div class="table-responsive">
+                    <table style="width:100%; border-collapse:collapse; font-size:13px;">
+                        <thead><tr style="background:#1e293b; color:white;"><th style="padding:12px;">الفئة</th><th style="padding:12px;">الدواء</th><th style="padding:12px;">الاستخدام</th><th style="padding:12px;">جرعة البالغين</th><th style="padding:12px;">جرعة الأطفال</th><th style="padding:12px;">ملاحظات</th></tr></thead>
+                        <tbody>
+                            <tr style="border-right:4px solid #ef4444; background:#fef2f2;"><td rowspan="10" style="background:#fef2f2; color:#b91c1c; font-weight:bold; text-align:center;">القلب والإنعاش</td>
+                            <tr><td>💉 Adrenaline (Epinephrine)</td><td>توقف القلب / صدمة تحسسية</td><td>1mg IV كل 3-5 دقائق</td><td>0.01mg/kg IV</td><td>الدواء الأول في CPR والأنافيلاكسيس</td></tr>
+                            <tr><td>💊 Amiodarone</td><td>رجفان بطيني / تسرع قلب بطيني</td><td>300mg ثم 150mg IV</td><td>5mg/kg IV</td><td>بعد الصدمة الكهربائية الثالثة</td></tr>
+                            <tr><td>💊 Atropine</td><td>بطء القلب / التسمم الفسفوري</td><td>1mg IV (حتى 3mg)</td><td>0.02mg/kg IV</td><td>في التسمم: جرعات أكبر</td></tr>
+                            <tr><td>💉 Lidocaine 2%</td><td>اضطراب نظم / تخدير موضعي</td><td>1-1.5mg/kg IV</td><td>1mg/kg IV</td><td>بديل للأميودارون</td></tr>
+                            <tr><td>💉 Dopamine</td><td>صدمة قلبية / هبوط ضغط</td><td>2-20 mcg/kg/min</td><td>2-20 mcg/kg/min</td><td>عن طريق مضخة infusion</td></tr>
+                            <tr><td>💊 Nitroglycerin</td><td>ذبحة صدرية / فشل قلبي</td><td>0.5mg تحت اللسان</td><td>--</td><td>كل 5 دقائق حتى 3 جرعات</td></tr>
+                            <tr><td>💊 Aspirin</td><td>جلطة قلبية / وقائي</td><td>300mg مضغ</td><td>--</td><td>لا يعطى للأطفال</td></tr>
+                            <tr><td>💉 Adenosine</td><td>تسارع فوق بطيني</td><td>6mg ثم 12mg IV</td><td>0.1mg/kg IV</td><td>دفعة سريعة جداً</td></tr>
+                            <tr><td>💉 Digoxin</td><td>فشل قلبي / رجفان أذيني</td><td>0.5mg ثم 0.25mg</td><td>حسب الوزن</td><td>مراقبة المستوى الدوائي</td></tr>
+                            <tr><td>💊 Verapamil</td><td>تسارع فوق بطيني / ذبحة</td><td>5-10mg IV</td><td>حسب الوزن</td><td>يمنع مع حاصرات البيتا</td></tr>
+                            <tr style="border-right:4px solid #ec4899; background:#fdf2f8;"><td rowspan="6" style="background:#fdf2f8; color:#be185d; font-weight:bold; text-align:center;">النزيف</td>
+                            <tr><td>💉 Tranexamic Acid</td><td>نزيف حاد / صدمات</td><td>1g IV ببطء</td><td>15mg/kg IV</td><td>خلال أول 3 ساعات</td></tr>
+                            <tr><td>💉 Oxytocin</td><td>نزيف ما بعد الولادة</td><td>10 IU IM/IV</td><td>--</td><td>تدليك الرحم أولاً</td></tr>
+                            <tr><td>💊 Misoprostol</td><td>نزيف ما بعد الولادة</td><td>600-800mcg شرجي</td><td>--</td><td>عند عدم توفر الأوكسيتوسين</td></tr>
+                            <tr><td>💉 Vitamin K</td><td>نزيف بسبب مضادات التخثر</td><td>5-10mg IM/IV</td><td>1-2mg IM</td><td>للحديثي الولادة 1mg IM</td></tr>
+                            <tr><td>💉 Protamine Sulfate</td><td>عكس تأثير الهيبارين</td><td>1mg لكل 100 وحدة هيبارين</td><td>حسب الجرعة</td><td>يعطى ببطء شديد</td></tr>
+                            <tr><td>💊 Etamsylate</td><td>نزيف شعيري / رعاف</td><td>500mg IV/IM</td><td>حسب الوزن</td><td>مثبت للجدران الشعرية</td></tr>
+                            <tr style="border-right:4px solid #8b5cf6; background:#f5f3ff;"><td rowspan="5" style="background:#f5f3ff; color:#6d28d9; font-weight:bold; text-align:center;">الجهاز العصبي</td>
+                            <tr><td>💊 Diazepam</td><td>تشنجات / حالة صرعية</td><td>10mg IV/PR</td><td>0.2-0.5mg/kg PR</td><td>مهدئ قوي، مراقبة التنفس</td></tr>
+                            <tr><td>💉 Phenytoin</td><td>حالة صرعية / وقاية</td><td>15-20mg/kg IV ببطء</td><td>15-20mg/kg IV</td><td>يمدد في Normal Saline فقط</td></tr>
+                            <tr><td>💉 Magnesium Sulfate</td><td>تسمم الحمل / ربو حاد</td><td>4g IV تحميل</td><td>25-50mg/kg</td><td>مراقبة منعكسات الأوتار</td></tr>
+                            <tr><td>💊 Midazolam</td><td>تخدير / تشنجات</td><td>5-10mg IM/IV</td><td>0.1-0.2mg/kg</td><td>بديل للديازيبام</td></tr>
+                            <tr><td>💊 Levetiracetam</td><td>حالة صرعية</td><td>1000-3000mg IV</td><td>20-40mg/kg</td><td>آمن للاستخدام في الطوارئ</td></tr>
+                            <tr style="border-right:4px solid #f59e0b; background:#fffbeb;"><td rowspan="6" style="background:#fffbeb; color:#b45309; font-weight:bold; text-align:center;">الأوبئة والمضادات</td>
+                            <tr><td>💉 Artesunate</td><td>ملاريا وخيمة</td><td>2.4mg/kg IV (0,12,24h)</td><td>2.4mg/kg IV</td><td>بروتوكول اليمن المعتمد</td></tr>
+                            <tr><td>💊 ORS</td><td>جفاف / كوليرا</td><td>حسب خطة الإرواء</td><td>حسب IMCI</td><td>خطة A,B,C</td></tr>
+                            <tr><td>💧 Ringer Lactate</td><td>صدمة / حروق / جفاف</td><td>Bolus 500-1000ml</td><td>20ml/kg</td><td>السائل المفضل في الطوارئ</td></tr>
+                            <tr><td>💉 Ceftriaxone</td><td>التهابات حادة / سحايا</td><td>1-2g IV/IM</td><td>50-100mg/kg</td><td>مضاد حيوي واسع المجال</td></tr>
+                            <tr><td>💉 Metronidazole</td><td>التهابات لاهوائية / جيارديا</td><td>500mg IV</td><td>15mg/kg</td><td>للعدوى البطنية والحوضية</td></tr>
+                            <tr><td>💊 Azithromycin</td><td>التهابات تنفسية / كوليرا</td><td>500mg</td><td>10mg/kg</td><td>علاج الكوليرا عند الأطفال</td></tr>
+                            <tr style="border-right:4px solid #6b7280; background:#f1f5f9;"><td rowspan="6" style="background:#f1f5f9; color:#374151; font-weight:bold; text-align:center;">التسمم</td>
+                            <tr><td>💊 Activated Charcoal</td><td>تسمم فموي</td><td>50-100g</td><td>1g/kg</td><td>خلال أول ساعة من التسمم</td></tr>
+                            <tr><td>💉 Naloxone</td><td>تسمم أفيونات (مورفين، هيروين)</td><td>0.4-2mg IV</td><td>0.01mg/kg</td><td>يعكس التسمم فوراً</td></tr>
+                            <tr><td>💉 Flumazenil</td><td>تسمم بنزوديازيبينات</td><td>0.2mg IV</td><td>0.01mg/kg</td><td>يستخدم بحذر شديد</td></tr>
+                            <tr><td>💉 Sodium Bicarbonate</td><td>حماض استقلابي / جرعة زائدة TCA</td><td>1-2 mEq/kg IV</td><td>1mEq/kg</td><td>مراقبة غازات الدم</td></tr>
+                            <tr><td>💊 Acetylcysteine</td><td>تسمم باراسيتامول</td><td>150mg/kg ثم 50mg/kg</td><td>حسب الوزن</td><td>بروتوكول 20 ساعة</td></tr>
+                            <tr><td>💊 Deferoxamine</td><td>تسمم بالحديد</td><td>1g ثم 500mg كل 4 ساعات</td><td>15mg/kg/ساعة</td><td>مراقبة لون البول</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="info-box"><h3>📝 ملاحظات الطبيب والتحديثات الميدانية:</h3><textarea id="noteInput_drugs" class="note-input">${savedDrugsNote}</textarea><button class="save-btn" onclick="saveDrugsNote()">💾 حفظ الملاحظة</button><span id="saveStatus_drugs" class="save-status">✓ تم الحفظ</span></div>
+            `;
+            window.scrollTo(0,0);
+        }
 
-                    <!-- 🩸 النزيف (6 أدوية) -->
-                    <tr style="border-right:4px solid #ec4899; background:#fdf2f8;">
-                        <td rowspan="6" style="background:#fdf2f8; color:#be185d; font-weight:bold; text-align:center;">النزيف</td>
-                        <td>💉 Tranexamic Acid</td><td>نزيف حاد / صدمات</td><td>1g IV ببطء</td><td>15mg/kg IV</td><td>خلال أول 3 ساعات</td>
-                    </tr>
-                    <tr><td>💉 Oxytocin</td><td>نزيف ما بعد الولادة</td><td>10 IU IM/IV</td><td>--</td><td>تدليك الرحم أولاً</td></tr>
-                    <tr><td>💊 Misoprostol</td><td>نزيف ما بعد الولادة</td><td>600-800mcg شرجي</td><td>--</td><td>عند عدم توفر الأوكسيتوسين</td></tr>
-                    <tr><td>💉 Vitamin K</td><td>نزيف بسبب مضادات التخثر</td><td>5-10mg IM/IV</td><td>1-2mg IM</td><td>للحديثي الولادة 1mg IM</td></tr>
-                    <tr><td>💉 Protamine Sulfate</td><td>عكس تأثير الهيبارين</td><td>1mg لكل 100 وحدة هيبارين</td><td>حسب الجرعة</td><td>يعطى ببطء شديد</td></tr>
-                    <tr><td>💊 Etamsylate</td><td>نزيف شعيري / رعاف</td><td>500mg IV/IM</td><td>حسب الوزن</td><td>مثبت للجدران الشعرية</td></tr>
+        function openDevelopment() {
+            document.getElementById("tocGrid").style.display = "none";
+            document.getElementById("bottomControls").style.display = "none";
+            const view = document.getElementById("caseView");
+            view.style.display = "block";
+            document.querySelector(".print-btn").style.display = "none";
+            document.getElementById("headerTitle").innerText = "💡 شاركنا التطوير";
+            document.getElementById("progressBar").style.width = "100%";
+            document.getElementById("caseDetail").innerHTML = `
+                <div class="info-box development-box" style="border-right-color:#10b981;">
+                    <h3>🤝 شاركنا في تطوير الدليل</h3>
+                    <p>إن معرفة الإسعافات الأولية هي مسؤولية إنسانية وأخلاقية. كل معلومة في هذا الدليل يمكن أن تكون الفارق بين الحياة والموت.</p>
+                    <div class="verse-text">❝ وَمَنْ أَحْيَاهَا فَكَأَنَّمَا أَحْيَا النَّاسَ جَمِيعًا ❞</div>
+                    <p><strong>صدق الله العظيم</strong></p>
+                    <hr style="margin:20px 0; border-color:#475569;">
+                    <p>تم إعداد هذا الدليل بواسطة<br><strong>د. صلاح قاسم الأهدل</strong><br>مدير مكتب الصحة والبيئة بالعدين<br>محافظة إب - الجمهورية اليمنية</p>
+                    <p>نسأل الله السلامة للجميع، والدعاء لجرحانا بالشفاء ومرضانا وموتانا بالرحمة والمغفرة.</p>
+                    <hr style="margin:20px 0; border-color:#475569;">
+                    <h3>📝 مقترحاتك لتطوير الدليل</h3>
+                    <textarea id="suggestionText" class="suggestion-input" placeholder="اكتب مقترحاتك، ملاحظاتك، أو أي حالة إسعافية تريد إضافتها..."></textarea>
+                    <button class="share-whatsapp-btn" onclick="sendSuggestionToWhatsApp()">
+                        <span>📱</span> إرسال المقترح عبر واتساب
+                    </button>
+                    <p style="font-size:12px; margin-top:15px; opacity:0.7;">سيتم إرسال مقترحاتك إلى رقم التطوير: 776572227</p>
+                </div>
+            `;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
 
-                    <!-- 🧠 الجهاز العصبي (5 أدوية) -->
-                    <tr style="border-right:4px solid #8b5cf6; background:#f5f3ff;">
-                        <td rowspan="5" style="background:#f5f3ff; color:#6d28d9; font-weight:bold; text-align:center;">الجهاز العصبي</td>
-                        <td>💊 Diazepam</td><td>تشنجات / حالة صرعية</td><td>10mg IV/PR</td><td>0.2-0.5mg/kg PR</td><td>مهدئ قوي، مراقبة التنفس</td>
-                    </tr>
-                    <tr><td>💉 Phenytoin</td><td>حالة صرعية / وقاية</td><td>15-20mg/kg IV ببطء</td><td>15-20mg/kg IV</td><td>يمدد في Normal Saline فقط</td></tr>
-                    <tr><td>💉 Magnesium Sulfate</td><td>تسمم الحمل / ربو حاد</td><td>4g IV تحميل</td><td>25-50mg/kg</td><td>مراقبة منعكسات الأوتار</td></tr>
-                    <tr><td>💊 Midazolam</td><td>تخدير / تشنجات</td><td>5-10mg IM/IV</td><td>0.1-0.2mg/kg</td><td>بديل للديازيبام</td></tr>
-                    <tr><td>💊 Levetiracetam</td><td>حالة صرعية</td><td>1000-3000mg IV</td><td>20-40mg/kg</td><td>آمن للاستخدام في الطوارئ</td></tr>
+        function sendSuggestionToWhatsApp() {
+            const suggestion = document.getElementById('suggestionText').value;
+            if (!suggestion.trim()) {
+                alert('الرجاء كتابة مقترحك قبل الإرسال');
+                return;
+            }
+            const phoneNumber = '776572227';
+            const message = `📝 *مقترح جديد لتطوير دليل الإسعافات الأولية*\n\n${suggestion}\n\n——\nتم الإرسال من تطبيق د. صلاح الأهدل`;
+            window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_blank');
+        }
 
-                    <!-- 🦠 الأوبئة والمضادات الحيوية (6 أدوية) -->
-                    <tr style="border-right:4px solid #f59e0b; background:#fffbeb;">
-                        <td rowspan="6" style="background:#fffbeb; color:#b45309; font-weight:bold; text-align:center;">الأوبئة والمضادات</td>
-                        <td>💉 Artesunate</td><td>ملاريا وخيمة</td><td>2.4mg/kg IV (0,12,24h)</td><td>2.4mg/kg IV</td><td>بروتوكول اليمن المعتمد</td>
-                    </tr>
-                    <tr><td>💊 ORS</td><td>جفاف / كوليرا</td><td>حسب خطة الإرواء</td><td>حسب IMCI</td><td>خطة A,B,C</td></tr>
-                    <tr><td>💧 Ringer Lactate</td><td>صدمة / حروق / جفاف</td><td>Bolus 500-1000ml</td><td>20ml/kg</td><td>السائل المفضل في الطوارئ</td></tr>
-                    <tr><td>💉 Ceftriaxone</td><td>التهابات حادة / سحايا</td><td>1-2g IV/IM</td><td>50-100mg/kg</td><td>مضاد حيوي واسع المجال</td></tr>
-                    <tr><td>💉 Metronidazole</td><td>التهابات لاهوائية / جيارديا</td><td>500mg IV</td><td>15mg/kg</td><td>للعدوى البطنية والحوضية</td></tr>
-                    <tr><td>💊 Azithromycin</td><td>التهابات تنفسية / كوليرا</td><td>500mg</td><td>10mg/kg</td><td>علاج الكوليرا عند الأطفال</td></tr>
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            const R = 6371;
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(lat1 * Math.PI/180) * Math.cos(lat2 * Math.PI/180) * Math.sin(dLon/2) * Math.sin(dLon/2);
+            return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)));
+        }
 
-                    <!-- ☠️ التسمم (6 أدوية) -->
-                    <tr style="border-right:4px solid #6b7280; background:#f1f5f9;">
-                        <td rowspan="6" style="background:#f1f5f9; color:#374151; font-weight:bold; text-align:center;">التسمم</td>
-                        <td>💊 Activated Charcoal</td><td>تسمم فموي</td><td>50-100g</td><td>1g/kg</td><td>خلال أول ساعة من التسمم</td>
-                    </tr>
-                    <tr><td>💉 Naloxone</td><td>تسمم أفيونات (مورفين، هيروين)</td><td>0.4-2mg IV</td><td>0.01mg/kg</td><td>يعكس التسمم فوراً</td></tr>
-                    <tr><td>💉 Flumazenil</td><td>تسمم بنزوديازيبينات</td><td>0.2mg IV</td><td>0.01mg/kg</td><td>يستخدم بحذر شديد</td></tr>
-                    <tr><td>💉 Sodium Bicarbonate</td><td>حماض استقلابي / جرعة زائدة TCA</td><td>1-2 mEq/kg IV</td><td>1mEq/kg</td><td>مراقبة غازات الدم</td></tr>
-                    <tr><td>💊 Acetylcysteine</td><td>تسمم باراسيتامول</td><td>150mg/kg ثم 50mg/kg</td><td>حسب الوزن</td><td>بروتوكول 20 ساعة</td></tr>
-                    <tr><td>💊 Deferoxamine</td><td>تسمم بالحديد</td><td>1g ثم 500mg كل 4 ساعات</td><td>15mg/kg/ساعة</td><td>مراقبة لون البول</td></tr>
-                </tbody>
-            </table>
-        </div>
-        
-        <div class="info-box">
-            <h3>📝 ملاحظات الطبيب والتحديثات الميدانية:</h3>
-            <textarea id="noteInput_drugs" class="note-input" placeholder="اكتب ملاحظاتك حول توفر الأدوية، تحديثات الجرعات، أو أي إضافات هامة...">${savedDrugsNote}</textarea>
-            <button class="save-btn" onclick="saveDrugsNote()">💾 حفظ الملاحظة</button>
-            <span id="saveStatus_drugs" class="save-status">✓ تم الحفظ</span>
-        </div>
-    `;
-    window.scrollTo(0, 0);
-}
+        function openHospitals() {
+            document.getElementById("tocGrid").style.display = "none";
+            document.getElementById("bottomControls").style.display = "none";
+            const view = document.getElementById("caseView");
+            view.style.display = "block";
+            document.querySelector(".print-btn").style.display = "none";
+            document.getElementById("headerTitle").innerText = "🗺️ الخريطة التفاعلية وأرقام الطوارئ";
+            document.getElementById("progressBar").style.width = "100%";
+            const emergencyNumbersHTML = `<div class="info-box emergency-numbers-box" style="border-right-color:#f59e0b; margin-bottom:20px;"><h3>📞 أرقام قد تهمك (طوارئ)</h3><div class="emergency-numbers-grid"><div class="emergency-number-item"><a href="tel:194">🚓 194</a><span>النجدة / الشرطة</span></div><div class="emergency-number-item"><a href="tel:195">🚑 195</a><span>الإسعاف / الصحة</span></div><div class="emergency-number-item"><a href="tel:191">🚔 191</a><span>شرطة الطرق</span></div><div class="emergency-number-item"><a href="tel:197">🩸 197</a><span>الهلال الأحمر اليمني</span></div><div class="emergency-number-item"><a href="tel:198">🔥 198</a><span>الدفاع المدني</span></div><div class="emergency-number-item"><a href="tel:777774883">📞 777774883</a><span>مدير الطوارئ - بكيل الجحافي</span></div></div></div>`;
+            document.getElementById("caseDetail").innerHTML = emergencyNumbersHTML + `<div id="hospitalMap" style="height:450px; width:100%; border-radius:20px; margin-bottom:20px;"></div><div id="hospitalsList" class="loading-map">📍 جاري تحديد موقعك وعرض أقرب المستشفيات على الخريطة...</div>`;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            map = L.map('hospitalMap').setView([13.9667,44.1300],9);
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', { attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>', subdomains: 'abcd', maxZoom: 19 }).addTo(map);
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(pos => {
+                    const userLat = pos.coords.latitude, userLng = pos.coords.longitude;
+                    const userIcon = L.divIcon({ html: '<div style="background:#3b82f6; width:24px; height:24px; border-radius:50%; border:3px solid white; text-align:center; line-height:22px;">📍</div>', iconSize:[30,30] });
+                    L.marker([userLat, userLng], { icon: userIcon }).addTo(map).bindPopup('<b>📍 موقعك الحالي</b><br>أنت هنا').openPopup();
+                    map.setView([userLat, userLng], 13);
+                    const hospitalsWithDistance = hospitals.map(h => ({ ...h, distance: calculateDistance(userLat, userLng, h.lat, h.lon).toFixed(1) })).sort((a,b)=>a.distance-b.distance);
+                    hospitalsWithDistance.forEach(h => {
+                        const hospitalIcon = L.divIcon({ html: '<div style="background:#ef4444; width:28px; height:28px; border-radius:50%; border:2px solid white; text-align:center; line-height:26px;">🏥</div>', iconSize:[32,32] });
+                        L.marker([h.lat, h.lon], { icon: hospitalIcon }).addTo(map).bindPopup(`<b>${h.name}</b><br>${h.type}<br>📏 ${h.distance} كم<br><button onclick="window.open('https://www.openstreetmap.org/directions?engine=graphhopper_foot&route=${userLat}%2C${userLng}%2F${h.lat}%2C${h.lon}','_blank')" style="background:#10b981;color:white;border:none;padding:5px 10px;border-radius:8px;">🗺️ اتجاهات</button>${h.phone ? `<button onclick="window.location.href='tel:${h.phone}'" style="background:#ef4444;color:white;border:none;padding:5px 10px;border-radius:8px;margin-right:5px;">📞 اتصل</button>` : ''}`);
+                    });
+                    let listHtml = `<div class="info-box" style="border-right-color:#10b981;"><h3>🏥 أقرب المرافق الصحية إليك</h3><p>📍 موقعك: ${userLat.toFixed(4)}, ${userLng.toFixed(4)}</p>`;
+                    hospitalsWithDistance.forEach(h => { listHtml += `<div class="hospital-card"><div class="hospital-info"><h4>${h.name}</h4><p>${h.type} | 📏 المسافة: ${h.distance} كم</p>${h.phone ? `<p>📞 ${h.phone}</p>` : ''}</div><div style="display:flex;gap:8px;"><a href="https://www.openstreetmap.org/directions?engine=graphhopper_foot&route=${userLat}%2C${userLng}%2F${h.lat}%2C${h.lon}" target="_blank" class="nav-btn">🗺️ اتجاهات</a>${h.phone ? `<a href="tel:${h.phone}" class="nav-btn call-btn">📞 اتصال</a>` : ''}</div></div>`; });
+                    listHtml += `<div style="margin-top:15px; padding:12px; background:#1e293b; border-radius:12px; text-align:center;"><small>⚠️ ملاحظة: في الحالات الحرجة، اتصل على الطوارئ فوراً.</small></div></div>`;
+                    document.getElementById("hospitalsList").innerHTML = listHtml;
+                }, () => {
+                    document.getElementById("hospitalsList").innerHTML = `<div class="location-error">⚠️ تعذر تحديد موقعك. يتم عرض جميع المستشفيات.</div><div class="info-box"><h3>🏥 جميع المستشفيات</h3>${hospitals.map(h => `<div class="hospital-card"><div><h4>${h.name}</h4><p>${h.type}</p></div><a href="tel:${h.phone || '777774883'}" class="nav-btn call-btn">📞 اتصال</a></div>`).join('')}</div>`;
+                    map.setView([13.9667,44.1300],10);
+                    hospitals.forEach(h => { L.marker([h.lat, h.lon], { icon: L.divIcon({ html: '<div style="background:#ef4444; width:28px; height:28px; border-radius:50%; border:2px solid white; text-align:center; line-height:26px;">🏥</div>', iconSize:[32,32] }) }).addTo(map).bindPopup(`<b>${h.name}</b><br>${h.type}`); });
+                });
+            } else {
+                document.getElementById("hospitalsList").innerHTML = `<div class="location-error">⚠️ متصفحك لا يدعم تحديد الموقع.</div>`;
+                map.setView([13.9667,44.1300],10);
+                hospitals.forEach(h => { L.marker([h.lat, h.lon], { icon: L.divIcon({ html: '<div style="background:#ef4444; width:28px; height:28px; border-radius:50%; border:2px solid white; text-align:center; line-height:26px;">🏥</div>', iconSize:[32,32] }) }).addTo(map).bindPopup(`<b>${h.name}</b><br>${h.type}`); });
+            }
+        }
 
         function saveNote(caseIndex) {
             const noteContent = document.getElementById(`noteInput_${caseIndex}`).value;
@@ -948,6 +1463,9 @@ function openDrugs() {
         }
 
         function goBack() {
+            if (metronomeInterval) clearInterval(metronomeInterval);
+            if (cprInterval) clearInterval(cprInterval);
+            if (currentStream) { currentStream.getTracks().forEach(t => t.stop()); currentStream = null; }
             document.getElementById("caseView").style.display = "none";
             document.getElementById("tocGrid").style.display = "grid";
             document.getElementById("bottomControls").style.display = "flex";
@@ -957,9 +1475,7 @@ function openDrugs() {
             if(map) { map.remove(); map = null; }
         }
 
-        function toggleTheme() { 
-            document.body.classList.toggle("light"); 
-        }
+        function toggleTheme() { document.body.classList.toggle("light"); }
     </script>
 </body>
 </html>
