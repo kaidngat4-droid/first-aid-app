@@ -5,7 +5,7 @@ rm -rf www && mkdir www
 # نسخ كل ملفات التطبيق بدون حذف أي شيء
 for f in * ; do
   case "$f" in
-    www|node_modules|android|package.json|package-lock.json|capacitor.config.json|build.sh) ;;
+    www|node_modules|android|assets|package.json|package-lock.json|capacitor.config.json|build.sh) ;;
     *) cp -r "$f" www/ ;;
   esac
 done

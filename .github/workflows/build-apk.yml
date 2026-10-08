@@ -32,6 +32,9 @@ jobs:
       - name: Add Android platform
         run: npx cap add android
 
+      - name: Generate icons
+        run: npx @capacitor/assets generate --android --iconBackgroundColor "#0f172a" --iconBackgroundColorDark "#0f172a"
+
       - name: Add permissions
         run: |
           sed -i 's|</manifest>|    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />\n    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />\n    <uses-permission android:name="android.permission.CAMERA" />\n</manifest>|' android/app/src/main/AndroidManifest.xml
