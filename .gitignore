@@ -28,3 +28,7 @@ Thumbs.db
 # Temp
 tmp/
 *.log
+
+# Capacitor
+www/
+android/

@@ -1,0 +1,17 @@
+{
+  "name": "first-aid-app",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": { "build": "bash build.sh" },
+  "dependencies": {
+    "@capacitor/android": "^6.1.2",
+    "@capacitor/cli": "^6.1.2",
+    "@capacitor/core": "^6.1.2",
+    "@fontsource/amiri": "^5.0.0",
+    "@fontsource/cairo": "^5.0.0",
+    "@fontsource/tajawal": "^5.0.0",
+    "@tensorflow-models/mobilenet": "2.1.0",
+    "@tensorflow/tfjs": "4.15.0",
+    "leaflet": "1.9.4"
+  }
+}
