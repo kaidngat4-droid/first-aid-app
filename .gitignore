@@ -1,0 +1,30 @@
+# Android
+*.apk
+*.aab
+*.keystore
+*.jks
+android-twa/.gradle/
+android-twa/build/
+android-twa/app/build/
+android-twa/local.properties
+.gradle/
+
+# Node
+node_modules/
+npm-debug.log*
+
+# System
+.DS_Store
+Thumbs.db
+
+# Netlify
+.netlify/
+
+# IDE
+.vscode/
+.idea/
+*.iml
+
+# Temp
+tmp/
+*.log

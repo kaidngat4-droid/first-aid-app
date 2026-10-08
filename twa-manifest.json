@@ -1,0 +1,21 @@
+{
+  "packageId": "com.salah.firstaid",
+  "host": "first-aid-ap.netlify.app",
+  "name": "الإسعافات الأولية",
+  "launcherName": "إسعافات",
+  "display": "standalone",
+  "themeColor": "#ef4444",
+  "navigationColor": "#0f172a",
+  "backgroundColor": "#0f172a",
+  "startUrl": "/",
+  "iconUrl": "https://first-aid-ap.netlify.app/icon-192.png",
+  "webManifestUrl": "https://first-aid-ap.netlify.app/manifest.json",
+  "appVersionName": "1.0.0",
+  "appVersionCode": 1,
+  "enableNotifications": true,
+  "orientation": "portrait",
+  "fallbackType": "customtabs",
+  "minSdkVersion": 21,
+  "generatorApp": "bubblewrap-cli",
+  "features": {}
+}
