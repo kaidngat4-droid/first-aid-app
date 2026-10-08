@@ -31,6 +31,18 @@ jobs:
 
       - name: Add Android platform
         run: npx cap add android
+      - name: Set app icon
+        run: |
+          sudo apt-get install -y imagemagick > /dev/null 2>&1 || true
+          RES=android/app/src/main/res
+          for d in mdpi:48 hdpi:72 xhdpi:96 xxhdpi:144 xxxhdpi:192; do
+            n=${d%%:*}; s=${d##*:}
+            mkdir -p $RES/mipmap-$n
+            for name in ic_launcher ic_launcher_round ic_launcher_foreground; do
+              convert assets/icon-only.png -resize ${s}x${s} $RES/mipmap-$n/$name.png
+            done
+          done
+          rm -rf $RES/mipmap-anydpi-v26
 
 
       - name: Add permissions
