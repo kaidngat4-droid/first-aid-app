@@ -32,8 +32,6 @@ jobs:
       - name: Add Android platform
         run: npx cap add android
 
-      - name: Generate icons
-        run: npx @capacitor/assets generate --android --iconBackgroundColor "#0f172a" --iconBackgroundColorDark "#0f172a"
 
       - name: Add permissions
         run: |
